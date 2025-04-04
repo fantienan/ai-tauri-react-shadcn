@@ -9,9 +9,9 @@ install:
 init:
 	@echo "Initializing project"
 	@pnpm husky init
-	@echo npx --no commitlint --edit $$1 > .husky/commit-msg
 	@npm pkg set scripts.commitlint="commitlint --edit"
-	@echo npm run commitlint $${1} > .husky/commit-msg
+	@echo npm run commitlint > .husky/commit-msg
+	@echo lint-staged > .husky/pre-commit
 
 client-dev:
 	@echo "Running dev client"
