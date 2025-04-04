@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "prepare": "husky",
     "app:build": "yarn mask && tauri build",
     "app:dev": " tauri dev",
     "build": "tsc -b && vite build",
@@ -60,7 +61,8 @@
     "@vitejs/plugin-react-swc": "^3.8.0",
     "drizzle-kit": "^0.30.6",
     "globals": "^16.0.0",
-    "lefthook": "^1.11.6",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
     "typescript": "~5.8.2",
     "typescript-eslint": "^8.28.1",
     "vite": "^6.2.0"
