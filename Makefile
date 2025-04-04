@@ -6,6 +6,13 @@ install:
 	@echo "Installing dependencies"
 	@pnpm install 
 
+init:
+	@echo "Initializing project"
+	@pnpm husky init
+	@echo npx --no commitlint --edit $$1 > .husky/commit-msg
+	@npm pkg set scripts.commitlint="commitlint --edit"
+	@echo npm run commitlint $${1} > .husky/commit-msg
+
 client-dev:
 	@echo "Running dev client"
 	@pnpm dev
@@ -40,8 +47,6 @@ git-init:
 	git push -u origin main
 
 
-biome:
-	@echo "Running biome"
-	@pnpm lint
-	@pnpm check
-	@pnpm format
+lint:
+	@echo "Running lint"
+	@pnpm lint-staged
