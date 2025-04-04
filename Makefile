@@ -34,19 +34,19 @@ git-hook:
 	@echo lint-staged > .husky/pre-commit
 
 git-commit:
-	pnpm format
-	pnpm check
-	git add .
-	git commit -am "$(ARGS)"
-	git push -u origin main
+	@pnpm format
+	@pnpm check
+	@git add .
+	@git commit -am "$(ARGS)"
+	@git push -u origin main
 
 git-init:
-	git init
-	git add .
-	git commit -m "feat: init"
-	git branch -M main
-	git remote add origin https://github.com/fantienan/ai-tauri-react-shadcn.git
-	git push -u origin main
+	@git init
+	@git add .
+	@git commit -m "feat: init"
+	@git branch -M main
+	@git remote add origin https://github.com/fantienan/ai-tauri-react-shadcn.git
+	@git push -u origin main
 
 lint:
 	@echo "Running lint"
