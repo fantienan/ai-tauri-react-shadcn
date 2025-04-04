@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
-
   "scripts": {
     "app:build": "yarn mask && tauri build",
     "app:dev": " tauri dev",
@@ -19,7 +18,7 @@
     "preview": "vite preview",
     "lint": "biome lint --write --unsafe",
     "format": "biome format --changed --since=main",
-    "check": "biome check --write --unsafe",
+    "check": "biome check --write",
     "tauri": "tauri",
     "biome": "biome"
   },
@@ -59,6 +58,7 @@
     "@vitejs/plugin-react-swc": "^3.8.0",
     "drizzle-kit": "^0.30.6",
     "globals": "^16.0.0",
+    "lefthook": "^1.11.6",
     "typescript": "~5.8.2",
     "typescript-eslint": "^8.28.1",
     "vite": "^6.2.0"
