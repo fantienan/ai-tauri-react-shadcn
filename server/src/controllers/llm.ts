@@ -1,7 +1,7 @@
-import { z } from 'zod'
 import { streamText } from 'ai'
 import type { FastifyInstance } from 'fastify'
 import type { FastifyZodOpenApiTypeProvider } from 'fastify-zod-openapi'
+import { z } from 'zod'
 
 const llmChatSchema = z.object({
   id: z.string(),

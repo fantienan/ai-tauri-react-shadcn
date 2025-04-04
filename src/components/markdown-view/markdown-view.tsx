@@ -2,8 +2,8 @@ import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { github } from 'react-syntax-highlighter/dist/esm/styles/hljs'
-import RemarkGfm from 'remark-gfm'
 import RehypeSanitize from 'rehype-sanitize'
+import RemarkGfm from 'remark-gfm'
 
 import styles from './MarkdownView.less'
 

@@ -1,6 +1,6 @@
-import fs from 'fs-extra'
 import path from 'node:path'
 import { configDotenv } from 'dotenv'
+import fs from 'fs-extra'
 import type { BizConfig } from './types.ts'
 
 const { NODE_ENV = 'local' } = process.env

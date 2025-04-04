@@ -1,9 +1,9 @@
 import { tool } from 'ai'
 import { z } from 'zod'
+import { logger } from '../../../utils/index.ts'
 import { sqlite } from '../../database/index.ts'
 import { createBizError } from '../../errors.ts'
 import { Result } from '../../result.ts'
-import { logger } from '../../../utils/index.ts'
 import { g2Chart } from '../chart/index.ts'
 
 export const sqliteSchema = tool({

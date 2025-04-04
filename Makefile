@@ -38,3 +38,10 @@ git-init:
 	git branch -M main
 	git remote add origin https://github.com/fantienan/ai-tauri-react-shadcn.git
 	git push -u origin main
+
+
+biome:
+	@echo "Running biome"
+	@pnpm lint
+	@pnpm check
+	@pnpm format

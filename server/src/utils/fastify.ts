@@ -1,5 +1,5 @@
-import { config } from '../config/index.ts'
 import type { FastifyServerOptions } from 'fastify'
+import { config } from '../config/index.ts'
 
 export const getFastifyOptions = () => {
   const options: FastifyServerOptions = {
