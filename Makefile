@@ -34,6 +34,8 @@ git-hook:
 	@echo lint-staged > .husky/pre-commit
 
 git-commit:
+	pnpm format
+	pnpm check
 	git add .
 	git commit -am "$(ARGS)"
 	git push -u origin main
