@@ -6,13 +6,6 @@ install:
 	@echo "Installing dependencies"
 	@pnpm install 
 
-init:
-	@echo "Initializing project"
-	@pnpm husky init
-	@npm pkg set scripts.commitlint="commitlint --edit"
-	@echo npm run commitlint > .husky/commit-msg
-	@echo lint-staged > .husky/pre-commit
-
 client-dev:
 	@echo "Running dev client"
 	@pnpm dev
@@ -33,7 +26,14 @@ app-build:
 	@echo "Building build app"
 	@pnpm app:build
 
-git-push:
+git-hook:
+	@echo "Initializing git hooks"
+	@pnpm husky init
+	@npm pkg set scripts.commitlint="commitlint --edit"
+	@echo npm run commitlint > .husky/commit-msg
+	@echo lint-staged > .husky/pre-commit
+
+git-commit:
 	git add .
 	git commit -am "$(ARGS)"
 	git push -u origin main
@@ -45,7 +45,6 @@ git-init:
 	git branch -M main
 	git remote add origin https://github.com/fantienan/ai-tauri-react-shadcn.git
 	git push -u origin main
-
 
 lint:
 	@echo "Running lint"
