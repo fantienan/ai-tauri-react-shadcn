@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "prepare": "husky",
+    "prepare": "husky install",
     "app:build": "yarn mask && tauri build",
     "app:dev": " tauri dev",
     "build": "tsc -b && vite build",
