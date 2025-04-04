@@ -1,10 +1,10 @@
-import type { VisualizationSpec } from 'vega-embed';
+import type { VisualizationSpec } from 'vega-embed'
 
 export const getRectSpec = (params: {
-  data: any[];
-  fields: { x: string; y: string };
+  data: any[]
+  fields: { x: string; y: string }
 }) => {
-  const { x, y } = params.fields;
+  const { x, y } = params.fields
   const spec: VisualizationSpec = {
     width: 400,
     height: 200,
@@ -141,6 +141,6 @@ export const getRectSpec = (params: {
         },
       },
     ],
-  };
-  return spec;
-};
+  }
+  return spec
+}

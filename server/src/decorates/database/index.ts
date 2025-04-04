@@ -1,1 +1,1 @@
-export * as sqlite from './sqlite.ts';
+export * as sqlite from './sqlite.ts'

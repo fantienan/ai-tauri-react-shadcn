@@ -1,14 +1,14 @@
-import React from 'react';
-import ReactMarkdown from 'react-markdown';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { github } from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import RemarkGfm from 'remark-gfm';
-import RehypeSanitize from 'rehype-sanitize';
+import React from 'react'
+import ReactMarkdown from 'react-markdown'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { github } from 'react-syntax-highlighter/dist/esm/styles/hljs'
+import RemarkGfm from 'remark-gfm'
+import RehypeSanitize from 'rehype-sanitize'
 
-import styles from './MarkdownView.less';
+import styles from './MarkdownView.less'
 
 interface MarkdownViewProps {
-  content: string;
+  content: string
 }
 
 const MarkdownView: React.FC<MarkdownViewProps> = ({ content }) => {
@@ -20,8 +20,8 @@ const MarkdownView: React.FC<MarkdownViewProps> = ({ content }) => {
         children={content}
         components={{
           code({ className, children, ref, ...props }) {
-            const match = /language-(\w+)/.exec(className || '');
-            const language = match?.[1] || 'text';
+            const match = /language-(\w+)/.exec(className || '')
+            const language = match?.[1] || 'text'
             return (
               <SyntaxHighlighter
                 {...props}
@@ -30,12 +30,12 @@ const MarkdownView: React.FC<MarkdownViewProps> = ({ content }) => {
                 language={language}
                 PreTag="div"
               />
-            );
+            )
           },
         }}
       />
     </div>
-  );
-};
+  )
+}
 
-export default MarkdownView;
+export default MarkdownView

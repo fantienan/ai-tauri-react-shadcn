@@ -1,15 +1,15 @@
 export function getErrorMessage(error: unknown) {
   if (error == null) {
-    return 'unknown error';
+    return 'unknown error'
   }
 
   if (typeof error === 'string') {
-    return error;
+    return error
   }
 
   if (error instanceof Error) {
-    return error.message;
+    return error.message
   }
 
-  return JSON.stringify(error);
+  return JSON.stringify(error)
 }

@@ -1,20 +1,11 @@
-import { useChat } from '@ai-sdk/react';
-import { MessageRenderer } from '../../components';
-export const maxDuration = 30;
+import { useChat } from '@ai-sdk/react'
+import { MessageRenderer } from '../../components'
+export const maxDuration = 30
 
 export default function ChatPage() {
-  const {
-    error,
-    input,
-    status,
-    handleInputChange,
-    handleSubmit,
-    messages,
-    reload,
-    stop,
-  } = useChat({
+  const { error, input, status, handleInputChange, handleSubmit, messages, reload, stop } = useChat({
     api: `${import.meta.env.BIZ_SERVER_URL}/llm/chat`,
-  });
+  })
   return (
     <div>
       <MessageRenderer messages={messages} status={status} />
@@ -55,5 +46,5 @@ export default function ChatPage() {
         />
       </form>
     </div>
-  );
+  )
 }

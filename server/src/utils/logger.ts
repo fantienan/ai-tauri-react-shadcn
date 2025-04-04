@@ -1,5 +1,5 @@
-import { pino } from 'pino';
-import { config } from '../config/index.ts';
+import { pino } from 'pino'
+import { config } from '../config/index.ts'
 
 let pinoLogger = pino({
   transport: {
@@ -8,7 +8,7 @@ let pinoLogger = pino({
     },
     target: 'pino/file',
   },
-});
+})
 
 if (process.env.NODE_ENV !== 'production') {
   pinoLogger = pino({
@@ -19,7 +19,7 @@ if (process.env.NODE_ENV !== 'production') {
         colorize: true,
       },
     },
-  });
+  })
 }
 
-export const logger = pinoLogger;
+export const logger = pinoLogger

@@ -1,16 +1,16 @@
-import fs from 'fs-extra';
-import path from 'node:path';
-import { configDotenv } from 'dotenv';
-import type { BizConfig } from './types.ts';
+import fs from 'fs-extra'
+import path from 'node:path'
+import { configDotenv } from 'dotenv'
+import type { BizConfig } from './types.ts'
 
-const { NODE_ENV = 'local' } = process.env;
-const envPath = path.resolve(process.cwd(), '..');
+const { NODE_ENV = 'local' } = process.env
+const envPath = path.resolve(process.cwd(), '..')
 
 configDotenv({
   path: [path.join(envPath, '.env.local'), path.join(envPath, `.env.${NODE_ENV}`), path.join(envPath, '.env')],
-});
+})
 
-const genFile = (name: string) => path.resolve(process.cwd(), '.logs', NODE_ENV!, `${name}.log`);
+const genFile = (name: string) => path.resolve(process.cwd(), '.logs', NODE_ENV!, `${name}.log`)
 
 const config: BizConfig = {
   tianditu: {
@@ -38,8 +38,8 @@ const config: BizConfig = {
       chat: '/chat',
     },
   },
-};
+}
 
-fs.ensureDirSync(config.service.file);
+fs.ensureDirSync(config.service.file)
 
-export default config;
+export default config

@@ -1,3 +1,3 @@
-export { default as config } from './config.default.ts';
+export { default as config } from './config.default.ts'
 
-export * from './types.ts';
+export * from './types.ts'

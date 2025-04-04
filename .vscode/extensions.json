@@ -1,16 +1,3 @@
 {
-  "recommendations": [
-    "ms-ceintl.vscode-language-pack-zh-hans",
-    "visualstudioexptteam.vscodeintellicode",
-    "xabikos.javascriptsnippets",
-    "dsznajder.es7-react-js-snippets",
-    "donjayamanne.githistory",
-    "eamodio.gitlens",
-    "esbenp.prettier-vscode",
-    "stylelint.vscode-stylelint",
-    "dbaeumer.vscode-eslint",
-    "EditorConfig.EditorConfig",
-    "meganrogge.template-string-converter",
-    "quicktype.quicktype"
-  ]
+  "recommendations": ["biomejs.biome"]
 }

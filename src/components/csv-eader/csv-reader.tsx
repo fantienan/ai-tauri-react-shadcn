@@ -1,27 +1,27 @@
-import { UploadOutlined } from '@ant-design/icons';
-import { Button, Upload } from 'antd';
-import type { UploadChangeParam, UploadFile } from 'antd/es/upload';
-import * as Papa from 'papaparse';
-import React from 'react';
+import { UploadOutlined } from '@ant-design/icons'
+import { Button, Upload } from 'antd'
+import type { UploadChangeParam, UploadFile } from 'antd/es/upload'
+import * as Papa from 'papaparse'
+import React from 'react'
 
 interface CsvReaderProps {
-  onFileLoaded: (data: any) => void;
+  onFileLoaded: (data: any) => void
 }
 
 const CsvReader: React.FC<CsvReaderProps> = ({ onFileLoaded }) => {
   const handleFileChange = (info: UploadChangeParam<UploadFile<File>>) => {
-    const file = info.fileList[0].originFileObj;
+    const file = info.fileList[0].originFileObj
     if (file) {
       Papa.parse(file, {
         header: true,
         dynamicTyping: true,
         skipEmptyLines: true,
         complete: (results) => {
-          onFileLoaded(results.data);
+          onFileLoaded(results.data)
         },
-      });
+      })
     }
-  };
+  }
 
   return (
     <div>
@@ -36,7 +36,7 @@ const CsvReader: React.FC<CsvReaderProps> = ({ onFileLoaded }) => {
         </Button>
       </Upload>
     </div>
-  );
-};
+  )
+}
 
-export default CsvReader;
+export default CsvReader

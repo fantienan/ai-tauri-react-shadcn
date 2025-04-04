@@ -1,14 +1,14 @@
-import { useEffect, useRef } from 'react';
-import embed, { vega, VisualizationSpec } from 'vega-embed';
+import { useEffect, useRef } from 'react'
+import embed, { vega, VisualizationSpec } from 'vega-embed'
 
 type VegaProps = {
-  spec: VisualizationSpec;
-};
+  spec: VisualizationSpec
+}
 
 export const ReactVega: React.FC<VegaProps> = ({ spec }) => {
-  const container = useRef<HTMLDivElement>(null);
+  const container = useRef<HTMLDivElement>(null)
 
-  const theme = 'light';
+  const theme = 'light'
 
   useEffect(() => {
     if (container.current && spec) {
@@ -20,9 +20,9 @@ export const ReactVega: React.FC<VegaProps> = ({ spec }) => {
         //     .remove(() => true)
         //     .insert(data),
         // );
-        view.run();
+        view.run()
         // view.resize();
-      });
+      })
       // spec.data = {
       //   name: 'data',
       // };
@@ -44,6 +44,6 @@ export const ReactVega: React.FC<VegaProps> = ({ spec }) => {
       //   // view.resize();
       // });
     }
-  }, [spec, theme]);
-  return <div ref={container} className="w-full w-[368px] bg-white p-5"></div>;
-};
+  }, [spec, theme])
+  return <div ref={container} className="w-full w-[368px] bg-white p-5"></div>
+}

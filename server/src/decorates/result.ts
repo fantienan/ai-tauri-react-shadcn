@@ -1,56 +1,56 @@
 export interface BizResult<T = any> {
-  data?: T | null;
-  code?: number;
-  message?: string;
-  success?: boolean;
+  data?: T | null
+  code?: number
+  message?: string
+  success?: boolean
 }
 
 export class Result {
   /**
    * @description 10000 成功
    */
-  static OK = 10000;
+  static OK = 10000
   /**
    * @description 40000-49999 平台异常
    */
-  static SYS_ERROR = 40000;
+  static SYS_ERROR = 40000
   /**
    * @description 30000-39999 ai 异常
    */
-  static AI_ERROR = 30000;
+  static AI_ERROR = 30000
   /**
    * @description 50000 未知异常
    */
-  static UN_ERROR = 50000;
+  static UN_ERROR = 50000
   /**
    * @description 60000-69999 基本的业务异常
    */
-  static BIZ_ERROR = 60000;
+  static BIZ_ERROR = 60000
   /**
    * @description 70000 参数校验异常
    */
-  static VALIDATE_ERROR = 70000;
+  static VALIDATE_ERROR = 70000
 
   static void() {
-    return { code: -1, data: null, message: '' };
+    return { code: -1, data: null, message: '' }
   }
   static success<T>(options: BizResult<T> = {}): BizResult<T> {
-    const { data = null, code = Result.OK, message = 'success', success = true } = options;
-    return { code, data, message, success };
+    const { data = null, code = Result.OK, message = 'success', success = true } = options
+    return { code, data, message, success }
   }
 
   static error<T>(options: BizResult<T> = {}): BizResult<T> {
-    const { data = null, code = Result.UN_ERROR, message = 'error', success = false } = options;
-    return { code, data, message, success };
+    const { data = null, code = Result.UN_ERROR, message = 'error', success = false } = options
+    return { code, data, message, success }
   }
 
   static validateError(options: BizResult = {}): BizResult {
-    const { data = null, code = Result.VALIDATE_ERROR, message = 'validateError', success = false } = options;
-    return { code, data, message, success };
+    const { data = null, code = Result.VALIDATE_ERROR, message = 'validateError', success = false } = options
+    return { code, data, message, success }
   }
 
   static getCode(code: number) {
-    return code ?? Result.UN_ERROR;
+    return code ?? Result.UN_ERROR
   }
 
   static getMessage(code: number) {
@@ -61,7 +61,7 @@ export class Result {
       [Result.BIZ_ERROR]: '基本的业务异常',
       [Result.VALIDATE_ERROR]: '参数校验异常',
       [Result.AI_ERROR]: 'AI 异常',
-    };
-    return message[code] || '未知异常';
+    }
+    return message[code] || '未知异常'
   }
 }

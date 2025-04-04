@@ -1,3 +1,3 @@
-export * from './vega';
+export * from './vega'
 
-export * from './spec';
+export * from './spec'

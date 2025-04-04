@@ -21,15 +21,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "files": [
-    "src/global.d.ts",
-  ],
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "packages",
-    "**/*.spec.ts"
-  ]
+  "files": ["src/global.d.ts"],
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "packages", "**/*.spec.ts"]
 }

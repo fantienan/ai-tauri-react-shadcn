@@ -1,4 +1,4 @@
-import type { G2Spec } from '@antv/g2';
+import type { G2Spec } from '@antv/g2'
 
 export const getSpec = (spec: Partial<G2Spec>) => {
   return {
@@ -7,5 +7,5 @@ export const getSpec = (spec: Partial<G2Spec>) => {
     data: [],
     // encode: { x: 'letter', y: 'frequency' },
     ...spec,
-  };
-};
+  }
+}

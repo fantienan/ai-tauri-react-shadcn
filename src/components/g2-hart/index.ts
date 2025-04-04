@@ -1,1 +1,1 @@
-export * from './g2-chart';
+export * from './g2-chart'

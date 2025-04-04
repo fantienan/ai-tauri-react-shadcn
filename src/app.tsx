@@ -1,7 +1,7 @@
-import ChatPage from './pages/chat';
+import ChatPage from './pages/chat'
 
 function App() {
-  return <ChatPage />;
+  return <ChatPage />
 }
 
-export default App;
+export default App

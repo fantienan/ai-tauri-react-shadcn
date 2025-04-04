@@ -1,13 +1,13 @@
-import { config } from '../config/index.ts';
-import type { FastifyServerOptions } from 'fastify';
+import { config } from '../config/index.ts'
+import type { FastifyServerOptions } from 'fastify'
 
 export const getFastifyOptions = () => {
   const options: FastifyServerOptions = {
     logger: {
       file: config.service.file,
     },
-  };
-  if (process.env.NODE_ENV === 'production') return options;
+  }
+  if (process.env.NODE_ENV === 'production') return options
 
   options.logger = {
     transport: {
@@ -17,6 +17,6 @@ export const getFastifyOptions = () => {
         colorize: true,
       },
     },
-  };
-  return options;
-};
+  }
+  return options
+}

@@ -1,1 +1,1 @@
-export * from './rect';
+export * from './rect'

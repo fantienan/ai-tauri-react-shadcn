@@ -1,10 +1,10 @@
-import markdownit from 'markdown-it';
-import React from 'react';
+import markdownit from 'markdown-it'
+import React from 'react'
 
-const md = markdownit({ html: true, breaks: true });
+const md = markdownit({ html: true, breaks: true })
 
 interface MarkdownViewProps {
-  content: string;
+  content: string
 }
 
 const MarkdownBase: React.FC<MarkdownViewProps> = ({ content }) => {
@@ -12,7 +12,7 @@ const MarkdownBase: React.FC<MarkdownViewProps> = ({ content }) => {
     <div>
       <div dangerouslySetInnerHTML={{ __html: md.render(content) }} />
     </div>
-  );
-};
+  )
+}
 
-export default MarkdownBase;
+export default MarkdownBase

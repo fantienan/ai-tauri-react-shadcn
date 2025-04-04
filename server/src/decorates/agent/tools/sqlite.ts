@@ -1,10 +1,10 @@
-import { tool } from 'ai';
-import { z } from 'zod';
-import { sqlite } from '../../database/index.ts';
-import { createBizError } from '../../errors.ts';
-import { Result } from '../../result.ts';
-import { logger } from '../../../utils/index.ts';
-import { g2Chart } from '../chart/index.ts';
+import { tool } from 'ai'
+import { z } from 'zod'
+import { sqlite } from '../../database/index.ts'
+import { createBizError } from '../../errors.ts'
+import { Result } from '../../result.ts'
+import { logger } from '../../../utils/index.ts'
+import { g2Chart } from '../chart/index.ts'
 
 export const sqliteSchema = tool({
   description: '获取SQLite数据库所有的表',
@@ -14,17 +14,17 @@ export const sqliteSchema = tool({
 
   execute: async ({ sql }) => {
     try {
-      const db = sqlite.getDatabase();
-      const result = db.prepare(sql).all();
-      db.close();
-      logger.info('sqliteSchemaTool', result);
-      return result;
+      const db = sqlite.getDatabase()
+      const result = db.prepare(sql).all()
+      db.close()
+      logger.info('sqliteSchemaTool', result)
+      return result
     } catch (error) {
-      if (error instanceof Error) return createBizError(Result.AI_ERROR, error);
-      throw error;
+      if (error instanceof Error) return createBizError(Result.AI_ERROR, error)
+      throw error
     }
   },
-});
+})
 
 export const sqliteTableField = tool({
   description: '获取SQLite数据库所有表的字段信息，调用此工具之前需要获取数据库中所有的表',
@@ -33,17 +33,17 @@ export const sqliteTableField = tool({
   }),
   execute: async ({ sql }) => {
     try {
-      const db = sqlite.getDatabase();
-      const result = db.prepare(sql).all();
-      db.close();
-      logger.info('sqliteFieldTool', result);
-      return result;
+      const db = sqlite.getDatabase()
+      const result = db.prepare(sql).all()
+      db.close()
+      logger.info('sqliteFieldTool', result)
+      return result
     } catch (error) {
-      if (error instanceof Error) return createBizError(Result.AI_ERROR, error);
-      throw error;
+      if (error instanceof Error) return createBizError(Result.AI_ERROR, error)
+      throw error
     }
   },
-});
+})
 
 export const sqliteAnalyze = tool({
   description:
@@ -54,14 +54,17 @@ export const sqliteAnalyze = tool({
   }),
   execute: async ({ sql }) => {
     try {
-      const db = sqlite.getDatabase();
-      const result = db.prepare(sql).all();
-      logger.info('sqliteAnalyzeTool', result);
-      db.close();
-      return g2Chart.getSpec({ data: result, encode: { x: 'name', y: 'value' } });
+      const db = sqlite.getDatabase()
+      const result = db.prepare(sql).all()
+      logger.info('sqliteAnalyzeTool', result)
+      db.close()
+      return g2Chart.getSpec({
+        data: result,
+        encode: { x: 'name', y: 'value' },
+      })
     } catch (error) {
-      if (error instanceof Error) return createBizError(Result.AI_ERROR, error);
-      throw error;
+      if (error instanceof Error) return createBizError(Result.AI_ERROR, error)
+      throw error
     }
   },
-});
+})

@@ -1,29 +1,29 @@
-import type { FastifyCorsOptions, FastifyCorsOptionsDelegate } from '@fastify/cors';
+import type { FastifyCorsOptions, FastifyCorsOptionsDelegate } from '@fastify/cors'
 
 export type BizConfig = {
   service: {
-    file: string;
-    port: number;
-    host: string;
-    address: string;
-  };
-  cors: NonNullable<FastifyCorsOptions> | FastifyCorsOptionsDelegate;
+    file: string
+    port: number
+    host: string
+    address: string
+  }
+  cors: NonNullable<FastifyCorsOptions> | FastifyCorsOptionsDelegate
 
   llm: {
     deepseek: {
-      apiKey: string;
-      baseUrl: string;
-    };
-  };
+      apiKey: string
+      baseUrl: string
+    }
+  }
   tianditu: {
-    apiKey: string;
-  };
+    apiKey: string
+  }
   routes: {
-    root: string;
+    root: string
 
     llm: {
-      prefix: string;
-      chat: string;
-    };
-  };
-};
+      prefix: string
+      chat: string
+    }
+  }
+}

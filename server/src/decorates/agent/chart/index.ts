@@ -1,1 +1,1 @@
-export * from './g2-chart/index.ts';
+export * from './g2-chart/index.ts'

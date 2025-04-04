@@ -1,12 +1,12 @@
-import { deepseek } from '@ai-sdk/deepseek';
-import { createProviderRegistry } from 'ai';
+import { deepseek } from '@ai-sdk/deepseek'
+import { createProviderRegistry } from 'ai'
 
-const registry = createProviderRegistry({ deepseek });
+const registry = createProviderRegistry({ deepseek })
 
 export class LLMProvider {
-  registry: typeof registry;
+  registry: typeof registry
 
   constructor() {
-    this.registry = registry;
+    this.registry = registry
   }
 }
