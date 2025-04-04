@@ -10,10 +10,6 @@ client-dev:
 	@echo "Running dev client"
 	@pnpm dev
 
-server-add:
-	@echo "Adding package to server"
-	@pnpm --filter server add $(ARGS)
-
 server-dev:
 	@echo "Running dev server"
 	@pnpm --filter server dev
@@ -26,7 +22,7 @@ app-build:
 	@echo "Building build app"
 	@pnpm app:build
 
-git-hook:
+git-hooks:
 	@echo "Initializing git hooks"
 	@pnpm husky init
 	@npm pkg set scripts.commitlint="commitlint --edit"

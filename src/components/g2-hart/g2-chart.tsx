@@ -1,6 +1,6 @@
 import { Chart, type G2Spec } from '@antv/g2'
 import classNames from 'classnames'
-import { memo, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
 export interface ChartViewProps {
   prefixCls?: string
@@ -9,7 +9,7 @@ export interface ChartViewProps {
   spec: G2Spec
 }
 
-const InternalG2Chart: React.FC<ChartViewProps> = ({ prefixCls = 'g2chart', className, style, spec, ...restProps }) => {
+export const G2Chart: React.FC<ChartViewProps> = ({ prefixCls = 'g2chart', className, style, spec, ...restProps }) => {
   const compClassName = classNames(`${prefixCls}`, className)
   const chartRef = useRef<HTMLDivElement>(null)
 
@@ -30,7 +30,3 @@ const InternalG2Chart: React.FC<ChartViewProps> = ({ prefixCls = 'g2chart', clas
 
   return <div {...restProps} className={compClassName} ref={chartRef} style={{ width, height, margin: 'auto' }} />
 }
-
-export const G2Chart = memo(InternalG2Chart, (prevProps, nextProps) => {
-  return JSON.stringify(prevProps.spec) === JSON.stringify(nextProps.spec)
-})

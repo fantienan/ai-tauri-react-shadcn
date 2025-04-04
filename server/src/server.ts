@@ -3,7 +3,8 @@ import { serializerCompiler, validatorCompiler } from 'fastify-zod-openapi'
 import { config } from './config/index.ts'
 import { Agent, Result, errors, sqlite } from './decorates/index.ts'
 import { getFastifyOptions } from './utils/index.ts'
-
+console.log(config)
+debugger
 async function main() {
   const fastify = Fastify(getFastifyOptions())
   fastify.setValidatorCompiler(validatorCompiler)
