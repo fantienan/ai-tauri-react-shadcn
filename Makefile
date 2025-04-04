@@ -28,7 +28,7 @@ app-build:
 
 git-push:
 	git add .
-	git commit -m "$(ARGS)"
+	git commit -am "$(ARGS)"
 	git push -u origin main
 
 git-init:
