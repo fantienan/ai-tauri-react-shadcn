@@ -41,7 +41,7 @@ export async function generateTitleFromUserMessage({
     model: llmProvider.languageModel('chat-model-reasoning'),
     system: `\n
         - 您将根据用户开始对话的第一条消息生成一个简短的标题
-        - 确保其长度不超过 80 个字符
+        - 确保其长度不超过 80 个汉字
         - 标题应为用户消息的摘要
         - 请勿使用引号或冒号`,
     prompt: JSON.stringify(message),

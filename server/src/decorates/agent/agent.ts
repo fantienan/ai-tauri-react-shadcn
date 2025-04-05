@@ -8,5 +8,6 @@ export class Agent {
   constructor() {
     this.tools = tools
     this.utils = utils
+    console.log('Agent initialized')
   }
 }
