@@ -14,6 +14,34 @@ server-dev:
 	@echo "Running dev server"
 	@pnpm --filter server dev
 
+db-check:
+	@echo "Checking database"
+	@pnpm --filter server db:check
+
+db-generate:
+	@echo "Generating database"
+	@pnpm --filter server db:generate
+
+db-migrate:
+	@echo "Running database migration"
+	@pnpm --filter server db:migrate
+
+db-pull:
+	@echo "Pulling database"
+	@pnpm --filter server db:pull
+
+db-push:
+	@echo "Pushing database"
+	@pnpm --filter server db:push
+
+db-studio:
+	@echo "Running database studio"
+	@pnpm --filter server db:studio
+
+db-up:
+	@echo "Running database up"
+	@pnpm --filter server db:up
+
 app-dev:
 	@echo "Running dev app"
 	@pnpm app:dev
