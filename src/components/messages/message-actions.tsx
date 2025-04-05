@@ -1,7 +1,7 @@
-import { CopyIcon, ThumbDownIcon, ThumbUpIcon } from '@/components/icons'
+import { CopyIcon, DownloadIcon, ThumbDownIcon, ThumbUpIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import type { Vote } from '@/db/schema'
+import type { Vote } from '@@/server/database/schema'
 import type { Message } from 'ai'
 import equal from 'fast-deep-equal'
 import { memo } from 'react'
@@ -156,6 +156,30 @@ export function PureMessageActions({
             </Button>
           </TooltipTrigger>
           <TooltipContent>反对回应</TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              data-testid="message-download"
+              className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto"
+              variant="outline"
+              disabled={vote && !vote.isUpvoted}
+              onClick={async () => {
+                const download = fetch('', { method: 'POST' })
+                toast.promise(download, {
+                  loading: '下载...',
+                  success: () => {
+                    return '下载成功！'
+                  },
+                  error: '下载失败',
+                })
+              }}
+            >
+              <DownloadIcon />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>下载</TooltipContent>
         </Tooltip>
       </div>
     </TooltipProvider>

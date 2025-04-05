@@ -1,18 +1,15 @@
-import type { G2Spec } from '@antv/g2'
 import equal from 'fast-deep-equal'
 import { memo } from 'react'
-import { G2Chart } from './g2-hart'
+import { ChartRenderer, ChartRendererProps } from './chart'
 
-interface AnalyzeProps {
-  analyzeResults?: G2Spec
-}
-
-function PureAnalyze({ analyzeResults }: AnalyzeProps) {
-  console.log('analyzeResults', analyzeResults)
-  return analyzeResults ? <G2Chart spec={analyzeResults} /> : null
+function PureAnalyze({ options, chartType }: Partial<ChartRendererProps>) {
+  return chartType && options ? <ChartRenderer options={options} chartType={chartType} /> : null
 }
 
 export const Analyze = memo(PureAnalyze, (prevProps, nextProps) => {
-  if (!equal(prevProps.analyzeResults, nextProps.analyzeResults)) return false
+  if (prevProps.chartType !== nextProps.chartType) return false
+  if (prevProps.options?.data.length !== nextProps.options?.data.length) return false
+  if (!equal(prevProps.options?.data, nextProps.options?.data)) return false
+  if (!equal(prevProps.options, nextProps.options)) return false
   return true
 })

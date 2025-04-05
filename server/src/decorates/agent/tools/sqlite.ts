@@ -4,7 +4,6 @@ import { logger } from '../../../utils/index.ts'
 import { sqlite } from '../../database/index.ts'
 import { createBizError } from '../../errors.ts'
 import { Result } from '../../result.ts'
-import { g2Chart } from '../chart/index.ts'
 
 export const sqliteSchema = tool({
   description: '获取SQLite数据库所有的表',
@@ -48,7 +47,6 @@ export const sqliteTableField = tool({
 export const sqliteAnalyze = tool({
   description:
     'SQLite数据库分析工具，调用此工具之前需要先获取数据库中所有的表和每个表的所有字段信息，注意，分析结果中用value作为统计值的字段名称，name作为统计目标的字段名称',
-
   parameters: z.object({
     sql: z.string().describe('要执行的 SQL 查询'),
   }),
@@ -58,10 +56,7 @@ export const sqliteAnalyze = tool({
       const result = db.prepare(sql).all()
       logger.info('sqliteAnalyzeTool', result)
       db.close()
-      return g2Chart.getSpec({
-        data: result,
-        encode: { x: 'name', y: 'value' },
-      })
+      return { data: result }
     } catch (error) {
       if (error instanceof Error) return createBizError(Result.AI_ERROR, error)
       throw error

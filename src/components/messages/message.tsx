@@ -3,8 +3,8 @@ import { Markdown } from '@/components/markdown'
 import { PreviewAttachment } from '@/components/preview-attachment'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import type { Vote } from '@/db/schema'
 import { cn } from '@/lib/utils'
+import type { Vote } from '@@/server/database/schema'
 import { UseChatHelpers } from '@ai-sdk/react'
 import type { UIMessage } from 'ai'
 import cx from 'classnames'
@@ -146,7 +146,7 @@ const PurePreviewMessage = ({
 
                   return (
                     <div key={toolCallId}>
-                      {toolName === 'sqliteAnalyze' ? <Analyze analyzeResults={result} /> : null}
+                      {toolName === 'sqliteAnalyze' ? <Analyze chartType="react-charts" options={result} /> : null}
                     </div>
                   )
                 }

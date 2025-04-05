@@ -8,7 +8,14 @@
     "dev": "cross-env NODE_ENV=development tsx watch --clear-screen=false src/server.ts",
     "ds": "tsx  watch --clear-screen=false src/stream-text/deepseek.ts",
     "dsr": "tsx  watch --clear-screen=false src/stream-text/deepseek-reasoning.ts",
-    "dstc": "tsx  src/stream-text/deepseek-tool-call.ts"
+    "dstc": "tsx  src/stream-text/deepseek-tool-call.ts",
+    "db:check": "drizzle-kit check",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "npx tsx lib/db/migrate.ts",
+    "db:pull": "drizzle-kit pull",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:up": "drizzle-kit up"
   },
   "dependencies": {
     "@ai-sdk/deepseek": "^0.2.4",
@@ -20,6 +27,8 @@
     "better-sqlite3": "^11.9.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.41.0",
+    "drizzle-zod": "^0.7.1",
     "fastify": "^5.2.1",
     "fastify-plugin": "^5.0.1",
     "fastify-type-provider-zod": "^4.0.2",
@@ -43,6 +52,7 @@
     "@types/fs-extra": "^11.0.4",
     "@types/ws": "^8.18.0",
     "cross-env": "^7.0.3",
+    "drizzle-kit": "^0.30.6",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"
   }

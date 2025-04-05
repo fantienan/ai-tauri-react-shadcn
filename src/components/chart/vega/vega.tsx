@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react'
 import embed, { vega, VisualizationSpec } from 'vega-embed'
 
-type VegaProps = {
+type VegaChartProps = {
   spec: VisualizationSpec
 }
 
-export const ReactVega: React.FC<VegaProps> = ({ spec }) => {
+export const VegaChart: React.FC<VegaChartProps> = ({ spec }) => {
   const container = useRef<HTMLDivElement>(null)
 
   const theme = 'light'

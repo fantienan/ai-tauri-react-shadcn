@@ -1,3 +1,9 @@
+// import { Download, type LucideProps } from 'lucide-react'
+
+// export const DownloadIcon = (props: LucideProps) => {
+//   return <Download {...props} />
+// }
+
 export const DeepseekIcon = ({ size = 16 }: { size?: number }) => {
   return (
     <svg height={size} style={{ flex: 'none', lineHeight: 1 }} viewBox="0 0 30 30" width={size}>

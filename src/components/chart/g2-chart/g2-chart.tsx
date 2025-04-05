@@ -15,7 +15,7 @@ export const G2Chart: React.FC<ChartViewProps> = ({ prefixCls = 'g2chart', class
 
   const height = style?.height || 200
   const width = style?.width || '100%'
-  console.log('spec', spec)
+
   useEffect(() => {
     if (chartRef.current && spec) {
       const chart = new Chart({

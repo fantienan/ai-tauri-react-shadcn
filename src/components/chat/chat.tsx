@@ -1,12 +1,10 @@
 import { Messages } from '@/components/messages'
 import { MultimodalInput } from '@/components/multimodal-input'
-import { Vote } from '@/db/schema'
-import { fetcher } from '@/utils'
 import { useChat } from '@ai-sdk/react'
 import { Attachment, UIMessage } from 'ai'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import useSWR, { useSWRConfig } from 'swr'
+// import { useSWRConfig } from 'swr'
 import { v4 as uuidv4 } from 'uuid'
 import { ChatHeader } from './chat-header'
 // import { unstable_serialize } from 'swr/infinite';
@@ -18,7 +16,7 @@ interface ChatProps {
 }
 
 export function Chat({ id, initialMessages, isReadonly }: ChatProps) {
-  const { mutate } = useSWRConfig()
+  //   const { mutate } = useSWRConfig()
   const { messages, setMessages, handleSubmit, input, setInput, append, status, stop, reload } = useChat({
     id,
     api: `${import.meta.env.BIZ_SERVER_URL}/llm/chat`,
@@ -34,7 +32,6 @@ export function Chat({ id, initialMessages, isReadonly }: ChatProps) {
       toast.error('发生错误，请重试！')
     },
   })
-  debugger
   const [attachments, setAttachments] = useState<Attachment[]>([])
   //   const { data: votes } = useSWR<Array<Vote>>(messages.length >= 2 ? `/api/vote?chatId=${id}` : null, fetcher)
   return (
@@ -48,7 +45,6 @@ export function Chat({ id, initialMessages, isReadonly }: ChatProps) {
         setMessages={setMessages}
         reload={reload}
         isReadonly={isReadonly}
-        isArtifactVisible
       />
       <form className="flex mx-auto px-4 bg-background pb-4 md:pb-6 gap-2 w-full md:max-w-3xl">
         {!isReadonly && (

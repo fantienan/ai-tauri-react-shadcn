@@ -20,10 +20,10 @@ function PureChatHeader() {
           <TooltipTrigger asChild>
             <Button variant="outline" className="order-2 md:order-1 md:px-2 px-2 md:h-fit ml-auto md:ml-0">
               <PlusIcon />
-              <span className="md:sr-only">New Chat</span>
+              <span className="md:sr-only">新聊天</span>
             </Button>
           </TooltipTrigger>
-          <TooltipContent>New Chat</TooltipContent>
+          <TooltipContent>新聊天</TooltipContent>
         </Tooltip>
       )}
     </header>

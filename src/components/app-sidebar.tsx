@@ -26,7 +26,7 @@ export function AppSidebar() {
                   <PlusIcon />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent align="end">New Chat</TooltipContent>
+              <TooltipContent align="end">新聊天</TooltipContent>
             </Tooltip>
           </div>
         </SidebarMenu>
