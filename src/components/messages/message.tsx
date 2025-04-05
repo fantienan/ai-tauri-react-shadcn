@@ -96,7 +96,7 @@ const PurePreviewMessage = ({
                               <PencilEditIcon />
                             </Button>
                           </TooltipTrigger>
-                          <TooltipContent>Edit message</TooltipContent>
+                          <TooltipContent>编辑消息</TooltipContent>
                         </Tooltip>
                       )}
 

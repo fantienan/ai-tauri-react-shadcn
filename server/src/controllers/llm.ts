@@ -24,6 +24,16 @@ export default async function (fastify: FastifyInstance) {
       },
     },
     async function (request, reply) {
+      //   const result = streamText({
+      //     model,
+      //     system: agent.utils.systemPrompt(),
+      //     messages: request.body.messages,
+      //     tools: agent.tools,
+      //     maxSteps: 5,
+      //     experimental_generateMessageId: uuidv4,
+      //   })
+
+      //   return reply.send(result.toDataStreamResponse({ getErrorMessage: agent.utils.getErrorMessage }))
       const userMessage = agent.utils.getMostRecentUserMessage(request.body.messages)
 
       if (!userMessage) {
@@ -54,15 +64,6 @@ export default async function (fastify: FastifyInstance) {
         ],
       })
 
-      //   const result = streamText({
-      //     model,
-      //     system: agent.utils.systemPrompt(),
-      //     messages: request.body.messages,
-      //     tools: agent.tools,
-      //     maxSteps: 10,
-      //     experimental_transform: smoothStream({ chunking: 'word' }),
-      //     experimental_generateMessageId: uuidv4,
-      //   })
       reply.header('Content-Type', 'text/plain; charset=utf-8')
       return reply.send(
         createDataStreamResponse({
@@ -72,8 +73,8 @@ export default async function (fastify: FastifyInstance) {
               system: agent.utils.systemPrompt(),
               messages: request.body.messages,
               tools: agent.tools,
-              maxSteps: 10,
-              experimental_transform: smoothStream({ chunking: 'word' }),
+              maxSteps: 5,
+              // experimental_transform: smoothStream({ chunking: 'word' }),
               experimental_generateMessageId: uuidv4,
               onFinish: async ({ response }) => {
                 if (session.user?.id) {
@@ -111,7 +112,7 @@ export default async function (fastify: FastifyInstance) {
                 }
               },
               experimental_telemetry: {
-                isEnabled: fastify.bizAppConfig.isProductionEnvironment,
+                isEnabled: true,
                 functionId: 'stream-text',
               },
             })
@@ -123,11 +124,6 @@ export default async function (fastify: FastifyInstance) {
           },
         }),
       )
-      //   return reply.send(
-      //     result.toDataStreamResponse({
-      //       getErrorMessage: agent.utils.getErrorMessage,
-      //     }),
-      //   )
     },
   )
 
