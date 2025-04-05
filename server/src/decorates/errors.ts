@@ -76,7 +76,7 @@ export function isBizError(error: unknown): error is BizError {
   return error instanceof BizError
 }
 
-export function createBizError(status: number, response: any): BizError {
+export function createBizError(status: number, response: { message?: string; [k: string]: any }): BizError {
   switch (status) {
     case 401:
       return new BizAuthenticationError(response?.message)
@@ -91,8 +91,10 @@ export function createBizError(status: number, response: any): BizError {
     case 429:
       return new BizRateLimitError(response?.message, new Date(response?.reset_at || Date.now() + 60000))
     case 500:
-      return new BizServerError(response?.message)
+      return new BizServerError(response?.message ?? 'Internal server error')
     case Result.AI_ERROR:
+    case Result.AI_AGENT_TOOL_ERROR:
+    case Result.AI_CHAT_ERROR:
       return new BizAiError(response?.message || 'AI error', response)
     default:
       return new BizError(response?.message || 'Biz API error', status, response)

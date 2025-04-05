@@ -1,6 +1,6 @@
 import BetterSqlite3 from 'better-sqlite3'
-import { config } from '../../config/index.ts'
-import { logger } from '../../utils/index.ts'
+import { config } from '../../../config/index.ts'
+import { logger } from '../../../utils/index.ts'
 
 export function getErrorMessage(error: unknown) {
   if (error == null) {
@@ -18,7 +18,7 @@ export function getErrorMessage(error: unknown) {
   return JSON.stringify(error)
 }
 
-export const getDatabase = () => {
+export function getDatabase() {
   return BetterSqlite3(config.sqlite.databaseUrl, {
     verbose: (a, b, ...args) => {
       logger.info(a, (b as any)?.toString(), ...args)

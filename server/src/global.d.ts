@@ -1,6 +1,7 @@
 import multer from 'fastify-multer'
 import type { BizConfig } from './config/index.ts'
 import { Agent, Result, errors, sqliteDb } from './decorates/index.ts'
+import * as schemas from './schemas/index.ts'
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -9,6 +10,7 @@ declare module 'fastify' {
     bizErrors: typeof errors
     bizAgent: InstanceType<typeof Agent>
     bizSqliteDb: typeof sqliteDb
+    bizSchemas: typeof schemas
   }
 }
 declare global {

@@ -2,6 +2,7 @@ import Fastify from 'fastify'
 import { serializerCompiler, validatorCompiler } from 'fastify-zod-openapi'
 import { config } from './config/index.ts'
 import { Agent, Result, errors, sqliteDb } from './decorates/index.ts'
+import * as schemas from './schemas/index.ts'
 import { getFastifyOptions } from './utils/index.ts'
 
 async function main() {
@@ -14,6 +15,7 @@ async function main() {
     .decorate('BizResult', Result)
     .decorate('bizAgent', new Agent())
     .decorate('bizSqliteDb', sqliteDb)
+    .decorate('bizSchemas', schemas)
     .register(import('@fastify/cors'), config.cors)
     .after(() => {
       fastify

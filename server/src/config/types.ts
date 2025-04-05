@@ -2,6 +2,7 @@ import type { FastifyCorsOptions, FastifyCorsOptionsDelegate } from '@fastify/co
 import type { Config } from 'drizzle-kit'
 
 export type BizConfig = {
+  isProductionEnvironment: boolean
   service: {
     file: string
     port: number
@@ -16,7 +17,11 @@ export type BizConfig = {
       baseUrl: string
     }
   }
-  drizzleKit: Config
+  drizzleKit: Config & {
+    dbCredentials: {
+      url: string
+    }
+  }
   sqlite: {
     databaseUrl: string
   }

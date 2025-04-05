@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { logger } from '../../../utils/index.ts'
 import { createBizError } from '../../errors.ts'
 import { Result } from '../../result.ts'
-import { getDatabase } from '../utils.ts'
+import { getDatabase } from '../utils/index.ts'
 
 export const sqliteSchema = tool({
   description: '获取SQLite数据库所有的表',
@@ -19,7 +19,7 @@ export const sqliteSchema = tool({
       logger.info('sqliteSchemaTool', result)
       return result
     } catch (error) {
-      if (error instanceof Error) return createBizError(Result.AI_ERROR, error)
+      if (error instanceof Error) return createBizError(Result.AI_AGENT_TOOL_ERROR, error)
       throw error
     }
   },
@@ -38,7 +38,7 @@ export const sqliteTableField = tool({
       logger.info('sqliteFieldTool', result)
       return result
     } catch (error) {
-      if (error instanceof Error) return createBizError(Result.AI_ERROR, error)
+      if (error instanceof Error) return createBizError(Result.AI_AGENT_TOOL_ERROR, error)
       throw error
     }
   },
@@ -58,7 +58,7 @@ export const sqliteAnalyze = tool({
       db.close()
       return { data: result }
     } catch (error) {
-      if (error instanceof Error) return createBizError(Result.AI_ERROR, error)
+      if (error instanceof Error) return createBizError(Result.AI_AGENT_TOOL_ERROR, error)
       throw error
     }
   },

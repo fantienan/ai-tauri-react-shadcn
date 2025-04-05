@@ -13,6 +13,7 @@ configDotenv({
 const genFile = (name: string) => path.resolve(process.cwd(), '.logs', NODE_ENV!, `${name}.log`)
 
 const config: BizConfig = {
+  isProductionEnvironment: process.env.NODE_ENV === 'production',
   drizzleKit: {
     schema: './src/database/schema.ts',
     out: './src/database/migrations',
