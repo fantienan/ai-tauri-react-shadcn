@@ -8,12 +8,13 @@ const router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       {
-        index: true,
+        // index: true,
         path: 'map',
         element: <MapPage />,
       },
       {
-        path: 'chat',
+        index: true,
+        // path: 'chat',
         lazy: async () => ({ Component: (await import('@/pages/chat')).default }),
       },
       {
