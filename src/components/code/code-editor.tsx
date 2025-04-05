@@ -1,4 +1,3 @@
-import { Suggestion } from '@@/server/database/schema'
 import { python } from '@codemirror/lang-python'
 import { EditorState, Transaction } from '@codemirror/state'
 import { oneDark } from '@codemirror/theme-one-dark'
@@ -12,7 +11,6 @@ type EditorProps = {
   status: 'streaming' | 'idle'
   isCurrentVersion: boolean
   currentVersionIndex: number
-  suggestions: Array<Suggestion>
 }
 
 function PureCodeEditor({ content, onSaveContent, status }: EditorProps) {
@@ -90,7 +88,6 @@ function PureCodeEditor({ content, onSaveContent, status }: EditorProps) {
 }
 
 function areEqual(prevProps: EditorProps, nextProps: EditorProps) {
-  if (prevProps.suggestions !== nextProps.suggestions) return false
   if (prevProps.currentVersionIndex !== nextProps.currentVersionIndex) return false
   if (prevProps.isCurrentVersion !== nextProps.isCurrentVersion) return false
   if (prevProps.status === 'streaming' && nextProps.status === 'streaming') return false

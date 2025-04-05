@@ -13,6 +13,17 @@ configDotenv({
 const genFile = (name: string) => path.resolve(process.cwd(), '.logs', NODE_ENV!, `${name}.log`)
 
 const config: BizConfig = {
+  drizzleKit: {
+    schema: './src/database/schema.ts',
+    out: './src/database/migrations',
+    dialect: 'sqlite',
+    dbCredentials: {
+      url: process.env.SQLITE_URL!,
+    },
+  },
+  sqlite: {
+    databaseUrl: process.env.SQLITE_URL!,
+  },
   tianditu: {
     apiKey: process.env.TIAN_DI_TU_API_KEY!,
   },

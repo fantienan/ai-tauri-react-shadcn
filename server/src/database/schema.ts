@@ -1,135 +1,100 @@
-import type { InferSelectModel } from 'drizzle-orm'
-import { boolean, foreignKey, json, pgTable, primaryKey, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core'
+import { type InferSelectModel, sql } from 'drizzle-orm'
+import { integer, primaryKey, real, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { v4 as uuidv4 } from 'uuid'
 
-export const user = pgTable('User', {
-  id: uuid('id').primaryKey().notNull().defaultRandom(),
-  email: varchar('email', { length: 64 }).notNull(),
-  password: varchar('password', { length: 64 }),
+export const orderProductDetails = sqliteTable('order_product_details', {
+  客户编码: integer('客户编码'),
+  客户类型: text('客户类型', { length: 255 }),
+  省份: text('省份', { length: 255 }),
+  城市: text('城市', { length: 255 }),
+  城市等级: text('城市等级', { length: 255 }),
+  门店类型: text('门店类型', { length: 255 }),
+  门店编码: integer('门店编码'),
+  会员编码: integer('会员编码'),
+  宝宝年龄段: text('宝宝年龄段', { length: 255 }),
+  性别: text('性别', { length: 255 }),
+  人群分类: text('人群分类', { length: 255 }),
+  线上订单号: text('线上订单号', { length: 255 }),
+  支付日期: text('支付日期', { length: 255 }),
+  核销日期: text('核销日期', { length: 255 }),
+  关联订单号: text('关联订单号', { length: 255 }),
+  '1级品类': text('1级品类', { length: 255 }),
+  '2级品类': text('2级品类', { length: 255 }),
+  连带1级品类: text('连带1级品类', { length: 255 }),
+  连带2级品类: text('连带2级品类', { length: 255 }),
+  品牌名称: text('品牌名称', { length: 255 }),
+  连带品牌名称: text('连带品牌名称', { length: 255 }),
+  线上商品编码: text('线上商品编码', { length: 255 }),
+  连带商品编码: text('连带商品编码', { length: 255 }),
+  营销活动类型: text('营销活动类型', { length: 255 }),
+  场景名称: text('场景名称', { length: 255 }),
+  支付核销天数差: integer('支付核销天数差'),
+  线上销售额: real('线上销售额'),
+  连带销售额: real('连带销售额'),
+})
+
+export const dailySummary = sqliteTable('daily_summary', {
+  客户编码: integer('客户编码'),
+  会员编码: integer('会员编码'),
+  访问日期: text('访问日期', { length: 255 }),
+  访问时段: integer('访问时段'),
+  微信场景id: integer('微信场景ID'),
+  pv: integer('PV'),
+})
+
+export const user = sqliteTable('user', {
+  id: text('id')
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => uuidv4()),
+  email: text('email', { length: 64 }).notNull(),
+  password: text('password', { length: 64 }),
 })
 
 export type User = InferSelectModel<typeof user>
 
-export const chat = pgTable('Chat', {
-  id: uuid('id').primaryKey().notNull().defaultRandom(),
-  createdAt: timestamp('createdAt').notNull(),
+export const chat = sqliteTable('chat', {
+  id: text('id')
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => uuidv4()),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`CURRENT_TIMESTAMP`),
   title: text('title').notNull(),
-  userId: uuid('userId')
+  userId: text('user_id')
     .notNull()
     .references(() => user.id),
-  visibility: varchar('visibility', { enum: ['public', 'private'] })
-    .notNull()
-    .default('private'),
 })
 
 export type Chat = InferSelectModel<typeof chat>
 
-// DEPRECATED: The following schema is deprecated and will be removed in the future.
-// Read the migration guide at https://github.com/vercel/ai-chatbot/blob/main/docs/04-migrate-to-parts.md
-export const messageDeprecated = pgTable('Message', {
-  id: uuid('id').primaryKey().notNull().defaultRandom(),
-  chatId: uuid('chatId')
+export const message = sqliteTable('message', {
+  id: text('id')
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => uuidv4()),
+  chatId: text('chat_id')
     .notNull()
     .references(() => chat.id),
-  role: varchar('role').notNull(),
-  content: json('content').notNull(),
-  createdAt: timestamp('createdAt').notNull(),
-})
-
-export type MessageDeprecated = InferSelectModel<typeof messageDeprecated>
-
-export const message = pgTable('Message_v2', {
-  id: uuid('id').primaryKey().notNull().defaultRandom(),
-  chatId: uuid('chatId')
-    .notNull()
-    .references(() => chat.id),
-  role: varchar('role').notNull(),
-  parts: json('parts').notNull(),
-  attachments: json('attachments').notNull(),
-  createdAt: timestamp('createdAt').notNull(),
+  role: text('role').notNull(),
+  parts: text('parts', { mode: 'json' }).notNull(),
+  attachments: text('attachments', { mode: 'json' }).notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`CURRENT_TIMESTAMP`),
 })
 
 export type DBMessage = InferSelectModel<typeof message>
 
-// DEPRECATED: The following schema is deprecated and will be removed in the future.
-// Read the migration guide at https://github.com/vercel/ai-chatbot/blob/main/docs/04-migrate-to-parts.md
-export const voteDeprecated = pgTable(
-  'Vote',
+export const vote = sqliteTable(
+  'vote',
   {
-    chatId: uuid('chatId')
+    chatId: text('chat_id')
       .notNull()
       .references(() => chat.id),
-    messageId: uuid('messageId')
-      .notNull()
-      .references(() => messageDeprecated.id),
-    isUpvoted: boolean('isUpvoted').notNull(),
-  },
-  (table) => {
-    return [primaryKey({ name: 'pk', columns: [table.chatId, table.messageId] })]
-  },
-)
-
-export type VoteDeprecated = InferSelectModel<typeof voteDeprecated>
-
-export const vote = pgTable(
-  'Vote_v2',
-  {
-    chatId: uuid('chatId')
-      .notNull()
-      .references(() => chat.id),
-    messageId: uuid('messageId')
+    messageId: text('message_id')
       .notNull()
       .references(() => message.id),
-    isUpvoted: boolean('isUpvoted').notNull(),
+    isUpvoted: integer('is_upvoted', { mode: 'boolean' }).notNull(),
   },
-  (table) => {
-    return [primaryKey({ name: 'pk', columns: [table.chatId, table.messageId] })]
-  },
+  (table) => [primaryKey({ name: 'pk', columns: [table.chatId, table.messageId] })],
 )
 
 export type Vote = InferSelectModel<typeof vote>
-
-export const document = pgTable(
-  'Document',
-  {
-    id: uuid('id').notNull().defaultRandom(),
-    createdAt: timestamp('createdAt').notNull(),
-    title: text('title').notNull(),
-    content: text('content'),
-    kind: varchar('text', { enum: ['text', 'code', 'image', 'sheet'] })
-      .notNull()
-      .default('text'),
-    userId: uuid('userId')
-      .notNull()
-      .references(() => user.id),
-  },
-  (table) => [primaryKey({ name: 'pk', columns: [table.id, table.createdAt] })],
-)
-
-export type Document = InferSelectModel<typeof document>
-
-export const suggestion = pgTable(
-  'Suggestion',
-  {
-    id: uuid('id').notNull().defaultRandom(),
-    documentId: uuid('documentId').notNull(),
-    documentCreatedAt: timestamp('documentCreatedAt').notNull(),
-    originalText: text('originalText').notNull(),
-    suggestedText: text('suggestedText').notNull(),
-    description: text('description'),
-    isResolved: boolean('isResolved').notNull().default(false),
-    userId: uuid('userId')
-      .notNull()
-      .references(() => user.id),
-    createdAt: timestamp('createdAt').notNull(),
-  },
-  (table) => [
-    primaryKey({ name: 'pk', columns: [table.id] }),
-    foreignKey({
-      name: 'documentRef',
-      columns: [table.documentId, table.documentCreatedAt],
-      foreignColumns: [document.id, document.createdAt],
-    }),
-  ],
-)
-
-export type Suggestion = InferSelectModel<typeof suggestion>

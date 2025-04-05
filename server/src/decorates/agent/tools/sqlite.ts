@@ -1,9 +1,9 @@
 import { tool } from 'ai'
 import { z } from 'zod'
 import { logger } from '../../../utils/index.ts'
-import { sqlite } from '../../database/index.ts'
 import { createBizError } from '../../errors.ts'
 import { Result } from '../../result.ts'
+import { getDatabase } from '../utils.ts'
 
 export const sqliteSchema = tool({
   description: '获取SQLite数据库所有的表',
@@ -13,7 +13,7 @@ export const sqliteSchema = tool({
 
   execute: async ({ sql }) => {
     try {
-      const db = sqlite.getDatabase()
+      const db = getDatabase()
       const result = db.prepare(sql).all()
       db.close()
       logger.info('sqliteSchemaTool', result)
@@ -32,7 +32,7 @@ export const sqliteTableField = tool({
   }),
   execute: async ({ sql }) => {
     try {
-      const db = sqlite.getDatabase()
+      const db = getDatabase()
       const result = db.prepare(sql).all()
       db.close()
       logger.info('sqliteFieldTool', result)
@@ -52,7 +52,7 @@ export const sqliteAnalyze = tool({
   }),
   execute: async ({ sql }) => {
     try {
-      const db = sqlite.getDatabase()
+      const db = getDatabase()
       const result = db.prepare(sql).all()
       logger.info('sqliteAnalyzeTool', result)
       db.close()

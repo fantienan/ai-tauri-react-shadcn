@@ -76,7 +76,7 @@ export function PureMessageActions({
                 toast.promise(upvote, {
                   loading: '点赞回复...',
                   success: () => {
-                    mutate<Array<Vote>>(
+                    mutate<Vote[]>(
                       `/api/vote?chatId=${chatId}`,
                       (currentVotes) => {
                         if (!currentVotes) return []
@@ -127,7 +127,7 @@ export function PureMessageActions({
                 toast.promise(downvote, {
                   loading: '反对回应...',
                   success: () => {
-                    mutate<Array<Vote>>(
+                    mutate<Vote[]>(
                       `/api/vote?chatId=${chatId}`,
                       (currentVotes) => {
                         if (!currentVotes) return []

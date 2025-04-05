@@ -1,4 +1,5 @@
 import type { FastifyCorsOptions, FastifyCorsOptionsDelegate } from '@fastify/cors'
+import type { Config } from 'drizzle-kit'
 
 export type BizConfig = {
   service: {
@@ -14,6 +15,10 @@ export type BizConfig = {
       apiKey: string
       baseUrl: string
     }
+  }
+  drizzleKit: Config
+  sqlite: {
+    databaseUrl: string
   }
   tianditu: {
     apiKey: string

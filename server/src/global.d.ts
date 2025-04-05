@@ -1,24 +1,24 @@
 import multer from 'fastify-multer'
 import type { BizConfig } from './config/index.ts'
-import { Agent, Result, bizErrors, sqlite } from './decorates/index.ts'
+import { Agent, Result, errors, sqliteDb } from './decorates/index.ts'
 
 declare module 'fastify' {
   interface FastifyInstance {
     bizAppConfig: BizConfig
     BizResult: typeof Result
-    bizErrors: typeof bizErrors
-    bizSqlite: typeof sqlite
+    bizErrors: typeof errors
     bizAgent: InstanceType<typeof Agent>
+    bizSqliteDb: typeof sqliteDb
   }
 }
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      DB_HOST: string
-      DB_PORT: number
-      DB_NAME: string
-      DB_USER: string
-      DB_PASSWORD: string
+      POSTGRES_HOST: string
+      POSTGRES_PORT: number
+      POSTGRES_USER: string
+      POSTGRES_PASSWORD: string
+      SQLITE_URL: string
       BIZ_SERVER_PORT: number
       BIZ_SERVER_URL: string
       TIAN_DI_TU_API_KEY: string
