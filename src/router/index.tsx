@@ -1,6 +1,16 @@
 import MapPage from '@/pages/map'
 import { useAppStore } from '@/stores'
-import { Link, Navigate, Outlet, RouterProvider, createBrowserRouter, redirect, useRouteError } from 'react-router'
+import { User } from '@/types'
+import {
+  Link,
+  Navigate,
+  Outlet,
+  RouterProvider,
+  createBrowserRouter,
+  redirect,
+  useLoaderData,
+  useRouteError,
+} from 'react-router'
 
 function RootErrorBoundary() {
   let error = useRouteError() as Error
@@ -21,20 +31,23 @@ function NoMatch() {
     </div>
   )
 }
+function Layout() {
+  const data = useLoaderData() as { user: User }
+  debugger
+  if (!data.user) return <Navigate replace to="/login" />
+  return (
+    <>
+      <Navigate replace to="/chat" />
+      <Outlet />
+    </>
+  )
+}
 const router = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <>
-        <Navigate replace to="/chat" />
-        <Outlet />
-      </>
-    ),
+    element: <Layout />,
     errorElement: <RootErrorBoundary />,
-    loader: async () => {
-      const user = await useAppStore.getState().getUserInfo()
-      if (!user) redirect('/login')
-    },
+    loader: async () => ({ user: await useAppStore.getState().getUserInfo() }),
     children: [
       {
         path: 'map',
@@ -49,6 +62,10 @@ const router = createBrowserRouter([
         lazy: async () => ({ Component: (await import('@/pages/chat')).default }),
       },
     ],
+  },
+  {
+    path: '/login',
+    lazy: async () => ({ Component: (await import('@/pages/login')).default }),
   },
   {
     path: '*',

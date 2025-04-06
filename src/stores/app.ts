@@ -21,8 +21,8 @@ export const useAppStore = create<AppStoreState & AppStoreActions>((set) => ({
   },
   dispatch: (state) => set((prev) => ({ ...prev, ...state })),
   getUserInfo: async () => {
-    const res = await getUserInfo({ id: 'localdev' })
-    if (!res.success || !res.data) {
+    const res = await getUserInfo({ id: 'localdev' }).catch(() => undefined)
+    if (!res || !res.success || !res.data) {
       toast.error('获取用户信息失败，请稍后重试！')
       return
     }
