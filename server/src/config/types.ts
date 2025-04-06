@@ -35,5 +35,6 @@ export type BizConfig = {
       prefix: string
       chat: string
     }
+    user: string
   }
 }

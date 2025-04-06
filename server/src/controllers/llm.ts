@@ -1,8 +1,8 @@
-import { appendResponseMessages, createDataStreamResponse, smoothStream, streamText } from 'ai'
+import { appendResponseMessages, createDataStreamResponse, streamText } from 'ai'
 import type { FastifyInstance } from 'fastify'
 import type { FastifyZodOpenApiTypeProvider } from 'fastify-zod-openapi'
 import { v4 as uuidv4 } from 'uuid'
-import { createLlmService } from '../services/llm.ts'
+import { createLlmService } from '../services/index.ts'
 
 export default async function (fastify: FastifyInstance) {
   const agent = fastify.bizAgent
@@ -34,12 +34,13 @@ export default async function (fastify: FastifyInstance) {
       //   })
 
       //   return reply.send(result.toDataStreamResponse({ getErrorMessage: agent.utils.getErrorMessage }))
-      const userMessage = agent.utils.getMostRecentUserMessage(request.body.messages)
+      const { messages, id } = request.body
+      const userMessage = agent.utils.getMostRecentUserMessage(messages)
 
       if (!userMessage) {
         return fastify.bizErrors.createBizError(fastify.BizResult.AI_CHAT_ERROR, { message: 'No user message found' })
       }
-      const chatRes = await service.chat.queryById({ id: request.body.id })
+      const chatRes = await service.chat.queryById({ id })
       let chat = chatRes.data
       if (!chat) {
         const title = await agent.utils.generateTitleFromUserMessage({ message: userMessage })
@@ -71,7 +72,7 @@ export default async function (fastify: FastifyInstance) {
             const result = streamText({
               model,
               system: agent.utils.systemPrompt(),
-              messages: request.body.messages,
+              messages,
               tools: agent.tools,
               maxSteps: 5,
               // experimental_transform: smoothStream({ chunking: 'word' }),
@@ -150,4 +151,27 @@ export default async function (fastify: FastifyInstance) {
       return service.chat.queryById(request.query)
     },
   )
+  fastify.withTypeProvider<FastifyZodOpenApiTypeProvider>().post(
+    fastify.bizAppConfig.routes.llm.chat + '/update',
+    {
+      schema: {
+        body: llmSchema.chat.update,
+      },
+    },
+    async function (request) {
+      return service.chat.update(request.body)
+    },
+  )
+
+  // export async function updateChatVisiblityById({
+  //   chatId,
+  //   visibility,
+  // }: { chatId: string; visibility: 'private' | 'public' }) {
+  //   try {
+  //     return await db.update(chat).set({ visibility }).where(eq(chat.id, chatId))
+  //   } catch (error) {
+  //     console.error('Failed to update chat visibility in database')
+  //     throw error
+  //   }
+  // }
 }

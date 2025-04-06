@@ -1,7 +1,13 @@
+import path from 'path'
+import { fileURLToPath } from 'url'
 import Database from 'better-sqlite3'
-import { drizzle } from 'drizzle-orm/postgres-js'
-import { migrate } from 'drizzle-orm/postgres-js/migrator'
+import { drizzle } from 'drizzle-orm/better-sqlite3'
+import { migrate } from 'drizzle-orm/better-sqlite3/migrator'
 import { config } from '../config/index.ts'
+
+// 获取 __dirname 的等效值
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const runMigrate = async () => {
   if (!config.drizzleKit.dbCredentials.url) {
@@ -15,7 +21,7 @@ const runMigrate = async () => {
   console.log('⏳ Running migrations...')
 
   const start = Date.now()
-  await migrate(db, { migrationsFolder: './lib/db/migrations' })
+  migrate(db, { migrationsFolder: path.join(__dirname, './migrations') })
   const end = Date.now()
 
   console.log('✅ Migrations completed in', end - start, 'ms')

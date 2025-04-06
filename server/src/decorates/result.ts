@@ -1,10 +1,4 @@
-export interface BizResult<T = any> {
-  data?: T | null
-  code?: number
-  message?: string
-  success?: boolean
-}
-
+import { BizResult } from 'types'
 export class Result {
   /**
    * @description 10000 成功

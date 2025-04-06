@@ -49,6 +49,7 @@ const config: BizConfig = {
       prefix: '/llm',
       chat: '/chat',
     },
+    user: '/user',
   },
 }
 

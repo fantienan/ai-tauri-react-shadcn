@@ -1,7 +1,7 @@
 import { CopyIcon, DownloadIcon, ThumbDownIcon, ThumbUpIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import type { Vote } from '@@/server/database/schema'
+import type { Vote } from '@/types'
 import type { Message } from 'ai'
 import equal from 'fast-deep-equal'
 import { memo } from 'react'

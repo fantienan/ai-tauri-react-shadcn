@@ -63,6 +63,9 @@ export const chat = sqliteTable('chat', {
   userId: text('user_id')
     .notNull()
     .references(() => user.id),
+  visibility: text('visibility', { enum: ['public', 'private'] })
+    .notNull()
+    .default('private'),
 })
 
 export type Chat = InferSelectModel<typeof chat>

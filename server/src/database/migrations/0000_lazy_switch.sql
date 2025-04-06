@@ -1,4 +1,4 @@
-CREATE TABLE `chat` (
+CREATE TABLE IF NOT EXISTS `chat` (
 	`id` text PRIMARY KEY NOT NULL,
 	`created_at` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	`title` text NOT NULL,
@@ -6,7 +6,7 @@ CREATE TABLE `chat` (
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
-CREATE TABLE `daily_summary` (
+CREATE TABLE IF NOT EXISTS `daily_summary` (
 	`客户编码` integer,
 	`会员编码` integer,
 	`访问日期` text(255),
@@ -15,7 +15,7 @@ CREATE TABLE `daily_summary` (
 	`PV` integer
 );
 --> statement-breakpoint
-CREATE TABLE `message` (
+CREATE TABLE IF NOT EXISTS `message` (
 	`id` text PRIMARY KEY NOT NULL,
 	`chat_id` text NOT NULL,
 	`role` text NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE `message` (
 	FOREIGN KEY (`chat_id`) REFERENCES `chat`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
-CREATE TABLE `order_product_details` (
+CREATE TABLE IF NOT EXISTS `order_product_details` (
 	`客户编码` integer,
 	`客户类型` text(255),
 	`省份` text(255),
@@ -56,13 +56,13 @@ CREATE TABLE `order_product_details` (
 	`连带销售额` real
 );
 --> statement-breakpoint
-CREATE TABLE `user` (
+CREATE TABLE IF NOT EXISTS `user` (
 	`id` text PRIMARY KEY NOT NULL,
 	`email` text(64) NOT NULL,
 	`password` text(64)
 );
 --> statement-breakpoint
-CREATE TABLE `vote` (
+CREATE TABLE IF NOT EXISTS `vote` (
 	`chat_id` text NOT NULL,
 	`message_id` text NOT NULL,
 	`is_upvoted` integer NOT NULL,

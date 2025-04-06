@@ -1,15 +1,19 @@
 import { PlusIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
-import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, useSidebar } from '@/components/ui/sidebar'
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, useSidebar } from '@/components/ui/sidebar'
+import { useAppStore } from '@/stores'
 import { useNavigate } from 'react-router'
+import { SidebarHistory } from './sidebar-history'
+import { SidebarUserNav } from './sidebar-user-nav'
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 
 export function AppSidebar() {
   const { setOpenMobile } = useSidebar()
   const navigate = useNavigate()
+  const user = useAppStore().session.user
   const onClick = () => {
     setOpenMobile(false)
-    navigate('/chat')
+    navigate('/')
   }
 
   return (
@@ -31,7 +35,10 @@ export function AppSidebar() {
           </div>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent></SidebarContent>
+      <SidebarContent>
+        <SidebarHistory user={user} />
+      </SidebarContent>
+      <SidebarFooter>{user && <SidebarUserNav user={user} />}</SidebarFooter>
     </Sidebar>
   )
 }

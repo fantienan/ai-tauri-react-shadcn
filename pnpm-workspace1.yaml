@@ -1,6 +1,8 @@
 onlyBuiltDependencies:
-  - '@swc/core'
+  - "@swc/core"
   - esbuild
   - better-sqlite3
 packages:
   - server
+  - packages/utils
+  - packages/types

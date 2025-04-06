@@ -20,9 +20,7 @@ async function main() {
     .after(() => {
       fastify
         .get('/ping', () => ({ pong: 'it work' }))
-        .register(import('./controllers/index.ts'), {
-          prefix: config.routes.root,
-        })
+        .register(import('./controllers/index.ts'), { prefix: config.routes.root })
     })
 
   await fastify.listen({ port: config.service.port, host: config.service.host })

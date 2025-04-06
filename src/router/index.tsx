@@ -1,20 +1,47 @@
-import RootLayout from '@/layout/layout'
 import MapPage from '@/pages/map'
-import { RouterProvider, createBrowserRouter } from 'react-router'
+import { useAppStore } from '@/stores'
+import { Link, Navigate, Outlet, RouterProvider, createBrowserRouter, redirect, useRouteError } from 'react-router'
 
+function RootErrorBoundary() {
+  let error = useRouteError() as Error
+  return (
+    <div>
+      <h1>Uh oh, something went terribly wrong 😩</h1>
+      <pre>{error.message || JSON.stringify(error)}</pre>
+      <button onClick={() => (window.location.href = '/')}>Click here to reload the app</button>
+    </div>
+  )
+}
+function NoMatch() {
+  return (
+    <div>
+      <h1>404 未找到</h1>
+      <p>抱歉，您要查找的页面不存在</p>
+      <Link to="/">单击此处重新加载应用程序</Link>
+    </div>
+  )
+}
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <RootLayout />,
+    element: (
+      <>
+        <Navigate replace to="/chat" />
+        <Outlet />
+      </>
+    ),
+    errorElement: <RootErrorBoundary />,
+    loader: async () => {
+      const user = await useAppStore.getState().getUserInfo()
+      if (!user) redirect('/login')
+    },
     children: [
       {
-        // index: true,
         path: 'map',
         element: <MapPage />,
       },
       {
-        index: true,
-        // path: 'chat',
+        path: 'chat',
         lazy: async () => ({ Component: (await import('@/pages/chat')).default }),
       },
       {
@@ -23,5 +50,14 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: '*',
+    element: <NoMatch />,
+  },
 ])
+
+if (import.meta.hot) {
+  import.meta.hot.dispose(() => router.dispose())
+}
+
 export const createRouter = () => <RouterProvider router={router} />
