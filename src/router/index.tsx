@@ -1,16 +1,7 @@
 import MapPage from '@/pages/map'
 import { useAppStore } from '@/stores'
 import { User } from '@/types'
-import {
-  Link,
-  Navigate,
-  Outlet,
-  RouterProvider,
-  createBrowserRouter,
-  redirect,
-  useLoaderData,
-  useRouteError,
-} from 'react-router'
+import { Link, Navigate, Outlet, RouterProvider, createBrowserRouter, useLoaderData, useRouteError } from 'react-router'
 
 function RootErrorBoundary() {
   let error = useRouteError() as Error
@@ -45,8 +36,8 @@ function Layout() {
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Layout />,
     errorElement: <RootErrorBoundary />,
+    Component: Layout,
     loader: async () => ({ user: await useAppStore.getState().getUserInfo() }),
     children: [
       {

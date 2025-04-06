@@ -44,10 +44,10 @@
     "spawn-rx": "^5.1.2",
     "ws": "^8.18.1",
     "zod": "^3.24.2",
-    "zod-to-json-schema": "^3.24.4",
-    "types": "workspace:../packages/types"
+    "zod-to-json-schema": "^3.24.4"
   },
   "devDependencies": {
+    "types": "workspace:../packages/types",
     "@antv/g2": "^5.2.12",
     "@types/better-sqlite3": "^7.6.12",
     "@types/cors": "^2.8.17",

@@ -22,6 +22,7 @@ export const createUserService = (fastify: FastifyInstance) => {
           .select({ id: user.id, email: user.email })
           .from(user)
           .where(eq(user.id, params.id))
+          .limit(1)
         return fastify.BizResult.success({ data: result[0] })
       } catch (error) {
         fastify.log.error(error)
@@ -36,6 +37,7 @@ export const createUserService = (fastify: FastifyInstance) => {
           .set(values)
           .where(eq(user.id, id))
           .returning({ id: user.id })
+          .limit(1)
         return fastify.BizResult.success({ data: result[0] })
       } catch (error) {
         fastify.log.error(error)

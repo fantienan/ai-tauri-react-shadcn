@@ -163,6 +163,18 @@ export default async function (fastify: FastifyInstance) {
     },
   )
 
+  fastify.withTypeProvider<FastifyZodOpenApiTypeProvider>().post(
+    fastify.bizAppConfig.routes.llm.chat + '/history',
+    {
+      schema: {
+        body: llmSchema.chat.history,
+      },
+    },
+    async function (request) {
+      return service.chat.history(request.body)
+    },
+  )
+
   // export async function updateChatVisiblityById({
   //   chatId,
   //   visibility,
