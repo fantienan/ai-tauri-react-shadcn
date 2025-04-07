@@ -58,7 +58,7 @@ export const sqliteAnalyze = tool({
       const result = db.prepare(sql).all()
       logger.info('sqliteAnalyzeTool', result)
       db.close()
-      return { data: result } as AnalyzeResult
+      return { data: result, title: '', description: '', summary: '' } as AnalyzeResult
     } catch (error) {
       if (error instanceof Error) return createBizError(Result.AI_AGENT_TOOL_ERROR, error)
       throw error
@@ -67,17 +67,19 @@ export const sqliteAnalyze = tool({
 })
 
 export const textLayout = tool({
-  description: `SQLite数据库分析结果文本编排工具，调用此工具前要准备好分析结果数据，文本
-    - 分析结果数据结构要求如下：
-        - 用value作为统计值的字段名称，如果有多种类型的统计值则以value1、value2的方式命名
-        - 用name作为统计分类的字段名称，如果有多种类型的分类值则以name1、name2的方式命名
+  description: `SQLite数据库分析结果文本编排工具，调用此工具前要准备好分析结果数据，要求如下:
         - 为分析结果生成标题，标题要求简洁明了，不要超过10个汉字，存放在title字段中
         - 为分析结果生成描述, 描述要求简洁明了，不要超过20个汉字，存放在description字段中
         - 为分析结果生成总结, 总结要求简洁明了，不要超过30个汉字，存放在summary字段中`,
-  parameters: z.object({ data: z.any().describe('分析结果，根据分析结果生成标题、描述和总结') }),
-  execute: async ({ data }) => {
+  parameters: z.object({
+    data: z.any().describe('分析结果数据'),
+    title: z.string().describe('分析结果标题'),
+    description: z.string().describe('分析结果描述'),
+    summary: z.string().describe('分析结果总结'),
+  }),
+  execute: async (data) => {
     try {
-      return { data } as AnalyzeResult
+      return data as AnalyzeResult
     } catch (error) {
       if (error instanceof Error) return createBizError(Result.AI_AGENT_TOOL_ERROR, error)
       throw error

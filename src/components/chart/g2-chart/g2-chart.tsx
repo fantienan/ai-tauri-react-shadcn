@@ -1,12 +1,13 @@
 import { Chart, type G2Spec } from '@antv/g2'
 import classNames from 'classnames'
 import { useEffect, useRef } from 'react'
+import type { AnalyzeResult } from 'types'
 
-export interface ChartViewProps {
+export type ChartViewProps = Omit<AnalyzeResult, 'chartRendererType' | 'data'> & {
   prefixCls?: string
   className?: string
   style?: React.CSSProperties
-  spec: G2Spec
+  spec: Partial<G2Spec>
 }
 
 export const G2Chart: React.FC<ChartViewProps> = ({ prefixCls = 'g2chart', className, style, spec, ...restProps }) => {

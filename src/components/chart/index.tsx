@@ -1,22 +1,23 @@
+import { AnalyzeResult } from 'types'
 import { G2Chart } from './g2-chart'
 import { ReactCharts } from './react-charts'
 import { Recharts } from './recharts'
 import { VegaChart } from './vega'
 
-export interface ChartRendererProps {
-  chartType: 'react-charts' | 'vega' | 'g2-chart' | 'recharts'
-  options: { data: any[] }
-}
+export type ChartRendererProps = AnalyzeResult
 
-export const ChartRenderer = ({ chartType, options }: ChartRendererProps) => {
+export const ChartRenderer = (props: ChartRendererProps) => {
+  const { chartRendererType, ...options } = props
   if (!options) return null
-  switch (chartType) {
+  const { data, ...resetOptions } = options
+
+  switch (chartRendererType) {
     case 'react-charts':
-      return <ReactCharts options={{ data: [options] }} />
+      return <ReactCharts options={options} />
     case 'vega':
-      return <VegaChart spec={options} />
+      return <VegaChart {...resetOptions} spec={options} />
     case 'g2-chart':
-      return <G2Chart spec={options} />
+      return <G2Chart {...resetOptions} spec={{ data }} />
     case 'recharts':
       return <Recharts {...options} />
     default:

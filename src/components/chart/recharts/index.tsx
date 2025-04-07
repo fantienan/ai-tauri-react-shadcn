@@ -1,9 +1,9 @@
+import { AnalyzeResult } from '@@/types/server'
 import { ChartBar } from './bar'
 
-interface RechartsProps {
-  data: any[]
-}
+type RechartsProps = Omit<AnalyzeResult, 'chartRendererType'>
 
-export const Recharts = ({ data }: RechartsProps) => {
-  return <ChartBar data={data} />
+export const Recharts = ({ chartType, ...options }: RechartsProps) => {
+  if (!chartType || chartType === 'bar') return <ChartBar {...options} />
+  return <ChartBar {...options} />
 }
