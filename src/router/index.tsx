@@ -24,7 +24,6 @@ function NoMatch() {
 }
 function Layout() {
   const data = useLoaderData() as { user: User }
-  debugger
   if (!data.user) return <Navigate replace to="/login" />
   return (
     <>

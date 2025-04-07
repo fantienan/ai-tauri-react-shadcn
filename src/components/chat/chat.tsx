@@ -1,12 +1,12 @@
 import { Messages } from '@/components/messages'
 import { MultimodalInput } from '@/components/multimodal-input'
-import { Vote } from '@/types'
-import { fetcher } from '@/utils'
+// import { Vote } from '@/types'
+// import { fetcher } from '@/utils'
 import { useChat } from '@ai-sdk/react'
 import { Attachment, UIMessage } from 'ai'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import useSWR from 'swr'
+// import useSWR from 'swr'
 // import { useSWRConfig } from 'swr'
 import { v4 as uuidv4 } from 'uuid'
 import { ChatHeader } from './chat-header'
@@ -37,7 +37,7 @@ export function Chat({ id, initialMessages, isReadonly }: ChatProps) {
   })
   const [attachments, setAttachments] = useState<Attachment[]>([])
 
-  const { data: votes } = useSWR<Vote[]>(messages.length >= 2 ? `/api/vote?chatId=${id}` : null, fetcher)
+  //   const { data: votes } = useSWR<Vote[]>(messages.length >= 2 ? `/api/vote?chatId=${id}` : null, fetcher)
 
   return (
     <div className="flex flex-col min-w-0 h-dvh bg-background">

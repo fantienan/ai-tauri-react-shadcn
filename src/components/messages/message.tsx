@@ -143,10 +143,9 @@ const PurePreviewMessage = ({
 
                 if (state === 'result') {
                   const { result } = toolInvocation
-
                   return (
                     <div key={toolCallId}>
-                      {toolName === 'sqliteAnalyze' ? <Analyze chartType="recharts" options={result} /> : null}
+                      {toolName === 'sqliteAnalyze' ? <Analyze chartRendererProps={result} /> : null}
                     </div>
                   )
                 }

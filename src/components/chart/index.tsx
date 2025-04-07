@@ -10,7 +10,6 @@ export const ChartRenderer = (props: ChartRendererProps) => {
   const { chartRendererType, ...options } = props
   if (!options) return null
   const { data, ...resetOptions } = options
-
   switch (chartRendererType) {
     case 'react-charts':
       return <ReactCharts options={options} />

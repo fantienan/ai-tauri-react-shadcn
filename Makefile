@@ -12,6 +12,7 @@ client-dev:
 
 server-dev:
 	@echo "Running dev server"
+	@chcp 65001
 	@pnpm --filter server dev
 
 db-check:

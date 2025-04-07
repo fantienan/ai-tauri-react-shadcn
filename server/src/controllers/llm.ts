@@ -32,7 +32,6 @@ export default async function (fastify: FastifyInstance) {
       //     maxSteps: 5,
       //     experimental_generateMessageId: uuidv4,
       //   })
-
       //   return reply.send(result.toDataStreamResponse({ getErrorMessage: agent.utils.getErrorMessage }))
       const { messages, id } = request.body
       const userMessage = agent.utils.getMostRecentUserMessage(messages)
@@ -74,7 +73,7 @@ export default async function (fastify: FastifyInstance) {
               system: agent.utils.systemPrompt(),
               messages,
               tools: agent.tools,
-              maxSteps: 5,
+              maxSteps: 10,
               // experimental_transform: smoothStream({ chunking: 'word' }),
               experimental_generateMessageId: uuidv4,
               onFinish: async ({ response }) => {

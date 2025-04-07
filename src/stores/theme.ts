@@ -12,7 +12,7 @@ export const useThemeStore = create<ThemeStoreState & ThemeStoreActions>((set) =
   theme: localStorage.getItem('theme') === 'dark' ? 'dark' : 'light',
   setTheme: (theme) => {
     set((prev) => ({ ...prev, theme }))
-    localStorage.setItem('theme', 'dark')
+    localStorage.setItem('theme', theme)
     if (theme === 'dark') {
       document.documentElement.classList.toggle('dark')
       document.documentElement.classList.remove('light')
