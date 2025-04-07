@@ -3,7 +3,7 @@ import { memo } from 'react'
 import { ChartRenderer, ChartRendererProps } from './chart'
 
 function PureAnalyze({ chartRendererProps }: { chartRendererProps?: ChartRendererProps }) {
-  return chartRendererProps ? (
+  return chartRendererProps?.data ? (
     <ChartRenderer chartRendererType="recharts" chartType="bar" {...chartRendererProps} />
   ) : null
 }

@@ -13,7 +13,7 @@ function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
     {
       title: '销售量最高的前5个产品',
       label: '查看销售排行榜',
-      action: '请分析销售量最高的前5个产品并提供一小段总结。',
+      action: '请分析销售量最高的前5个产品',
     },
   ]
 
