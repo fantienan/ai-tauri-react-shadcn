@@ -146,7 +146,7 @@ const PurePreviewMessage = ({
 
                   return (
                     <div key={toolCallId}>
-                      {toolName === 'sqliteAnalyze' ? <Analyze chartType="react-charts" options={result} /> : null}
+                      {toolName === 'sqliteAnalyze' ? <Analyze chartType="recharts" options={result} /> : null}
                     </div>
                   )
                 }

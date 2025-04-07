@@ -1,9 +1,10 @@
 import { G2Chart } from './g2-chart'
 import { ReactCharts } from './react-charts'
+import { Recharts } from './recharts'
 import { VegaChart } from './vega'
 
 export interface ChartRendererProps {
-  chartType: 'react-charts' | 'vega' | 'g2-chart'
+  chartType: 'react-charts' | 'vega' | 'g2-chart' | 'recharts'
   options: { data: any[] }
 }
 
@@ -16,6 +17,8 @@ export const ChartRenderer = ({ chartType, options }: ChartRendererProps) => {
       return <VegaChart spec={options} />
     case 'g2-chart':
       return <G2Chart spec={options} />
+    case 'recharts':
+      return <Recharts {...options} />
     default:
       return null
   }

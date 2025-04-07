@@ -9,12 +9,13 @@ import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui
 import { useAppStore, useThemeStore } from '@/stores'
 import type { User } from '@/types'
 import { ChevronUp } from 'lucide-react'
-import { redirect } from 'react-router'
+import { useNavigate } from 'react-router'
 
 export function SidebarUserNav({ user }: { user: User }) {
   const setTheme = useThemeStore((state) => state.setTheme)
   const theme = useThemeStore((state) => state.theme)
   const signOut = useAppStore((state) => state.signOut)
+  const navigate = useNavigate()
 
   return (
     <SidebarMenu>
@@ -28,7 +29,7 @@ export function SidebarUserNav({ user }: { user: User }) {
           </DropdownMenuTrigger>
           <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-width]">
             <DropdownMenuItem className="cursor-pointer" onSelect={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
-              {`Toggle ${theme === 'light' ? 'dark' : 'light'} mode`}
+              {`切换${theme === 'light' ? '暗黑' : '高亮'}主题`}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
@@ -37,10 +38,10 @@ export function SidebarUserNav({ user }: { user: User }) {
                 className="w-full cursor-pointer"
                 onClick={async () => {
                   await signOut()
-                  redirect('/login')
+                  navigate('/login')
                 }}
               >
-                Sign out
+                退出登录
               </button>
             </DropdownMenuItem>
           </DropdownMenuContent>

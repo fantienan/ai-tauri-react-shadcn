@@ -36,8 +36,9 @@ export function Chat({ id, initialMessages, isReadonly }: ChatProps) {
     },
   })
   const [attachments, setAttachments] = useState<Attachment[]>([])
-  console.log('messages', messages)
+
   const { data: votes } = useSWR<Vote[]>(messages.length >= 2 ? `/api/vote?chatId=${id}` : null, fetcher)
+
   return (
     <div className="flex flex-col min-w-0 h-dvh bg-background">
       <ChatHeader />

@@ -1,14 +1,24 @@
 import { create } from 'zustand'
 
 export interface ThemeStoreState {
-  theme: string
+  theme: 'dark' | 'light'
 }
 
 type ThemeStoreActions = {
-  setTheme: (theme: string) => void
+  setTheme: (theme: ThemeStoreState['theme']) => void
 }
 
 export const useThemeStore = create<ThemeStoreState & ThemeStoreActions>((set) => ({
-  theme: 'default',
-  setTheme: (theme) => set((prev) => ({ ...prev, theme })),
+  theme: localStorage.getItem('theme') === 'dark' ? 'dark' : 'light',
+  setTheme: (theme) => {
+    set((prev) => ({ ...prev, theme }))
+    localStorage.setItem('theme', 'dark')
+    if (theme === 'dark') {
+      document.documentElement.classList.toggle('dark')
+      document.documentElement.classList.remove('light')
+    } else {
+      document.documentElement.classList.toggle('light')
+      document.documentElement.classList.remove('dark')
+    }
+  },
 }))
