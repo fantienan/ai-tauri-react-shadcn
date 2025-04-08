@@ -5,12 +5,11 @@ interface ApplicationError extends Error {
   status: number
 }
 
-const baseUrl = import.meta.env.BIZ_SERVER_URL
+export const baseUrl = import.meta.env.BIZ_SERVER_URL
+export const llmUrl = `${baseUrl}/llm`
+export const chatUrl = `${llmUrl}/chat`
 
-export const fetcherWithResult = async <T = any>(
-  input: RequestInfo | URL,
-  init?: RequestInit,
-): Promise<BizResult<T>> => {
+export const fetcher = async <T>(input: RequestInfo | URL, init?: RequestInit): Promise<BizResult<T>> => {
   const headers = new Headers(init?.headers)
   if (!headers.has('Content-Type')) headers.set('Content-Type', 'application/json')
   const res = await fetch(`${baseUrl}${input}`, { ...init, headers })
@@ -25,8 +24,4 @@ export const fetcherWithResult = async <T = any>(
   }
 
   return res.json()
-}
-export const fetcher = async <T>(input: RequestInfo | URL, init?: RequestInit): Promise<T> => {
-  const res = await fetcherWithResult(input, init)
-  return res.data
 }

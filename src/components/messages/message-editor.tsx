@@ -57,7 +57,7 @@ export function MessageEditor({ message, setMode, setMessages, reload }: Message
             setMode('view')
           }}
         >
-          Cancel
+          取消
         </Button>
         <Button
           data-testid="message-editor-send-button"

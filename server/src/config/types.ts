@@ -34,6 +34,8 @@ export type BizConfig = {
     llm: {
       prefix: string
       chat: string
+      vote: string
+      message: string
     }
     user: string
   }

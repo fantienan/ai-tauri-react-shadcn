@@ -1,8 +1,8 @@
-import { SQL, and, desc, eq, gt, lt } from 'drizzle-orm'
+import { SQL, and, asc, desc, eq, gt, lt } from 'drizzle-orm'
 import type { FastifyInstance } from 'fastify'
-import { MakeReqiured, MakeRequiredAndOptional } from 'types'
+import { MakeOptional, MakeReqiured, MakeRequiredAndOptional } from 'types'
 import { z } from 'zod'
-import { chat, message } from '../database/schema.ts'
+import { chat, message, vote } from '../database/schema.ts'
 import * as schemas from '../schemas/index.ts'
 
 export type LlmService = ReturnType<typeof createLlmService>
@@ -15,13 +15,14 @@ export const createLlmService = (fastify: FastifyInstance) => {
     try {
       const extendedLimit = limit + 1
 
-      const query = (whereCondition?: SQL<any>) =>
-        db
+      const query = async (whereCondition?: SQL<any>) => {
+        return db
           .select()
           .from(chat)
           .where(whereCondition ? and(whereCondition, eq(chat.userId, id)) : eq(chat.userId, id))
           .orderBy(desc(chat.createdAt))
           .limit(extendedLimit)
+      }
 
       let filteredChats: (typeof chat.$inferSelect)[] = []
 
@@ -44,7 +45,6 @@ export const createLlmService = (fastify: FastifyInstance) => {
       } else {
         filteredChats = await query()
       }
-
       const hasMore = filteredChats.length > limit
 
       return {
@@ -53,6 +53,17 @@ export const createLlmService = (fastify: FastifyInstance) => {
       }
     } catch (error) {
       console.error('Failed to get chats by user from database')
+      throw error
+    }
+  }
+
+  async function deleteChatById({ id }: Pick<typeof chat.$inferSelect, 'id'>) {
+    try {
+      await db.delete(vote).where(eq(vote.chatId, id))
+      await db.delete(message).where(eq(message.chatId, id))
+      return await db.delete(chat).where(eq(chat.id, id))
+    } catch (error) {
+      console.error('Failed to delete chat by id from database')
       throw error
     }
   }
@@ -87,6 +98,15 @@ export const createLlmService = (fastify: FastifyInstance) => {
           throw error
         }
       },
+      delete: async function (params: Pick<typeof chat.$inferSelect, 'id'>) {
+        try {
+          await deleteChatById(params)
+          return fastify.BizResult.success()
+        } catch (error) {
+          fastify.log.error(error)
+          throw error
+        }
+      },
       history: async function (params: LlmServiceHistoryParams) {
         try {
           const result = await getChatsByUserId(params)
@@ -98,12 +118,35 @@ export const createLlmService = (fastify: FastifyInstance) => {
       },
     },
     message: {
-      insert: async function (params: { messages: (typeof message.$inferSelect)[] }) {
+      insert: async function (params: { messages: MakeOptional<typeof message.$inferSelect, 'createdAt'>[] }) {
         try {
           const result = await db.insert(message).values(params.messages).returning()
           return fastify.BizResult.success({ data: result[0] })
         } catch (error) {
           fastify.log.error(error)
+          throw error
+        }
+      },
+      queryMessageByChatId: async function ({ chatId }: Pick<typeof message.$inferSelect, 'chatId'>) {
+        try {
+          const result = await db
+            .select()
+            .from(message)
+            .where(eq(message.chatId, chatId))
+            .orderBy(asc(message.createdAt))
+          return fastify.BizResult.success({ data: result })
+        } catch (error) {
+          console.error('Failed to get messages by chat id from database', error)
+          throw error
+        }
+      },
+    },
+    vote: {
+      queryByChatId: async function (params: Pick<typeof vote.$inferSelect, 'chatId'>) {
+        try {
+          return await db.select().from(vote).where(eq(vote.chatId, params.chatId))
+        } catch (error) {
+          console.error('Failed to get votes by chat id from database', error)
           throw error
         }
       },

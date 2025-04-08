@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { SidebarGroup, SidebarGroupContent, SidebarMenu, useSidebar } from '@/components/ui/sidebar'
 import type { Chat, User } from '@/types'
-import { fetcher } from '@/utils'
+import { chatUrl, fetcher } from '@/utils'
 import { isToday, isYesterday, subMonths, subWeeks } from 'date-fns'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
@@ -29,7 +29,7 @@ type GroupedChats = {
 }
 
 export interface ChatHistory {
-  chats: Array<Chat>
+  chats: Chat[]
   hasMore: boolean
 }
 
@@ -92,9 +92,11 @@ export function SidebarHistory({ user }: { user?: User }) {
     isValidating,
     isLoading,
     mutate,
-  } = useSWRInfinite<ChatHistory>(getChatHistoryPaginationKey, fetcher, {
-    fallbackData: [],
-  })
+  } = useSWRInfinite<ChatHistory>(
+    getChatHistoryPaginationKey,
+    (input, init) => fetcher(input, init).then((res) => res.data as any),
+    { fallbackData: [] },
+  )
 
   const navigate = useNavigate()
   const [deleteId, setDeleteId] = useState<string | null>(null)
@@ -106,12 +108,10 @@ export function SidebarHistory({ user }: { user?: User }) {
     : false
 
   const handleDelete = async () => {
-    const deletePromise = fetch(`/api/chat?id=${deleteId}`, {
-      method: 'DELETE',
-    })
+    const deletePromise = fetch(`${chatUrl}?id=${deleteId}`, { method: 'DELETE' })
 
     toast.promise(deletePromise, {
-      loading: 'Deleting chat...',
+      loading: '正在删除聊天...',
       success: () => {
         mutate((chatHistories) => {
           if (chatHistories) {
@@ -131,7 +131,6 @@ export function SidebarHistory({ user }: { user?: User }) {
 
     if (deleteId === id) navigate('/')
   }
-
   if (!user) {
     return (
       <SidebarGroup>
@@ -147,7 +146,7 @@ export function SidebarHistory({ user }: { user?: User }) {
   if (isLoading) {
     return (
       <SidebarGroup>
-        <div className="px-2 py-1 text-xs text-sidebar-foreground/50">Today</div>
+        <div className="px-2 py-1 text-xs text-sidebar-foreground/50">今天</div>
         <SidebarGroupContent>
           <div className="flex flex-col">
             {[44, 32, 28, 64, 52].map((item) => (
@@ -179,7 +178,6 @@ export function SidebarHistory({ user }: { user?: User }) {
       </SidebarGroup>
     )
   }
-
   return (
     <>
       <SidebarGroup>
@@ -197,7 +195,7 @@ export function SidebarHistory({ user }: { user?: User }) {
                   <div className="flex flex-col gap-6">
                     {groupedChats.today.length > 0 && (
                       <div>
-                        <div className="px-2 py-1 text-xs text-sidebar-foreground/50">Today</div>
+                        <div className="px-2 py-1 text-xs text-sidebar-foreground/50">今天</div>
                         {groupedChats.today.map((chat) => (
                           <ChatItem
                             key={chat.id}
@@ -233,7 +231,7 @@ export function SidebarHistory({ user }: { user?: User }) {
 
                     {groupedChats.lastWeek.length > 0 && (
                       <div>
-                        <div className="px-2 py-1 text-xs text-sidebar-foreground/50">Last 7 days</div>
+                        <div className="px-2 py-1 text-xs text-sidebar-foreground/50">过去 7 天</div>
                         {groupedChats.lastWeek.map((chat) => (
                           <ChatItem
                             key={chat.id}
@@ -251,7 +249,7 @@ export function SidebarHistory({ user }: { user?: User }) {
 
                     {groupedChats.lastMonth.length > 0 && (
                       <div>
-                        <div className="px-2 py-1 text-xs text-sidebar-foreground/50">Last 30 days</div>
+                        <div className="px-2 py-1 text-xs text-sidebar-foreground/50">过去 30 天</div>
                         {groupedChats.lastMonth.map((chat) => (
                           <ChatItem
                             key={chat.id}
@@ -269,7 +267,7 @@ export function SidebarHistory({ user }: { user?: User }) {
 
                     {groupedChats.older.length > 0 && (
                       <div>
-                        <div className="px-2 py-1 text-xs text-sidebar-foreground/50">Older than last month</div>
+                        <div className="px-2 py-1 text-xs text-sidebar-foreground/50">比上个月还早</div>
                         {groupedChats.older.map((chat) => (
                           <ChatItem
                             key={chat.id}
@@ -299,14 +297,14 @@ export function SidebarHistory({ user }: { user?: User }) {
 
           {hasReachedEnd ? (
             <div className="px-2 text-zinc-500 w-full flex flex-row justify-center items-center text-sm gap-2 mt-8">
-              You have reached the end of your chat history.
+              您已到达聊天记录的末尾。
             </div>
           ) : (
             <div className="p-2 text-zinc-500 dark:text-zinc-400 flex flex-row gap-2 items-center mt-8">
               <div className="animate-spin">
                 <LoaderIcon />
               </div>
-              <div>Loading Chats...</div>
+              <div>加载中...</div>
             </div>
           )}
         </SidebarGroupContent>
@@ -315,14 +313,14 @@ export function SidebarHistory({ user }: { user?: User }) {
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle>您确定吗?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your chat and remove it from our servers.
+              此操作无法撤消，这将永久删除您的聊天记录并将其从我们的服务器中移除。
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete}>Continue</AlertDialogAction>
+            <AlertDialogCancel>取消</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete}>继续</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

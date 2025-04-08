@@ -1,16 +1,16 @@
 import { Messages } from '@/components/messages'
 import { MultimodalInput } from '@/components/multimodal-input'
-// import { Vote } from '@/types'
-// import { fetcher } from '@/utils'
+import { Vote } from '@/types'
+import { fetcher, llmUrl } from '@/utils'
 import { useChat } from '@ai-sdk/react'
 import { Attachment, UIMessage } from 'ai'
 import { useState } from 'react'
 import { toast } from 'sonner'
-// import useSWR from 'swr'
-// import { useSWRConfig } from 'swr'
+import useSWR, { useSWRConfig } from 'swr'
+import { unstable_serialize } from 'swr/infinite'
 import { v4 as uuidv4 } from 'uuid'
+import { getChatHistoryPaginationKey } from '../sidebar-history'
 import { ChatHeader } from './chat-header'
-// import { unstable_serialize } from 'swr/infinite';
 
 interface ChatProps {
   id: string
@@ -19,7 +19,7 @@ interface ChatProps {
 }
 
 export function Chat({ id, initialMessages, isReadonly }: ChatProps) {
-  //   const { mutate } = useSWRConfig()
+  const { mutate } = useSWRConfig()
   const { messages, setMessages, handleSubmit, input, setInput, append, status, stop, reload } = useChat({
     id,
     api: `${import.meta.env.BIZ_SERVER_URL}/llm/chat`,
@@ -29,23 +29,24 @@ export function Chat({ id, initialMessages, isReadonly }: ChatProps) {
     sendExtraMessageFields: true,
     generateId: uuidv4,
     onFinish: () => {
-      //   mutate(unstable_serialize(getChatHistoryPaginationKey));
+      mutate(unstable_serialize(getChatHistoryPaginationKey))
     },
     onError: () => {
       toast.error('发生错误，请重试！')
     },
   })
   const [attachments, setAttachments] = useState<Attachment[]>([])
-
-  //   const { data: votes } = useSWR<Vote[]>(messages.length >= 2 ? `/api/vote?chatId=${id}` : null, fetcher)
-
+  const { data: votes } = useSWR<Vote[]>(
+    messages.length >= 2 ? `${llmUrl}/vote?chatId=${id}` : null,
+    async (input: string, init?: RequestInit) => fetcher<Vote[]>(input, init).then((res) => res.data ?? []),
+  )
   return (
     <div className="flex flex-col min-w-0 h-dvh bg-background">
       <ChatHeader />
       <Messages
         chatId={id}
         status={status}
-        votes={[]}
+        votes={votes ?? []}
         messages={messages}
         setMessages={setMessages}
         reload={reload}

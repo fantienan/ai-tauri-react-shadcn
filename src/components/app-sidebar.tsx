@@ -11,9 +11,10 @@ export function AppSidebar() {
   const { setOpenMobile } = useSidebar()
   const navigate = useNavigate()
   const user = useAppStore().session.user
-  const onClick = () => {
+
+  const onNewChat = () => {
     setOpenMobile(false)
-    navigate('/')
+    navigate(`/chat`, { replace: true })
   }
 
   return (
@@ -21,12 +22,12 @@ export function AppSidebar() {
       <SidebarHeader>
         <SidebarMenu>
           <div className="flex flex-row justify-between items-center">
-            <div onClick={onClick} className="flex flex-row gap-3 items-center">
+            <div onClick={onNewChat} className="flex flex-row gap-3 items-center">
               <span className="text-lg font-semibold px-2 hover:bg-muted rounded-md cursor-pointer">Chatbot</span>
             </div>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" type="button" className="p-2 h-fit" onClick={onClick}>
+                <Button variant="ghost" type="button" className="p-2 h-fit" onClick={onNewChat}>
                   <PlusIcon />
                 </Button>
               </TooltipTrigger>

@@ -11,6 +11,7 @@ export const llm = {
     inster: createInsertSchema(schema.chat).omit({ id: true, createdAt: true }),
     update: createUpdateSchema(schema.chat).required({ id: true }),
     queryById: createSelectSchema(schema.chat).pick({ id: true }).required({ id: true }),
+    delete: z.object({ id: z.string({ description: '聊天记录id' }) }),
     history: z
       .object({
         limit: z
@@ -25,5 +26,11 @@ export const llm = {
         message: 'startingAfter 和 endingBefore 不能同时提供',
         path: ['startingAfter', 'endingBefore'],
       }),
+  },
+  message: {
+    queryByChatId: createSelectSchema(schema.message).pick({ chatId: true }).required({ chatId: true }),
+  },
+  vote: {
+    self: createSelectSchema(schema.vote).pick({ chatId: true }).required({ chatId: true }),
   },
 }

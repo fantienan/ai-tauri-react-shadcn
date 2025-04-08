@@ -36,6 +36,7 @@ const config: BizConfig = {
   },
   cors: {
     origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   },
   llm: {
     deepseek: {
@@ -48,6 +49,8 @@ const config: BizConfig = {
     llm: {
       prefix: '/llm',
       chat: '/chat',
+      vote: '/vote',
+      message: '/message',
     },
     user: '/user',
   },

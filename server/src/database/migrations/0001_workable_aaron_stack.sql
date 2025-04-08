@@ -1,1 +1,0 @@
-ALTER TABLE `chat` ADD `visibility` text DEFAULT 'private' NOT NULL;

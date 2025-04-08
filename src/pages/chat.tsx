@@ -6,6 +6,24 @@ import { v4 as uuidv4 } from 'uuid'
 
 export default function Page() {
   const { id = uuidv4() } = useParams<{ id: string }>() ?? {}
+  debugger
+
+  //   const messagesFromDb = await getMessagesByChatId({
+  //     id,
+  //   });
+
+  //   function convertToUIMessages(messages: Array<DBMessage>): Array<UIMessage> {
+  //     return messages.map((message) => ({
+  //       id: message.id,
+  //       parts: message.parts as UIMessage['parts'],
+  //       role: message.role as UIMessage['role'],
+  //       // Note: content will soon be deprecated in @ai-sdk/react
+  //       content: '',
+  //       createdAt: message.createdAt,
+  //       experimental_attachments:
+  //         (message.attachments as Array<Attachment>) ?? [],
+  //     }));
+  //   }
   return (
     <SidebarProvider>
       <AppSidebar />

@@ -49,7 +49,7 @@ export async function generateTitleFromUserMessage({ message }: { message: Messa
   return title
 }
 
-export function getTrailingMessageId({ messages }: { messages: Array<ResponseMessage> }) {
+export function getTrailingMessageId({ messages }: { messages: ResponseMessage[] }) {
   return messages.at(-1)?.id ?? null
 }
 

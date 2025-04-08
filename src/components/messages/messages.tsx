@@ -9,8 +9,8 @@ import { PreviewMessage, ThinkingMessage } from './message'
 interface MessagesProps {
   chatId: string
   status: UseChatHelpers['status']
-  votes: Array<any> | undefined
-  messages: Array<UIMessage>
+  votes: any[] | undefined
+  messages: UIMessage[]
   setMessages: UseChatHelpers['setMessages']
   reload: UseChatHelpers['reload']
   isReadonly: boolean

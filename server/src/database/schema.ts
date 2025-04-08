@@ -49,6 +49,9 @@ export const user = sqliteTable('user', {
     .$defaultFn(() => uuidv4()),
   email: text('email', { length: 64 }).notNull(),
   password: text('password', { length: 64 }),
+  createdAt: text('created_at')
+    .notNull()
+    .$defaultFn(() => new Date().toISOString()),
 })
 
 export type User = InferSelectModel<typeof user>
@@ -58,7 +61,9 @@ export const chat = sqliteTable('chat', {
     .primaryKey()
     .notNull()
     .$defaultFn(() => uuidv4()),
-  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`CURRENT_TIMESTAMP`),
+  createdAt: text('created_at')
+    .notNull()
+    .$defaultFn(() => new Date().toISOString()),
   title: text('title').notNull(),
   userId: text('user_id')
     .notNull()
@@ -81,7 +86,9 @@ export const message = sqliteTable('message', {
   role: text('role').notNull(),
   parts: text('parts', { mode: 'json' }).notNull(),
   attachments: text('attachments', { mode: 'json' }).notNull(),
-  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`CURRENT_TIMESTAMP`),
+  createdAt: text('created_at')
+    .notNull()
+    .$defaultFn(() => new Date().toISOString()),
 })
 
 export type DBMessage = InferSelectModel<typeof message>

@@ -10,6 +10,18 @@ export default async function (fastify: FastifyInstance) {
   const model = agent.utils.llmProvider.languageModel('chat-model-reasoning')
   const service = createLlmService(fastify)
   const session = fastify.session
+  const getChatById = async (id: string) => {
+    const chat = await service.chat.queryById({ id })
+    if (!chat) {
+      return fastify.bizErrors.createBizError(404, { message: 'Chat not found' })
+    }
+    if (!chat.success || !chat.data) {
+      return fastify.bizErrors.createBizError(404, { message: chat.message })
+    }
+    if (chat.data.userId !== session.user.id) {
+      return fastify.bizErrors.createBizError(401, { message: 'Unauthorized' })
+    }
+  }
 
   fastify.withTypeProvider<FastifyZodOpenApiTypeProvider>().post(
     fastify.bizAppConfig.routes.llm.chat,
@@ -54,7 +66,7 @@ export default async function (fastify: FastifyInstance) {
             role: 'user',
             parts: userMessage.parts,
             attachments: userMessage.experimental_attachments ?? [],
-            createdAt: new Date(),
+            // createdAt: userMessage.createdAt?.toISOString,
           },
         ],
       })
@@ -97,7 +109,7 @@ export default async function (fastify: FastifyInstance) {
                           role: assistantMessage.role,
                           parts: assistantMessage.parts,
                           attachments: assistantMessage.experimental_attachments ?? [],
-                          createdAt: new Date(),
+                          //   createdAt: assistantMessage.createdAt?.toISOString(),
                         },
                       ],
                     })
@@ -166,6 +178,48 @@ export default async function (fastify: FastifyInstance) {
     },
     async function (request) {
       return service.chat.history({ ...request.query, limit: request.query.limit ?? 10, id: session.user.id })
+    },
+  )
+
+  fastify.withTypeProvider<FastifyZodOpenApiTypeProvider>().delete(
+    fastify.bizAppConfig.routes.llm.chat,
+    {
+      schema: {
+        querystring: llmSchema.chat.delete,
+      },
+    },
+    async function (request) {
+      const chat = await getChatById(request.query.id)
+      if (chat instanceof fastify.bizErrors.BizError) return chat
+      return service.chat.delete(request.query)
+    },
+  )
+
+  fastify.withTypeProvider<FastifyZodOpenApiTypeProvider>().get(
+    fastify.bizAppConfig.routes.llm.vote,
+    {
+      schema: {
+        querystring: llmSchema.vote.self,
+      },
+    },
+    async function (request) {
+      const chat = await getChatById(request.query.chatId)
+      if (chat instanceof fastify.bizErrors.BizError) return chat
+      const votes = await service.vote.queryByChatId(request.query)
+      return fastify.BizResult.success({ data: votes })
+    },
+  )
+  fastify.withTypeProvider<FastifyZodOpenApiTypeProvider>().get(
+    fastify.bizAppConfig.routes.llm.message + '/queryByChatId',
+    {
+      schema: {
+        querystring: llmSchema.message.queryByChatId,
+      },
+    },
+    async function (request) {
+      const chat = await getChatById(request.query.chatId)
+      if (chat instanceof fastify.bizErrors.BizError) return chat
+      return service.message.queryMessageByChatId(request.query)
     },
   )
 

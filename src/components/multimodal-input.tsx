@@ -14,8 +14,10 @@ import {
 import { toast } from 'sonner'
 import { useLocalStorage, useWindowSize } from 'usehooks-ts'
 
+import { fetcher } from '@/utils'
 import type { UseChatHelpers } from '@ai-sdk/react'
 import equal from 'fast-deep-equal'
+import { useNavigate } from 'react-router'
 import { ArrowUpIcon, PaperclipIcon, StopIcon } from './icons'
 import { PreviewAttachment } from './preview-attachment'
 import { SuggestedActions } from './suggested-actions'
@@ -41,9 +43,9 @@ function PureMultimodalInput({
   setInput: UseChatHelpers['setInput']
   status: UseChatHelpers['status']
   stop: () => void
-  attachments: Array<Attachment>
-  setAttachments: Dispatch<SetStateAction<Array<Attachment>>>
-  messages: Array<UIMessage>
+  attachments: Attachment[]
+  setAttachments: Dispatch<SetStateAction<Attachment[]>>
+  messages: UIMessage[]
   setMessages: UseChatHelpers['setMessages']
   append: UseChatHelpers['append']
   handleSubmit: UseChatHelpers['handleSubmit']
@@ -93,22 +95,17 @@ function PureMultimodalInput({
   }
 
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [uploadQueue, setUploadQueue] = useState<Array<string>>([])
+  const [uploadQueue, setUploadQueue] = useState<string[]>([])
+  const navigate = useNavigate()
 
   const submitForm = useCallback(() => {
-    window.history.replaceState({}, '', `/chat/${chatId}`)
-
-    handleSubmit(undefined, {
-      experimental_attachments: attachments,
-    })
-
+    navigate(`/chat/${chatId}`, { replace: true })
+    handleSubmit(undefined, { experimental_attachments: attachments })
     setAttachments([])
     setLocalStorageInput('')
     resetHeight()
 
-    if (width && width > 768) {
-      textareaRef.current?.focus()
-    }
+    if (width && width > 768) textareaRef.current?.focus()
   }, [attachments, handleSubmit, setAttachments, setLocalStorageInput, width, chatId])
 
   const uploadFile = async (file: File) => {
@@ -116,13 +113,10 @@ function PureMultimodalInput({
     formData.append('file', file)
 
     try {
-      const response = await fetch('/api/files/upload', {
-        method: 'POST',
-        body: formData,
-      })
+      const result = await fetcher('/files/upload', { method: 'POST', body: formData })
 
-      if (response.ok) {
-        const data = await response.json()
+      if (result.success) {
+        const data = result.data as any
         const { url, pathname, contentType } = data
 
         return {
@@ -131,8 +125,7 @@ function PureMultimodalInput({
           contentType: contentType,
         }
       }
-      const { error } = await response.json()
-      toast.error(error)
+      toast.error(result.message)
     } catch (error) {
       toast.error('上传文件失败，请重试！')
     }
@@ -297,7 +290,7 @@ function PureSendButton({
 }: {
   submitForm: () => void
   input: string
-  uploadQueue: Array<string>
+  uploadQueue: string[]
 }) {
   return (
     <Button
