@@ -9,8 +9,9 @@ declare module 'fastify' {
     BizResult: typeof Result
     bizErrors: typeof errors
     bizAgent: InstanceType<typeof Agent>
-    bizSqliteDb: typeof sqliteDb
+    bizDb: typeof sqliteDb
     bizSchemas: typeof schemas
+    session: { user: { id: string } }
   }
 }
 declare global {

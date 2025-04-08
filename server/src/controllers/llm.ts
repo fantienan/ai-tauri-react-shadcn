@@ -9,12 +9,7 @@ export default async function (fastify: FastifyInstance) {
   const llmSchema = fastify.bizSchemas.llm
   const model = agent.utils.llmProvider.languageModel('chat-model-reasoning')
   const service = createLlmService(fastify)
-  /** @todo 需要添加用戶验证 */
-  const session = {
-    user: {
-      id: 'localdev',
-    },
-  }
+  const session = fastify.session
 
   fastify.withTypeProvider<FastifyZodOpenApiTypeProvider>().post(
     fastify.bizAppConfig.routes.llm.chat,
@@ -162,15 +157,15 @@ export default async function (fastify: FastifyInstance) {
     },
   )
 
-  fastify.withTypeProvider<FastifyZodOpenApiTypeProvider>().post(
+  fastify.withTypeProvider<FastifyZodOpenApiTypeProvider>().get(
     fastify.bizAppConfig.routes.llm.chat + '/history',
     {
       schema: {
-        body: llmSchema.chat.history,
+        querystring: llmSchema.chat.history,
       },
     },
     async function (request) {
-      return service.chat.history(request.body)
+      return service.chat.history({ ...request.query, limit: request.query.limit ?? 10, id: session.user.id })
     },
   )
 

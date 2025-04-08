@@ -9,7 +9,7 @@ export const createUserService = (fastify: FastifyInstance) => {
   return {
     insert: async function (params: typeof user.$inferInsert) {
       try {
-        const result = await fastify.bizSqliteDb.insert(user).values(params).returning({ id: user.id })
+        const result = await fastify.bizDb.insert(user).values(params).returning({ id: user.id })
         return fastify.BizResult.success({ data: result[0] })
       } catch (error) {
         fastify.log.error(error)
@@ -18,7 +18,7 @@ export const createUserService = (fastify: FastifyInstance) => {
     },
     queryById: async function (params: Pick<typeof user.$inferSelect, 'id'>) {
       try {
-        const result = await fastify.bizSqliteDb
+        const result = await fastify.bizDb
           .select({ id: user.id, email: user.email })
           .from(user)
           .where(eq(user.id, params.id))
@@ -32,7 +32,7 @@ export const createUserService = (fastify: FastifyInstance) => {
     update: async function (params: MakeRequiredAndOptional<typeof user.$inferSelect, 'id'>) {
       try {
         const { id, ...values } = params
-        const result = await fastify.bizSqliteDb
+        const result = await fastify.bizDb
           .update(user)
           .set(values)
           .where(eq(user.id, id))

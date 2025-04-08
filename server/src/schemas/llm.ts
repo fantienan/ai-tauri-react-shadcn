@@ -11,9 +11,19 @@ export const llm = {
     inster: createInsertSchema(schema.chat).omit({ id: true, createdAt: true }),
     update: createUpdateSchema(schema.chat).required({ id: true }),
     queryById: createSelectSchema(schema.chat).pick({ id: true }).required({ id: true }),
-    history: createSelectSchema(schema.chat)
-      .pick({ userId: true })
-      .required({ userId: true })
-      .and(z.object({ limit: z.number({ description: '数量' }).default(10) })),
+    history: z
+      .object({
+        limit: z
+          .union([z.string().transform((val) => parseInt(val, 10)), z.number()])
+          .default(10)
+          .optional()
+          .describe('每一页的数据数量'),
+        startingAfter: z.string({ description: '分页的起始id' }).optional(),
+        endingBefore: z.string({ description: '分页的结束id' }).optional(),
+      })
+      .refine((data) => !(data.startingAfter && data.endingBefore), {
+        message: 'startingAfter 和 endingBefore 不能同时提供',
+        path: ['startingAfter', 'endingBefore'],
+      }),
   },
 }

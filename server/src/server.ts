@@ -14,8 +14,10 @@ async function main() {
     .decorate('bizError', errors)
     .decorate('BizResult', Result)
     .decorate('bizAgent', new Agent())
-    .decorate('bizSqliteDb', sqliteDb)
+    .decorate('bizDb', sqliteDb)
     .decorate('bizSchemas', schemas)
+    /** @todo 需要添加用戶验证 */
+    .decorate('session', { user: { id: 'localdev' } })
     .register(import('@fastify/cors'), config.cors)
     .after(() => {
       fastify
