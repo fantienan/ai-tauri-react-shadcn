@@ -2,7 +2,7 @@ import { CopyIcon, DownloadIcon, ThumbDownIcon, ThumbUpIcon } from '@/components
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import type { Vote } from '@/types'
-import { fetcher, voteUrl } from '@/utils'
+import { baseUrl, fetcher } from '@/utils'
 import type { Message } from 'ai'
 import equal from 'fast-deep-equal'
 import { memo } from 'react'
@@ -65,7 +65,7 @@ export function PureMessageActions({
               disabled={vote?.isUpvoted}
               variant="outline"
               onClick={async () => {
-                const upvote = fetcher(`/llm/vote`, {
+                const upvote = fetcher(`/llm/vote?chatId=${chatId}`, {
                   method: 'PATCH',
                   body: JSON.stringify({ chatId, messageId: message.id, isUpvoted: true }),
                 })
@@ -74,7 +74,7 @@ export function PureMessageActions({
                   loading: '点赞回复...',
                   success: () => {
                     mutate<Vote[]>(
-                      `${voteUrl}/vote?chatId=${chatId}`,
+                      `${baseUrl}/llm/vote?chatId=${chatId}`,
                       (currentVotes) => {
                         if (!currentVotes) return []
 
@@ -112,7 +112,7 @@ export function PureMessageActions({
               variant="outline"
               disabled={vote && !vote.isUpvoted}
               onClick={async () => {
-                const downvote = fetcher(`/llm/vote`, {
+                const downvote = fetcher(`/llm/vote?chatId=${chatId}`, {
                   method: 'PATCH',
                   body: JSON.stringify({ chatId, messageId: message.id, isUpvoted: false }),
                 })
@@ -121,7 +121,7 @@ export function PureMessageActions({
                   loading: '反对回应...',
                   success: () => {
                     mutate<Vote[]>(
-                      `${voteUrl}/vote?chatId=${chatId}`,
+                      `${baseUrl}/llm/vote?chatId=${chatId}`,
                       (currentVotes) => {
                         if (!currentVotes) return []
 

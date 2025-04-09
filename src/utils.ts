@@ -7,9 +7,6 @@ interface ApplicationError extends Error {
 
 export const baseUrl = import.meta.env.BIZ_SERVER_URL
 export const llmUrl = `${baseUrl}/llm`
-export const chatUrl = `${llmUrl}/chat`
-export const messageUrl = `${llmUrl}/message`
-export const voteUrl = `${llmUrl}/vote`
 
 export const fetcher = async <T>(input: RequestInfo | URL, init?: RequestInit): Promise<BizResult<T>> => {
   const headers = new Headers(init?.headers)

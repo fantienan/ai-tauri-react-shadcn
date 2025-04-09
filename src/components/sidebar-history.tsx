@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { SidebarGroup, SidebarGroupContent, SidebarMenu, useSidebar } from '@/components/ui/sidebar'
 import type { Chat, User } from '@/types'
-import { chatUrl, fetcher } from '@/utils'
+import { fetcher } from '@/utils'
 import { isToday, isYesterday, subMonths, subWeeks } from 'date-fns'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
@@ -108,7 +108,7 @@ export function SidebarHistory({ user }: { user?: User }) {
     : false
 
   const handleDelete = async () => {
-    const deletePromise = fetch(`${chatUrl}?id=${deleteId}`, { method: 'DELETE' })
+    const deletePromise = fetcher(`/llm/chat?id=${deleteId}`, { method: 'DELETE' })
 
     toast.promise(deletePromise, {
       loading: '正在删除聊天...',
