@@ -7,7 +7,7 @@ declare module 'fastify' {
   interface FastifyInstance {
     bizAppConfig: BizConfig
     BizResult: typeof Result
-    bizErrors: typeof errors
+    bizError: typeof errors
     bizAgent: InstanceType<typeof Agent>
     bizDb: typeof sqliteDb
     bizSchemas: typeof schemas

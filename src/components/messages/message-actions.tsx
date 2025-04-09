@@ -2,6 +2,7 @@ import { CopyIcon, DownloadIcon, ThumbDownIcon, ThumbUpIcon } from '@/components
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import type { Vote } from '@/types'
+import { voteUrl } from '@/utils'
 import type { Message } from 'ai'
 import equal from 'fast-deep-equal'
 import { memo } from 'react'
@@ -64,7 +65,7 @@ export function PureMessageActions({
               disabled={vote?.isUpvoted}
               variant="outline"
               onClick={async () => {
-                const upvote = fetch('/api/vote', {
+                const upvote = fetch(`${voteUrl}/vote`, {
                   method: 'PATCH',
                   body: JSON.stringify({
                     chatId,
@@ -77,7 +78,7 @@ export function PureMessageActions({
                   loading: '点赞回复...',
                   success: () => {
                     mutate<Vote[]>(
-                      `/api/vote?chatId=${chatId}`,
+                      `${voteUrl}/vote?chatId=${chatId}`,
                       (currentVotes) => {
                         if (!currentVotes) return []
 
@@ -115,7 +116,7 @@ export function PureMessageActions({
               variant="outline"
               disabled={vote && !vote.isUpvoted}
               onClick={async () => {
-                const downvote = fetch('/api/vote', {
+                const downvote = fetch(`${voteUrl}/vote`, {
                   method: 'PATCH',
                   body: JSON.stringify({
                     chatId,
@@ -128,7 +129,7 @@ export function PureMessageActions({
                   loading: '反对回应...',
                   success: () => {
                     mutate<Vote[]>(
-                      `/api/vote?chatId=${chatId}`,
+                      `${voteUrl}/vote?chatId=${chatId}`,
                       (currentVotes) => {
                         if (!currentVotes) return []
 

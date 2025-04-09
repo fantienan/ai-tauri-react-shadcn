@@ -13,13 +13,13 @@ export default async function (fastify: FastifyInstance) {
   const getChatById = async (id: string) => {
     const chat = await service.chat.queryById({ id })
     if (!chat) {
-      return fastify.bizErrors.createBizError(404, { message: 'Chat not found' })
+      return fastify.bizError.createBizError(404, { message: 'Chat not found' })
     }
     if (!chat.success || !chat.data) {
-      return fastify.bizErrors.createBizError(404, { message: chat.message })
+      return fastify.bizError.createBizError(404, { message: chat.message })
     }
     if (chat.data.userId !== session.user.id) {
-      return fastify.bizErrors.createBizError(401, { message: 'Unauthorized' })
+      return fastify.bizError.createBizError(401, { message: 'Unauthorized' })
     }
   }
 
@@ -44,7 +44,7 @@ export default async function (fastify: FastifyInstance) {
       const userMessage = agent.utils.getMostRecentUserMessage(messages)
 
       if (!userMessage) {
-        return fastify.bizErrors.createBizError(fastify.BizResult.AI_CHAT_ERROR, { message: 'No user message found' })
+        return fastify.bizError.createBizError(fastify.BizResult.AI_CHAT_ERROR, { message: 'No user message found' })
       }
       const chatRes = await service.chat.queryById({ id })
       let chat = chatRes.data
@@ -52,10 +52,10 @@ export default async function (fastify: FastifyInstance) {
         const title = await agent.utils.generateTitleFromUserMessage({ message: userMessage })
         chat = (await service.chat.insert({ userId: session.user.id, title })).data
         if (!chat) {
-          return fastify.bizErrors.createBizError(fastify.BizResult.AI_CHAT_ERROR, { message: 'Chat not found' })
+          return fastify.bizError.createBizError(fastify.BizResult.AI_CHAT_ERROR, { message: 'Chat not found' })
         }
       } else if (chat.userId !== session.user.id) {
-        return fastify.bizErrors.createBizError(401, { message: 'Unauthorized' })
+        return fastify.bizError.createBizError(401, { message: 'Unauthorized' })
       }
 
       await service.message.insert({
@@ -91,7 +91,7 @@ export default async function (fastify: FastifyInstance) {
                     })
 
                     if (!assistantId) {
-                      throw fastify.bizErrors.createBizError(fastify.BizResult.AI_CHAT_ERROR, {
+                      throw fastify.bizError.createBizError(fastify.BizResult.AI_CHAT_ERROR, {
                         message: 'No assistant message found!',
                       })
                     }
@@ -190,7 +190,7 @@ export default async function (fastify: FastifyInstance) {
     },
     async function (request) {
       const chat = await getChatById(request.query.id)
-      if (chat instanceof fastify.bizErrors.BizError) return chat
+      if (chat instanceof fastify.bizError.BizError) return chat
       return service.chat.delete(request.query)
     },
   )
@@ -204,7 +204,7 @@ export default async function (fastify: FastifyInstance) {
     },
     async function (request) {
       const chat = await getChatById(request.query.chatId)
-      if (chat instanceof fastify.bizErrors.BizError) return chat
+      if (chat instanceof fastify.bizError.BizError) return chat
       const votes = await service.vote.queryByChatId(request.query)
       return fastify.BizResult.success({ data: votes })
     },
@@ -218,7 +218,7 @@ export default async function (fastify: FastifyInstance) {
     },
     async function (request) {
       const chat = await getChatById(request.query.chatId)
-      if (chat instanceof fastify.bizErrors.BizError) return chat
+      if (chat instanceof fastify.bizError.BizError) return chat
       return service.message.queryMessageByChatId(request.query)
     },
   )
