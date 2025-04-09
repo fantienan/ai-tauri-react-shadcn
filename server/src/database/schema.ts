@@ -1,4 +1,4 @@
-import { type InferSelectModel, sql } from 'drizzle-orm'
+import { type InferSelectModel } from 'drizzle-orm'
 import { integer, primaryKey, real, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 import { v4 as uuidv4 } from 'uuid'
 

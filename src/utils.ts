@@ -1,4 +1,4 @@
-import { BizResult } from '@@/types/server'
+import { BizResult } from 'types'
 
 interface ApplicationError extends Error {
   info: string

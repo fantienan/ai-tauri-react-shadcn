@@ -3,7 +3,4 @@ onlyBuiltDependencies:
   - esbuild
   - better-sqlite3
 packages:
-  - server
-  - packages/utils
-  - packages/types
-  - src
+  - packages/*

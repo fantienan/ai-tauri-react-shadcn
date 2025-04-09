@@ -1,4 +1,4 @@
-import { AnalyzeResult } from '@@/types/server'
+import { AnalyzeResult } from 'types'
 import { ChartBar } from './bar'
 
 type RechartsProps = Omit<AnalyzeResult, 'chartRendererType'>

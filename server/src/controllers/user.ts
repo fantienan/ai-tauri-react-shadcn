@@ -24,7 +24,6 @@ export default async function (fastify: FastifyInstance) {
       },
     },
     async function (request) {
-      console.log('request.body', request.body)
       return await service.queryById(request.body)
     },
   )

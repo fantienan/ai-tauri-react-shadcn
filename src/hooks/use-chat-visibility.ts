@@ -1,5 +1,3 @@
-'use client'
-
 import { type ChatHistory, getChatHistoryPaginationKey } from '@/components/sidebar-history'
 import { updateChatVisibility } from '@/services'
 import { ChatVisibilityType } from '@/types'

@@ -68,6 +68,25 @@ export const createLlmService = (fastify: FastifyInstance) => {
     }
   }
 
+  async function voteMessage({ messageId, chatId, isUpvoted }: typeof vote.$inferInsert) {
+    try {
+      const [existingVote] = await db
+        .select()
+        .from(vote)
+        .where(and(eq(vote.messageId, messageId)))
+
+      if (existingVote) {
+        return await db
+          .update(vote)
+          .set({ isUpvoted })
+          .where(and(eq(vote.messageId, messageId), eq(vote.chatId, chatId)))
+      }
+      return await db.insert(vote).values({ chatId, messageId, isUpvoted })
+    } catch (error) {
+      console.error('Failed to upvote message in database', error)
+      throw error
+    }
+  }
   return {
     chat: {
       insert: async function (params: typeof chat.$inferInsert) {
@@ -147,6 +166,15 @@ export const createLlmService = (fastify: FastifyInstance) => {
           return await db.select().from(vote).where(eq(vote.chatId, params.chatId))
         } catch (error) {
           console.error('Failed to get votes by chat id from database', error)
+          throw error
+        }
+      },
+      update: async function (params: typeof vote.$inferInsert) {
+        try {
+          await voteMessage(params)
+          return fastify.BizResult.success()
+        } catch (error) {
+          fastify.log.error(error)
           throw error
         }
       },

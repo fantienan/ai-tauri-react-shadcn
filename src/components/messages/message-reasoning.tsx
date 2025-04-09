@@ -1,5 +1,3 @@
-'use client'
-
 import { ChevronDownIcon, LoaderIcon } from '@/components/icons'
 import { Markdown } from '@/components/markdown'
 import { AnimatePresence, motion } from 'framer-motion'

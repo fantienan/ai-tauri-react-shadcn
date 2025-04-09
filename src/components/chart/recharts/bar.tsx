@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
-import { AnalyzeResult } from '@@/types/server'
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from 'recharts'
+import { AnalyzeResult } from 'types'
 
 type ChartBarProps = { config?: ChartConfig } & Omit<AnalyzeResult, 'chartRendererType' | 'chartType'>
 

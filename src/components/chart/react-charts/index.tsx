@@ -1,5 +1,5 @@
-import { AnalyzeResult } from '@@/types/server'
 import { Chart } from 'react-charts'
+import type { AnalyzeResult } from 'types'
 import ResizableBox from './resizable-box'
 
 export const ReactCharts = ({ options }: { options: Omit<AnalyzeResult, 'chartRendererType'> }) => {

@@ -3,8 +3,10 @@ PROJECT := aitaurireactshadcn
 
 # To pass extra arguments, call with: make install ARGS="arg1 arg2 ..."
 install:
-	@echo "Installing dependencies"
+	@echo "Installing client dependencies"
 	@pnpm install 
+	@echo "Installing server dependencies"
+	@cd server && yarn install
 
 client-dev:
 	@echo "Running dev client"
@@ -13,35 +15,39 @@ client-dev:
 server-dev:
 	@echo "Running dev server"
 	@chcp 65001
-	@pnpm --filter server dev
+	@pnpm -C server dev
+
+server-install:
+	@echo "Installing server dependencies"
+	@cd server && yarn install
 
 db-check:
 	@echo "Checking database"
-	@pnpm --filter server db:check
+	@pnpm -C server db:check
 
 db-generate:
 	@echo "Generating database"
-	@pnpm --filter server db:generate
+	@pnpm -C server db:generate
 
 db-migrate:
 	@echo "Running database migration"
-	@pnpm --filter server db:migrate
+	@pnpm -C server db:migrate
 
 db-pull:
 	@echo "Pulling database"
-	@pnpm --filter server db:pull
+	@pnpm -C server db:pull
 
 db-push:
 	@echo "Pushing database"
-	@pnpm --filter server db:push
+	@pnpm -C server db:push
 
 db-studio:
 	@echo "Running database studio"
-	@pnpm --filter server db:studio
+	@pnpm -C server db:studio
 
 db-up:
 	@echo "Running database up"
-	@pnpm --filter server db:up
+	@pnpm -C server db:up
 
 app-dev:
 	@echo "Running dev app"

@@ -2,7 +2,7 @@ import { CopyIcon, DownloadIcon, ThumbDownIcon, ThumbUpIcon } from '@/components
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import type { Vote } from '@/types'
-import { voteUrl } from '@/utils'
+import { fetcher, voteUrl } from '@/utils'
 import type { Message } from 'ai'
 import equal from 'fast-deep-equal'
 import { memo } from 'react'
@@ -65,13 +65,9 @@ export function PureMessageActions({
               disabled={vote?.isUpvoted}
               variant="outline"
               onClick={async () => {
-                const upvote = fetch(`${voteUrl}/vote`, {
+                const upvote = fetcher(`/llm/vote`, {
                   method: 'PATCH',
-                  body: JSON.stringify({
-                    chatId,
-                    messageId: message.id,
-                    type: 'up',
-                  }),
+                  body: JSON.stringify({ chatId, messageId: message.id, isUpvoted: true }),
                 })
 
                 toast.promise(upvote, {
@@ -116,13 +112,9 @@ export function PureMessageActions({
               variant="outline"
               disabled={vote && !vote.isUpvoted}
               onClick={async () => {
-                const downvote = fetch(`${voteUrl}/vote`, {
+                const downvote = fetcher(`/llm/vote`, {
                   method: 'PATCH',
-                  body: JSON.stringify({
-                    chatId,
-                    messageId: message.id,
-                    type: 'down',
-                  }),
+                  body: JSON.stringify({ chatId, messageId: message.id, isUpvoted: false }),
                 })
 
                 toast.promise(downvote, {
@@ -167,7 +159,7 @@ export function PureMessageActions({
               variant="outline"
               disabled={vote && !vote.isUpvoted}
               onClick={async () => {
-                const download = fetch('', { method: 'POST' })
+                const download = fetcher('', { method: 'POST' })
                 toast.promise(download, {
                   loading: '下载...',
                   success: () => {

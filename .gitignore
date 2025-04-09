@@ -1,4 +1,4 @@
-node_modules
+node_modules*
 server/build
 dist
 .env.local

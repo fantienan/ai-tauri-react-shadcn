@@ -32,5 +32,6 @@ export const llm = {
   },
   vote: {
     self: createSelectSchema(schema.vote).pick({ chatId: true }).required({ chatId: true }),
+    batch: createInsertSchema(schema.vote),
   },
 }

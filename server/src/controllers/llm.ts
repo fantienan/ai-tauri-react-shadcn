@@ -209,6 +209,19 @@ export default async function (fastify: FastifyInstance) {
       return fastify.BizResult.success({ data: votes })
     },
   )
+  fastify.withTypeProvider<FastifyZodOpenApiTypeProvider>().patch(
+    fastify.bizAppConfig.routes.llm.vote,
+    {
+      schema: {
+        body: llmSchema.vote.batch,
+      },
+    },
+    async function (request) {
+      const chat = await getChatById(request.body.chatId)
+      if (chat instanceof fastify.bizError.BizError) return chat
+      return service.vote.update(request.body)
+    },
+  )
   fastify.withTypeProvider<FastifyZodOpenApiTypeProvider>().get(
     fastify.bizAppConfig.routes.llm.message + '/queryByChatId',
     {
@@ -222,16 +235,4 @@ export default async function (fastify: FastifyInstance) {
       return service.message.queryMessageByChatId(request.query)
     },
   )
-
-  // export async function updateChatVisiblityById({
-  //   chatId,
-  //   visibility,
-  // }: { chatId: string; visibility: 'private' | 'public' }) {
-  //   try {
-  //     return await db.update(chat).set({ visibility }).where(eq(chat.id, chatId))
-  //   } catch (error) {
-  //     console.error('Failed to update chat visibility in database')
-  //     throw error
-  //   }
-  // }
 }

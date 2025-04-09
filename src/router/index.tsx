@@ -1,7 +1,7 @@
 import MapPage from '@/pages/map'
 import { useAppStore } from '@/stores'
 import { User } from '@/types'
-import { fetcher, messageUrl } from '@/utils'
+import { fetcher } from '@/utils'
 import {
   Link,
   Navigate,
@@ -72,7 +72,7 @@ const router = createBrowserRouter([
         path: 'chat/:id',
         loader: async ({ params }) => {
           if (params.id) {
-            const result = await fetcher(`${messageUrl}/queryByChatId?chatId=${params.id}`).catch(() => {
+            const result = await fetcher(`/llm/message/queryByChatId?chatId=${params.id}`).catch(() => {
               return { success: false, message: '获取消息失败', data: [] }
             })
             if (!result.success || !Array.isArray(result.data)) {
