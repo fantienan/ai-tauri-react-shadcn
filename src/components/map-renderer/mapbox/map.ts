@@ -1,15 +1,13 @@
 import 'mapbox-gl/dist/mapbox-gl.css'
-// import 'maplibre-gl/dist/maplibre-gl.css'
 import { logger } from '@/utils'
-// import { Map, MapOptions } from 'maplibre-gl'
 import { Map, MapOptions } from 'mapbox-gl'
 import { interceptRequest } from './utils'
 
-export type MapKitOptions = MapOptions & {
-  dispatch: ({ map }: { map: MapKitInstance }) => void
+export type MapboxRendererOptions = MapOptions & {
+  dispatch: ({ map }: { map: MapboxRendererInstance }) => void
 }
 
-export type MapKitInstance = InstanceType<typeof MapKit>
+export type MapboxRendererInstance = InstanceType<typeof MapboxRenderer>
 
 const defaultMapOptions: MapOptions = {
   container: 'map',
@@ -23,9 +21,8 @@ const defaultMapOptions: MapOptions = {
   style: `/map-style/style.json?t=${Date.now()}`,
 }
 
-logger('MapKit Options:', defaultMapOptions)
-export class MapKit extends Map {
-  constructor({ dispatch, ...resetOptions }: MapKitOptions) {
+export class MapboxRenderer extends Map {
+  constructor({ dispatch, ...resetOptions }: MapboxRendererOptions) {
     const options = { ...defaultMapOptions, ...resetOptions }
     interceptRequest(`access_token=${options.accessToken}`)
     super(options)

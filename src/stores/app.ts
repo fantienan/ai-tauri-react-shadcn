@@ -1,4 +1,4 @@
-import type { MapKitInstance } from '@/components/map-kit'
+import type { MapKitInstance } from '@/components/map-renderer'
 import { getUserInfo } from '@/services'
 import type { User } from '@/types'
 import { logger } from '@/utils'
