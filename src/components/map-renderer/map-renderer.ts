@@ -11,31 +11,35 @@ export type MapRendererOptionsWithMaplibre = MaplibreRendererOptions
 export type MapRendererOptionsWithOpenlayers = OpenlayersRendererOptions
 
 export type MapRendererOptions = {
+  container: HTMLElement | string
   dispatch: ({ map }: { map: any }) => void
 } & (
   | {
       mapRendererType: 'mapbox'
-      mapOptions: MapRendererOptionsWithMapbox
+      mapOptions?: Omit<MapRendererOptionsWithMapbox, 'dispatch'>
     }
   | {
       mapRendererType: 'maplibre'
-      mapOptions: MapRendererOptionsWithMaplibre
+      mapOptions?: Omit<MapRendererOptionsWithMaplibre, 'dispatch'>
     }
   | {
       mapRendererType: 'openlayers'
-      mapOptions: MapRendererOptionsWithOpenlayers
+      mapOptions?: Omit<MapRendererOptionsWithOpenlayers, 'dispatch'>
     }
 )
 
 export class MapRenderer {
   map: any
-  constructor({ mapRendererType, mapOptions }: MapRendererOptions) {
+  constructor({ mapRendererType, dispatch, container, mapOptions }: MapRendererOptions) {
+    const _dispatch: MapRendererOptions['dispatch'] = (params) => {
+      dispatch(params)
+    }
     if (mapRendererType === 'mapbox') {
-      this.map = new MapboxRenderer(mapOptions)
+      this.map = new MapboxRenderer({ container, dispatch: _dispatch, ...mapOptions })
     } else if (mapRendererType === 'maplibre') {
-      this.map = new MaplibreRenderer(mapOptions)
+      this.map = new MaplibreRenderer({ container, dispatch: _dispatch, ...mapOptions })
     } else if (mapRendererType === 'openlayers') {
-      this.map = new OpenlayersRenderer(mapOptions)
+      this.map = new OpenlayersRenderer({ target: container, dispatch: _dispatch, ...mapOptions })
     } else {
       throw new Error('Invalid map renderer type')
     }

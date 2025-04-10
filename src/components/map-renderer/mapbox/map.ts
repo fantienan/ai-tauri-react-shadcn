@@ -24,6 +24,7 @@ const defaultMapOptions: MapOptions = {
 export class MapboxRenderer extends Map {
   constructor({ dispatch, ...resetOptions }: MapboxRendererOptions) {
     const options = { ...defaultMapOptions, ...resetOptions }
+    options.container
     interceptRequest(`access_token=${options.accessToken}`)
     super(options)
     this.on('style.load', () => {

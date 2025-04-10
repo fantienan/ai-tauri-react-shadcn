@@ -1,5 +1,4 @@
 import { useSyncReference } from '@/hooks/use-sync-reference'
-import { cn } from '@/lib/utils'
 import { useEffect, useRef } from 'react'
 import { MapRenderer, MapRendererOptions } from '../map-renderer'
 
@@ -10,8 +9,12 @@ export const Map = (props: Pick<MapRendererOptions, 'dispatch'>) => {
     new MapRenderer({
       dispatch: (params) => dispatchRef.current(params),
       mapRendererType: 'mapbox',
-      mapOptions: { dispatch: () => {}, container: divRef.current! },
+      container: divRef.current!,
     })
   }, [])
-  return <div className={cn('min-h-svh w-full')} ref={divRef} />
+  return (
+    <>
+      <div className="min-h-svh w-full" ref={divRef} />
+    </>
+  )
 }

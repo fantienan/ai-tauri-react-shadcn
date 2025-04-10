@@ -12,7 +12,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { getChatHistoryPaginationKey } from '../sidebar-history'
 import { ChatHeader } from './chat-header'
 
-interface ChatProps {
+export interface ChatProps {
   id: string
   initialMessages: UIMessage[]
   isReadonly: boolean
