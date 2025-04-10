@@ -1,11 +1,12 @@
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { logger } from '@/utils'
 import { UseChatHelpers } from '@ai-sdk/react'
 import { Message } from 'ai'
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 
 const deleteTrailingMessages = async (message: { id: string }) => {
-  console.log(message)
+  logger(message)
 }
 
 export type MessageEditorProps = {

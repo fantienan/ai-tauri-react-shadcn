@@ -1,19 +1,7 @@
+import Layout, { layoutLoader } from '@/layout'
+import { chatLoader } from '@/pages/chat'
 import MapPage from '@/pages/map'
-import { useAppStore } from '@/stores'
-import { User } from '@/types'
-import { fetcher } from '@/utils'
-import {
-  Link,
-  Navigate,
-  Outlet,
-  RouterProvider,
-  createBrowserRouter,
-  useLoaderData,
-  useParams,
-  useRouteError,
-} from 'react-router'
-import { toast } from 'sonner'
-import { SWRConfig } from 'swr'
+import { Link, RouterProvider, createBrowserRouter, useRouteError } from 'react-router'
 
 function RootErrorBoundary() {
   let error = useRouteError() as Error
@@ -25,6 +13,7 @@ function RootErrorBoundary() {
     </div>
   )
 }
+
 function NoMatch() {
   return (
     <div>
@@ -34,55 +23,21 @@ function NoMatch() {
     </div>
   )
 }
-function Layout() {
-  const data = useLoaderData() as { user: User }
-  const { id } = useParams()
-  if (!data.user) return <Navigate replace to="/login" />
-
-  return (
-    <SWRConfig
-      value={{
-        provider: () => new Map(),
-        // fetcher: (i, ii) => {
-        //   return fetcher(i, ii)
-        // },
-      }}
-    >
-      {!id && <Navigate replace to="/chat" />}
-      <Outlet />
-    </SWRConfig>
-  )
-}
 const router = createBrowserRouter([
   {
     path: '/',
     errorElement: <RootErrorBoundary />,
     Component: Layout,
-    loader: async () => ({ user: await useAppStore.getState().getUserInfo() }),
+    loader: layoutLoader,
     children: [
-      {
-        path: 'map',
-        element: <MapPage />,
-      },
+      { path: 'map', element: <MapPage /> },
       {
         path: 'chat',
         lazy: async () => ({ Component: (await import('@/pages/chat')).default }),
       },
       {
         path: 'chat/:id',
-        loader: async ({ params }) => {
-          if (params.id) {
-            const result = await fetcher(`/llm/message/queryByChatId?chatId=${params.id}`).catch(() => {
-              return { success: false, message: '获取消息失败', data: [] }
-            })
-            if (!result.success || !Array.isArray(result.data)) {
-              toast.error(result.message)
-            } else {
-              return { initialMessages: result.data }
-            }
-          }
-          return { initialMessages: [] }
-        },
+        loader: chatLoader,
         lazy: async () => ({ Component: (await import('@/pages/chat')).default }),
       },
     ],

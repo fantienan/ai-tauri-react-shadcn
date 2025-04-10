@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react-swc'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  envPrefix: ['BIZ_'],
+  envPrefix: ['BIZ_', 'MAPBOX_'],
   plugins: [react(), tailwindcss()],
   server: {
     watch: {

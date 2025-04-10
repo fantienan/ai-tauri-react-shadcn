@@ -1,5 +1,8 @@
+import { fetcher, logger } from '@/utils'
+import type { UseChatHelpers } from '@ai-sdk/react'
 import type { Attachment, UIMessage } from 'ai'
 import cx from 'classnames'
+import equal from 'fast-deep-equal'
 import type React from 'react'
 import {
   type ChangeEvent,
@@ -11,13 +14,9 @@ import {
   useRef,
   useState,
 } from 'react'
+import { useNavigate } from 'react-router'
 import { toast } from 'sonner'
 import { useLocalStorage, useWindowSize } from 'usehooks-ts'
-
-import { fetcher } from '@/utils'
-import type { UseChatHelpers } from '@ai-sdk/react'
-import equal from 'fast-deep-equal'
-import { useNavigate } from 'react-router'
 import { ArrowUpIcon, PaperclipIcon, StopIcon } from './icons'
 import { PreviewAttachment } from './preview-attachment'
 import { SuggestedActions } from './suggested-actions'
@@ -144,7 +143,7 @@ function PureMultimodalInput({
 
         setAttachments((currentAttachments) => [...currentAttachments, ...successfullyUploadedAttachments])
       } catch (error) {
-        console.error('Error uploading files!', error)
+        logger('Error uploading files!', error)
       } finally {
         setUploadQueue([])
       }
