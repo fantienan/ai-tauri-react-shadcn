@@ -18,7 +18,7 @@ export default function Layout() {
         // },
       }}
     >
-      <Navigate to="/map" />
+      {/* <Navigate to="/map" /> */}
       <Outlet />
     </SWRConfig>
   )

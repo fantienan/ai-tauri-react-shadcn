@@ -7,11 +7,11 @@ import { SidebarHistory } from './sidebar-history'
 import { SidebarUserNav } from './sidebar-user-nav'
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 
-export function AppSidebar() {
+export function AppSidebar(props: { showFooter?: boolean }) {
   const { setOpenMobile } = useSidebar()
   const navigate = useNavigate()
   const user = useAppStore().session.user
-
+  const { showFooter } = props
   const onNewChat = () => {
     setOpenMobile(false)
     navigate(`/chat`, { replace: true })
@@ -39,7 +39,7 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarHistory user={user} />
       </SidebarContent>
-      <SidebarFooter>{user && <SidebarUserNav user={user} />}</SidebarFooter>
+      {showFooter && <SidebarFooter>{user && <SidebarUserNav user={user} />}</SidebarFooter>}
     </Sidebar>
   )
 }

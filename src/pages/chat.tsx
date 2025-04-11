@@ -5,5 +5,5 @@ import { convertToUIMessages } from '@/utils'
 export default function Page() {
   const { id, initialMessages } = useLoader()
 
-  return <ChatBar isReadonly={false} id={id} initialMessages={convertToUIMessages(initialMessages)} />
+  return <ChatBar showFooter isReadonly={false} id={id} initialMessages={convertToUIMessages(initialMessages)} />
 }
