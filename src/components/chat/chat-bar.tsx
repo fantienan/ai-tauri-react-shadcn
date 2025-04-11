@@ -1,18 +1,23 @@
 import { AppSidebar } from '@/components/app-sidebar'
 import { Chat, ChatProps } from '@/components/chat'
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
+import { SidebarInset, SidebarProvider, type SidebarProviderProps } from '@/components/ui/sidebar'
 import { cn } from '@/lib/utils'
+import { ChatProvider } from './chat-provider'
 
 export const ChatBar = ({
   className,
   showFooter,
+  defaultOpen,
+  onNewChat,
   ...props
-}: ChatProps & { className?: string; showFooter?: boolean }) => {
+}: ChatProps & Pick<SidebarProviderProps, 'className' | 'defaultOpen' | 'onNewChat' | 'showFooter'>) => {
   return (
-    <SidebarProvider className={cn(className)}>
-      <AppSidebar showFooter={showFooter} />
+    <SidebarProvider showFooter={showFooter} onNewChat={onNewChat} defaultOpen={defaultOpen} className={cn(className)}>
+      <AppSidebar />
       <SidebarInset>
-        <Chat {...props} key={props.id} />
+        <ChatProvider onNewChat={onNewChat}>
+          <Chat {...props} key={props.id} />
+        </ChatProvider>
       </SidebarInset>
     </SidebarProvider>
   )

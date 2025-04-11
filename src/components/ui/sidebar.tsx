@@ -27,6 +27,16 @@ type SidebarContextProps = {
   setOpenMobile: (open: boolean) => void
   isMobile: boolean
   toggleSidebar: () => void
+  showFooter?: boolean
+  onNewChat: () => void
+}
+
+export type SidebarProviderProps = React.ComponentProps<'div'> & {
+  defaultOpen?: boolean
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
+  showFooter?: boolean
+  onNewChat: () => void
 }
 
 const SidebarContext = React.createContext<SidebarContextProps | null>(null)
@@ -44,17 +54,17 @@ function SidebarProvider({
   defaultOpen = true,
   open: openProp,
   onOpenChange: setOpenProp,
+  onNewChat,
+  showFooter,
   className,
   style,
   children,
   ...props
-}: React.ComponentProps<'div'> & {
-  defaultOpen?: boolean
-  open?: boolean
-  onOpenChange?: (open: boolean) => void
-}) {
+}: SidebarProviderProps) {
   const isMobile = useIsMobile()
   const [openMobile, setOpenMobile] = React.useState(false)
+  const onNewChatRef = React.useRef(onNewChat)
+  onNewChatRef.current = onNewChat
 
   // This is the internal state of the sidebar.
   // We use openProp and setOpenProp for control from outside the component.
@@ -106,6 +116,8 @@ function SidebarProvider({
       openMobile,
       setOpenMobile,
       toggleSidebar,
+      showFooter,
+      onNewChat: () => onNewChatRef.current(),
     }),
     [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar],
   )

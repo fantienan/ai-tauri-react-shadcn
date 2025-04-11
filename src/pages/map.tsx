@@ -6,10 +6,6 @@ import {
   DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerPortal,
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer'
@@ -23,6 +19,8 @@ import { Bot } from 'lucide-react'
 export default function Page() {
   const { id, initialMessages } = useLoader()
   const setMap = useAppStore((state) => state.setMap)
+
+  const onNewChat = () => {}
 
   return (
     <div className="flex min-h-svh w-full">
@@ -41,7 +39,22 @@ export default function Page() {
             <DrawerTitle>聊天</DrawerTitle>
             <DrawerDescription>聊天</DrawerDescription>
           </VisuallyHidden>
-          <ChatBar isReadonly={false} id={id} initialMessages={convertToUIMessages(initialMessages)} />
+          <ChatBar
+            onNewChat={onNewChat}
+            defaultOpen={false}
+            isReadonly={false}
+            id={id}
+            initialMessages={convertToUIMessages(initialMessages)}
+          />
+          <DrawerClose asChild>
+            <Button
+              variant="secondary"
+              size="icon"
+              className="absolute top-4 right-4 rounded-full shadow-md hover:bg-muted"
+            >
+              <X className="h-5 w-5" />
+            </Button>
+          </DrawerClose>
         </DrawerContent>
       </Drawer>
     </div>
