@@ -28,7 +28,6 @@ export class MapboxRenderer extends Map {
     interceptRequest(`access_token=${options.accessToken}`)
     super(options)
     this.on('style.load', () => {
-      debugger
       //   this.setProjection({ type: 'globe' })
       //   this.resize()
       dispatch({ map: this })

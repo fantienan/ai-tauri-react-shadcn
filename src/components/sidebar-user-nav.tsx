@@ -7,16 +7,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar'
-import { useAppStore, useThemeStore } from '@/stores'
 import type { User } from '@/types'
 import { ChevronUp } from 'lucide-react'
 import { useNavigate } from 'react-router'
+import { useChatbar } from './chat/chat-provider'
 
 export function SidebarUserNav({ user }: { user: User }) {
-  const setTheme = useThemeStore((state) => state.setTheme)
-  const theme = useThemeStore((state) => state.theme)
-  const signOut = useAppStore((state) => state.signOut)
   const navigate = useNavigate()
+  const { signOut, theme, setTheme } = useChatbar()
 
   return (
     <SidebarMenu>

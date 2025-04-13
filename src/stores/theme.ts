@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-export interface ThemeStoreState {
+interface ThemeStoreState {
   theme: 'dark' | 'light'
 }
 
@@ -8,7 +8,9 @@ type ThemeStoreActions = {
   setTheme: (theme: ThemeStoreState['theme']) => void
 }
 
-export const useThemeStore = create<ThemeStoreState & ThemeStoreActions>((set) => ({
+export type ThemeStoreProps = ThemeStoreState & ThemeStoreActions
+
+export const useThemeStore = create<ThemeStoreProps>((set) => ({
   theme: localStorage.getItem('theme') === 'dark' ? 'dark' : 'light',
   setTheme: (theme) => {
     set((prev) => ({ ...prev, theme }))

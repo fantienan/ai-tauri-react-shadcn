@@ -1,12 +1,13 @@
 import { useAppStore } from '@/stores'
 import type { User } from '@/types'
-import { Navigate, Outlet, useLoaderData } from 'react-router'
+import { Navigate, Outlet, useLoaderData, useLocation } from 'react-router'
 import { SWRConfig } from 'swr'
 
 export const layoutLoader = async () => ({ user: await useAppStore.getState().getUserInfo() })
 
 export default function Layout() {
   const data = useLoaderData() as { user: User }
+  const location = useLocation()
   if (!data.user) return <Navigate replace to="/login" />
 
   return (
@@ -18,7 +19,7 @@ export default function Layout() {
         // },
       }}
     >
-      {/* <Navigate to="/map" /> */}
+      {location.pathname === '/' && <Navigate to="/map" replace />}
       <Outlet />
     </SWRConfig>
   )

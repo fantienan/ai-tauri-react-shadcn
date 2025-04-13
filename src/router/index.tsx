@@ -1,6 +1,5 @@
 import Layout, { layoutLoader } from '@/layout'
 import MapPage from '@/pages/map'
-import { chatLoader } from '@/utils'
 import { Link, RouterProvider, createBrowserRouter, useRouteError } from 'react-router'
 
 function RootErrorBoundary() {
@@ -31,14 +30,12 @@ const router = createBrowserRouter([
     loader: layoutLoader,
     children: [
       { path: 'map', element: <MapPage /> },
-      { path: 'map/:id', loader: chatLoader, element: <MapPage /> },
       {
         path: 'chat',
         lazy: async () => ({ Component: (await import('@/pages/chat')).default }),
       },
       {
         path: 'chat/:id',
-        loader: chatLoader,
         lazy: async () => ({ Component: (await import('@/pages/chat')).default }),
       },
     ],

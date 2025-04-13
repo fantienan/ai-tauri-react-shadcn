@@ -1,24 +1,21 @@
-import { ChatBar } from '@/components/chat/chat-bar'
-import { useLoader } from '@/hooks/use-loader'
-import { convertToUIMessages } from '@/utils'
-import { useNavigate } from 'react-router'
+import { Chatbar } from '@/components/chat/chat-bar'
+import { useChatbarLoader } from '@/hooks/use-chatbar-loader'
+import { Navigate, useNavigate, useParams } from 'react-router'
 
 export default function Page() {
-  const { id, initialMessages } = useLoader()
-
+  const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-
-  const onNewChat = () => {
-    navigate(`/chat`, { replace: true })
-  }
-
+  const { error, ...chatbarLoaderData } = useChatbarLoader({ chatId: id })
+  if (error) return <Navigate replace to="/chat" />
   return (
-    <ChatBar
-      onNewChat={onNewChat}
+    <Chatbar
       showFooter
-      isReadonly={false}
-      id={id}
-      initialMessages={convertToUIMessages(initialMessages)}
+      onDeleteChat={({ chatId }) => {
+        if (chatbarLoaderData.id === chatId) navigate('/chat')
+      }}
+      onNewChat={() => navigate(`/chat`, { replace: true })}
+      onOpenHistoryChat={({ chatId }) => navigate(`/chat/${chatId}`, { replace: true })}
+      {...chatbarLoaderData}
     />
   )
 }

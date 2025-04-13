@@ -146,12 +146,12 @@ export const createLlmService = (fastify: FastifyInstance) => {
           throw error
         }
       },
-      queryMessageByChatId: async function ({ chatId }: Pick<typeof message.$inferSelect, 'chatId'>) {
+      queryMessageByChatId: async function (params: Pick<typeof message.$inferSelect, 'chatId'>) {
         try {
           const result = await db
             .select()
             .from(message)
-            .where(eq(message.chatId, chatId))
+            .where(eq(message.chatId, params.chatId))
             .orderBy(asc(message.createdAt))
           return fastify.BizResult.success({ data: result })
         } catch (error) {

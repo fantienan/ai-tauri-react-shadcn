@@ -2,23 +2,29 @@ import { AppSidebar } from '@/components/app-sidebar'
 import { Chat, ChatProps } from '@/components/chat'
 import { SidebarInset, SidebarProvider, type SidebarProviderProps } from '@/components/ui/sidebar'
 import { cn } from '@/lib/utils'
-import { ChatProvider } from './chat-provider'
+import { ChatbarProvider, ChatbarProviderProps } from './chat-provider'
 
-export const ChatBar = ({
+export type ChatbarProps = ChatProps &
+  Pick<SidebarProviderProps, 'className' | 'defaultOpen' | 'showFooter'> &
+  ChatbarProviderProps
+
+export const Chatbar = ({
   className,
   showFooter,
   defaultOpen,
-  onNewChat,
-  ...props
-}: ChatProps & Pick<SidebarProviderProps, 'className' | 'defaultOpen' | 'onNewChat' | 'showFooter'>) => {
+  id,
+  initialMessages,
+  isReadonly,
+  ...chatbarProviderProps
+}: ChatbarProps) => {
   return (
-    <SidebarProvider showFooter={showFooter} onNewChat={onNewChat} defaultOpen={defaultOpen} className={cn(className)}>
-      <AppSidebar />
-      <SidebarInset>
-        <ChatProvider onNewChat={onNewChat}>
-          <Chat {...props} key={props.id} />
-        </ChatProvider>
-      </SidebarInset>
-    </SidebarProvider>
+    <ChatbarProvider chatId={id} {...chatbarProviderProps}>
+      <SidebarProvider showFooter={showFooter} defaultOpen={defaultOpen} className={cn(className)}>
+        <AppSidebar />
+        <SidebarInset>
+          <Chat initialMessages={initialMessages} isReadonly={isReadonly} id={id} key={id} />
+        </SidebarInset>
+      </SidebarProvider>
+    </ChatbarProvider>
   )
 }

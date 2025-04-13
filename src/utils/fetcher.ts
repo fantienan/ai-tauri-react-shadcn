@@ -14,15 +14,11 @@ export const fetcher = async <T>(input: RequestInfo | URL, init?: RequestInit): 
   let i = input
   if (typeof input === 'string' && !input.startsWith('http')) i = `${baseUrl}${input}`
   const res = await fetch(i, { ...init, headers })
-
   if (!res.ok) {
     const error = new Error('An error occurred while fetching the data.') as ApplicationError
-
     error.info = await res.json()
     error.status = res.status
-
     throw error
   }
-
   return res.json()
 }

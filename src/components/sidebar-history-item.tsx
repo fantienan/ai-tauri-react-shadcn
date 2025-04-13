@@ -1,7 +1,7 @@
 import { useChatVisibility } from '@/hooks/use-chat-visibility'
 import { Chat } from '@/types'
 import { memo } from 'react'
-import { Link } from 'react-router'
+import { useChatbar } from './chat/chat-provider'
 import { CheckCircleFillIcon, GlobeIcon, LockIcon, MoreHorizontalIcon, ShareIcon, TrashIcon } from './icons'
 import {
   DropdownMenu,
@@ -26,19 +26,22 @@ const PureChatItem = ({
   onDelete: (chatId: string) => void
   setOpenMobile: (open: boolean) => void
 }) => {
+  const { onOpenHistoryChat } = useChatbar()
   const { visibilityType, setVisibilityType } = useChatVisibility({
     chatId: chat.id,
     initialVisibility: chat.visibility,
   })
 
+  const historyChat = () => {
+    setOpenMobile(false)
+    onOpenHistoryChat?.({ chatId: chat.id })
+  }
+
   return (
     <SidebarMenuItem>
-      <SidebarMenuButton asChild isActive={isActive}>
-        <Link to={`/chat/${chat.id}`} onClick={() => setOpenMobile(false)}>
-          <span>{chat.title}</span>
-        </Link>
+      <SidebarMenuButton isActive={isActive} onClick={historyChat}>
+        {chat.title}
       </SidebarMenuButton>
-
       <DropdownMenu modal={true}>
         <DropdownMenuTrigger asChild>
           <SidebarMenuAction
@@ -72,9 +75,7 @@ const PureChatItem = ({
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="cursor-pointer flex-row justify-between"
-                  onClick={() => {
-                    setVisibilityType('public')
-                  }}
+                  onClick={() => setVisibilityType('public')}
                 >
                   <div className="flex flex-row gap-2 items-center">
                     <GlobeIcon />

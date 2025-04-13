@@ -31,7 +31,7 @@ export const llm = {
     queryByChatId: createSelectSchema(schema.message).pick({ chatId: true }).required({ chatId: true }),
   },
   vote: {
-    self: createSelectSchema(schema.vote).pick({ chatId: true }).required({ chatId: true }),
+    self: z.object({ chatId: z.string({ description: '聊天记录id' }) }),
     batch: createInsertSchema(schema.vote),
   },
 }

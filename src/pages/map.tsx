@@ -1,4 +1,4 @@
-import { ChatBar } from '@/components/chat/chat-bar'
+import { Chatbar } from '@/components/chat/chat-bar'
 import { Map } from '@/components/map-ui'
 import { Button } from '@/components/ui/button'
 import {
@@ -9,18 +9,17 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer'
-import { useLoader } from '@/hooks/use-loader'
+import { useChatbarLoader } from '@/hooks/use-chatbar-loader'
 import { useAppStore } from '@/stores'
-import { convertToUIMessages } from '@/utils'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import { X } from 'lucide-react'
 import { Bot } from 'lucide-react'
 
 export default function Page() {
-  const { id, initialMessages } = useLoader()
-  const setMap = useAppStore((state) => state.setMap)
-
-  const onNewChat = () => {}
+  const currentChatId = useAppStore().currentChatId
+  const setCurrentChatId = useAppStore().setCurrentChatId
+  const { error, ...chatbarLoaderData } = useChatbarLoader({ chatId: currentChatId })
+  const setMap = useAppStore().setMap
 
   return (
     <div className="flex min-h-svh w-full">
@@ -39,12 +38,14 @@ export default function Page() {
             <DrawerTitle>聊天</DrawerTitle>
             <DrawerDescription>聊天</DrawerDescription>
           </VisuallyHidden>
-          <ChatBar
-            onNewChat={onNewChat}
+          <Chatbar
             defaultOpen={false}
-            isReadonly={false}
-            id={id}
-            initialMessages={convertToUIMessages(initialMessages)}
+            onDeleteChat={({ chatId }) => {
+              if (currentChatId === chatId) setCurrentChatId('')
+            }}
+            onNewChat={() => setCurrentChatId('')}
+            onOpenHistoryChat={({ chatId }) => setCurrentChatId(chatId)}
+            {...chatbarLoaderData}
           />
           <DrawerClose asChild>
             <Button

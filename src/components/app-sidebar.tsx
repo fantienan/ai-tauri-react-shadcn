@@ -1,18 +1,18 @@
 import { PlusIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, useSidebar } from '@/components/ui/sidebar'
-import { useAppStore } from '@/stores'
+import { useChatbar } from './chat/chat-provider'
 import { SidebarHistory } from './sidebar-history'
 import { SidebarUserNav } from './sidebar-user-nav'
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 
 export function AppSidebar() {
-  const { setOpenMobile, showFooter, onNewChat: contextOnNewChat } = useSidebar()
-  const user = useAppStore().session.user
+  const { setOpenMobile, showFooter } = useSidebar()
+  const { onNewChat: contextOnNewChat, user } = useChatbar()
 
   const onNewChat = () => {
     setOpenMobile(false)
-    contextOnNewChat()
+    contextOnNewChat?.()
   }
 
   return (
@@ -35,7 +35,7 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarHistory user={user} />
+        <SidebarHistory />
       </SidebarContent>
       {showFooter && <SidebarFooter>{user && <SidebarUserNav user={user} />}</SidebarFooter>}
     </Sidebar>

@@ -1,23 +1,30 @@
+import { AppStoreActions, ThemeStoreProps } from '@/stores'
+import type { User } from '@/types'
 import React from 'react'
 
-export interface ChatContextProps {
-  onNewChat: () => void
-}
+export type ChatbarContextProps = Pick<ThemeStoreProps, 'theme' | 'setTheme'> &
+  Pick<AppStoreActions, 'signOut'> & {
+    user?: User
+    chatId?: string
+    onNewChat?: () => void
+    onDeleteChat?: (params: { chatId: string }) => void
+    onOpenHistoryChat?: (params: { chatId: string }) => void
+  }
 
-export type ChatProviderProps = Pick<ChatContextProps, 'onNewChat'> & Pick<React.HTMLProps<HTMLDivElement>, 'children'>
+export type ChatbarProviderProps = ChatbarContextProps & Pick<React.HTMLProps<HTMLDivElement>, 'children'>
 
-const ChatContext = React.createContext<ChatContextProps | null>(null)
+const ChatbarContext = React.createContext<ChatbarContextProps | null>(null)
 
-function useChatContext() {
-  const context = React.useContext(ChatContext)
+function useChatbar() {
+  const context = React.useContext(ChatbarContext)
   if (!context) {
-    throw new Error('useChat must be used within a ChatProvider.')
+    throw new Error('useChat must be used within a ChatbarProvider.')
   }
 
   return context
 }
 
-function ChatProvider({ children, ...props }: ChatProviderProps) {
-  return <ChatContext.Provider value={props}>{children}</ChatContext.Provider>
+function ChatbarProvider({ children, ...props }: ChatbarProviderProps) {
+  return <ChatbarContext.Provider value={props}>{children}</ChatbarContext.Provider>
 }
-export { useChatContext, ChatProvider }
+export { useChatbar, ChatbarProvider }

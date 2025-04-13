@@ -10,17 +10,16 @@ export default async function (fastify: FastifyInstance) {
   const model = agent.utils.llmProvider.languageModel('chat-model-reasoning')
   const service = createLlmService(fastify)
   const session = fastify.session
+
   const getChatById = async (id: string) => {
     const chat = await service.chat.queryById({ id })
-    if (!chat) {
-      return fastify.bizError.createBizError(404, { message: 'Chat not found' })
-    }
-    if (!chat.success || !chat.data) {
-      return fastify.bizError.createBizError(404, { message: chat.message })
+    if (!chat || !chat.data) {
+      return fastify.BizResult.error({ code: 404, message: 'Chat not found' })
     }
     if (chat.data.userId !== session.user.id) {
-      return fastify.bizError.createBizError(401, { message: 'Unauthorized' })
+      return fastify.BizResult.error({ code: 401, message: 'Unauthorized' })
     }
+    return chat
   }
 
   fastify.withTypeProvider<FastifyZodOpenApiTypeProvider>().post(
@@ -51,11 +50,9 @@ export default async function (fastify: FastifyInstance) {
       if (!chat) {
         const title = await agent.utils.generateTitleFromUserMessage({ message: userMessage })
         chat = (await service.chat.insert({ userId: session.user.id, title })).data
-        if (!chat) {
-          return fastify.bizError.createBizError(fastify.BizResult.AI_CHAT_ERROR, { message: 'Chat not found' })
-        }
+        if (!chat) return fastify.BizResult.error({ code: 404, message: 'Chat not found' })
       } else if (chat.userId !== session.user.id) {
-        return fastify.bizError.createBizError(401, { message: 'Unauthorized' })
+        return fastify.BizResult.error({ code: 401, message: 'Unauthorized' })
       }
 
       await service.message.insert({
@@ -66,7 +63,6 @@ export default async function (fastify: FastifyInstance) {
             role: 'user',
             parts: userMessage.parts,
             attachments: userMessage.experimental_attachments ?? [],
-            // createdAt: userMessage.createdAt?.toISOString,
           },
         ],
       })
@@ -109,7 +105,6 @@ export default async function (fastify: FastifyInstance) {
                           role: assistantMessage.role,
                           parts: assistantMessage.parts,
                           attachments: assistantMessage.experimental_attachments ?? [],
-                          //   createdAt: assistantMessage.createdAt?.toISOString(),
                         },
                       ],
                     })
@@ -185,13 +180,13 @@ export default async function (fastify: FastifyInstance) {
     fastify.bizAppConfig.routes.llm.chat,
     {
       schema: {
-        querystring: llmSchema.chat.delete,
+        body: llmSchema.chat.delete,
       },
     },
     async function (request) {
-      const chat = await getChatById(request.query.id)
-      if (chat instanceof fastify.bizError.BizError) return chat
-      return service.chat.delete(request.query)
+      const chat = await getChatById(request.body.id)
+      if (!chat.success) return chat
+      return service.chat.delete(request.body)
     },
   )
 
@@ -204,7 +199,7 @@ export default async function (fastify: FastifyInstance) {
     },
     async function (request) {
       const chat = await getChatById(request.query.chatId)
-      if (chat instanceof fastify.bizError.BizError) return chat
+      if (!chat.success) return chat
       const votes = await service.vote.queryByChatId(request.query)
       return fastify.BizResult.success({ data: votes })
     },
@@ -218,7 +213,7 @@ export default async function (fastify: FastifyInstance) {
     },
     async function (request) {
       const chat = await getChatById(request.body.chatId)
-      if (chat instanceof fastify.bizError.BizError) return chat
+      if (!chat.success) return chat
       return service.vote.update(request.body)
     },
   )
@@ -231,7 +226,7 @@ export default async function (fastify: FastifyInstance) {
     },
     async function (request) {
       const chat = await getChatById(request.query.chatId)
-      if (chat instanceof fastify.bizError.BizError) return chat
+      if (!chat.success) return chat
       return service.message.queryMessageByChatId(request.query)
     },
   )

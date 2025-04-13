@@ -5,11 +5,11 @@ import { useSidebar } from '@/components/ui/sidebar'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { memo } from 'react'
 import { useWindowSize } from 'usehooks-ts'
-import { useChatContext } from './chat-provider'
+import { useChatbar } from './chat-provider'
 
 function PureChatHeader() {
   const { open } = useSidebar()
-  const { onNewChat } = useChatContext()
+  const { onNewChat } = useChatbar()
   const { width: windowWidth } = useWindowSize()
 
   return (

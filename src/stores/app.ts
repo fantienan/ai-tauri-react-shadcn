@@ -1,4 +1,4 @@
-import type { MapKitInstance } from '@/components/map-renderer'
+import type { MapRendererInstance } from '@/components/map-renderer'
 import { getUserInfo } from '@/services'
 import type { User } from '@/types'
 import { logger } from '@/utils'
@@ -11,14 +11,16 @@ export interface AppStoreState {
   session: {
     user?: User
   }
-  map?: MapKitInstance
+  map?: MapRendererInstance
+  currentChatId?: string
 }
 
-type AppStoreActions = {
+export type AppStoreActions = {
   dispatch: (state: Partial<AppStoreState>) => void
   getUserInfo: () => Promise<User | undefined>
   signOut: () => Promise<void>
-  setMap: (map: MapKitInstance) => void
+  setMap: (map: MapRendererInstance) => void
+  setCurrentChatId: (chatId?: string) => void
 }
 
 export const useAppStore = create<AppStoreState & AppStoreActions>((set) => ({
@@ -39,4 +41,5 @@ export const useAppStore = create<AppStoreState & AppStoreActions>((set) => ({
   },
   signOut: async () => {},
   setMap: (map) => set((prev) => ({ ...prev, map })),
+  setCurrentChatId: (chatId) => set((prev) => ({ ...prev, currentChatId: chatId })),
 }))

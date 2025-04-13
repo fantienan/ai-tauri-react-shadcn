@@ -1,0 +1,46 @@
+import type { ChatbarProps } from '@/components/chat/chat-bar'
+import { useAppStore, useThemeStore } from '@/stores'
+import { DBMessage } from '@/types'
+import { fetcher } from '@/utils'
+import type { Attachment, UIMessage } from 'ai'
+import useSWR from 'swr'
+import { BizResult } from 'types'
+import { v4 as uuidv4 } from 'uuid'
+
+export type ChatLoaderData = {
+  initialMessages: DBMessage[]
+  error?: boolean
+}
+
+export function convertToUIMessages(messages: DBMessage[]): UIMessage[] {
+  return messages.map((message) => ({
+    id: message.id,
+    parts: message.parts as UIMessage['parts'],
+    role: message.role as UIMessage['role'],
+    content: '',
+    createdAt: new Date(message.createdAt),
+    experimental_attachments: (message.attachments as Attachment[]) ?? [],
+  }))
+}
+
+export const useChatbarLoader = ({ chatId }: { chatId?: string }) => {
+  const signOut = useAppStore().signOut
+  const user = useAppStore().session.user
+  const theme = useThemeStore().theme
+  const setTheme = useThemeStore().setTheme
+
+  const { data, isLoading } = useSWR(
+    chatId ? `/llm/message/queryByChatId?chatId=${chatId}` : null,
+    async (input: string, init?: RequestInit) => fetcher<BizResult<DBMessage[]>>(input, init).then((res) => res.data),
+  )
+  return {
+    id: chatId ?? uuidv4(),
+    initialMessages: Array.isArray(data) ? convertToUIMessages(data) : [],
+    signOut,
+    user,
+    theme,
+    setTheme,
+    isReadonly: false,
+    error: chatId && !isLoading && !Array.isArray(data),
+  } as ChatbarProps & Omit<ChatLoaderData, 'initialMessages'>
+}
