@@ -125,9 +125,9 @@ export function SidebarHistory() {
           }
         })
 
-        return 'Chat deleted successfully'
+        return '聊天记录删除成功'
       },
-      error: 'Failed to delete chat',
+      error: '删除聊天失败',
     })
 
     setShowDeleteDialog(false)

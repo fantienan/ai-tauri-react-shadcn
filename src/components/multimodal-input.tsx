@@ -14,9 +14,9 @@ import {
   useRef,
   useState,
 } from 'react'
-import { useNavigate } from 'react-router'
 import { toast } from 'sonner'
 import { useLocalStorage, useWindowSize } from 'usehooks-ts'
+import { useChatbar } from './chat/chat-provider'
 import { ArrowUpIcon, PaperclipIcon, StopIcon } from './icons'
 import { PreviewAttachment } from './preview-attachment'
 import { SuggestedActions } from './suggested-actions'
@@ -52,6 +52,7 @@ function PureMultimodalInput({
 }) {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const { width } = useWindowSize()
+  const { onCreateChat } = useChatbar()
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -95,10 +96,9 @@ function PureMultimodalInput({
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [uploadQueue, setUploadQueue] = useState<string[]>([])
-  const navigate = useNavigate()
 
   const submitForm = useCallback(() => {
-    navigate(`/chat/${chatId}`, { replace: true })
+    onCreateChat?.({ chatId })
     handleSubmit(undefined, { experimental_attachments: attachments })
     setAttachments([])
     setLocalStorageInput('')

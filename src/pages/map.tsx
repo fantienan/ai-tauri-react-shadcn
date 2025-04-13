@@ -40,9 +40,7 @@ export default function Page() {
           </VisuallyHidden>
           <Chatbar
             defaultOpen={false}
-            onDeleteChat={({ chatId }) => {
-              if (currentChatId === chatId) setCurrentChatId('')
-            }}
+            onDeleteChat={({ chatId }) => currentChatId === chatId && setCurrentChatId('')}
             onNewChat={() => setCurrentChatId('')}
             onOpenHistoryChat={({ chatId }) => setCurrentChatId(chatId)}
             {...chatbarLoaderData}

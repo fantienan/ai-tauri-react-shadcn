@@ -49,7 +49,7 @@ export default async function (fastify: FastifyInstance) {
       let chat = chatRes.data
       if (!chat) {
         const title = await agent.utils.generateTitleFromUserMessage({ message: userMessage })
-        chat = (await service.chat.insert({ userId: session.user.id, title })).data
+        chat = (await service.chat.insert({ userId: session.user.id, title, id })).data
         if (!chat) return fastify.BizResult.error({ code: 404, message: 'Chat not found' })
       } else if (chat.userId !== session.user.id) {
         return fastify.BizResult.error({ code: 401, message: 'Unauthorized' })

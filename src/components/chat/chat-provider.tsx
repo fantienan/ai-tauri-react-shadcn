@@ -1,15 +1,18 @@
-import { AppStoreActions, ThemeStoreProps } from '@/stores'
+import { ThemeStoreProps } from '@/stores'
 import type { User } from '@/types'
+import type { UseChatOptions } from '@ai-sdk/react'
 import React from 'react'
 
-export type ChatbarContextProps = Pick<ThemeStoreProps, 'theme' | 'setTheme'> &
-  Pick<AppStoreActions, 'signOut'> & {
-    user?: User
-    chatId?: string
-    onNewChat?: () => void
-    onDeleteChat?: (params: { chatId: string }) => void
-    onOpenHistoryChat?: (params: { chatId: string }) => void
-  }
+export type ChatbarContextProps = Pick<ThemeStoreProps, 'theme' | 'setTheme'> & {
+  user?: User
+  chatId?: string
+  onSignOut?: () => void
+  onNewChat?: () => void
+  onDeleteChat?: (params: { chatId: string }) => void
+  onOpenHistoryChat?: (params: { chatId: string }) => void
+  onCreateChat?: (params: { chatId: string }) => void
+  useChatOptions: UseChatOptions
+}
 
 export type ChatbarProviderProps = ChatbarContextProps & Pick<React.HTMLProps<HTMLDivElement>, 'children'>
 

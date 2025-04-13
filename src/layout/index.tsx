@@ -1,6 +1,7 @@
 import { useAppStore } from '@/stores'
 import type { User } from '@/types'
 import { Navigate, Outlet, useLoaderData, useLocation } from 'react-router'
+import { Toaster } from 'sonner'
 import { SWRConfig } from 'swr'
 
 export const layoutLoader = async () => ({ user: await useAppStore.getState().getUserInfo() })
@@ -21,6 +22,7 @@ export default function Layout() {
     >
       {location.pathname === '/' && <Navigate to="/map" replace />}
       <Outlet />
+      <Toaster position="top-center" />
     </SWRConfig>
   )
 }

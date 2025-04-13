@@ -1,4 +1,4 @@
-import { CopyIcon, DownloadIcon, ThumbDownIcon, ThumbUpIcon } from '@/components/icons'
+import { CodeIcon, CopyIcon, DownloadIcon, ThumbDownIcon, ThumbUpIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import type { Vote } from '@/types'
@@ -157,7 +157,6 @@ export function PureMessageActions({
               data-testid="message-download"
               className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto"
               variant="outline"
-              disabled={vote && !vote.isUpvoted}
               onClick={async () => {
                 const download = fetcher('', { method: 'POST' })
                 toast.promise(download, {
@@ -173,6 +172,19 @@ export function PureMessageActions({
             </Button>
           </TooltipTrigger>
           <TooltipContent>下载</TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              data-testid="message-code"
+              className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto"
+              variant="outline"
+            >
+              <CodeIcon />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>代码</TooltipContent>
         </Tooltip>
       </div>
     </TooltipProvider>

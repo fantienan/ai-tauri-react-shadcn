@@ -11,6 +11,7 @@ import { unstable_serialize } from 'swr/infinite'
 import { v4 as uuidv4 } from 'uuid'
 import { getChatHistoryPaginationKey } from '../sidebar-history'
 import { ChatHeader } from './chat-header'
+import { useChatbar } from './chat-provider'
 
 export interface ChatProps {
   id: string
@@ -19,10 +20,10 @@ export interface ChatProps {
 }
 
 export function Chat({ id, initialMessages, isReadonly }: ChatProps) {
+  const { useChatOptions } = useChatbar()
   const { mutate } = useSWRConfig()
   const { messages, setMessages, handleSubmit, input, setInput, append, status, stop, reload } = useChat({
     id,
-    api: `${import.meta.env.BIZ_SERVER_URL}/llm/chat`,
     body: { id },
     initialMessages,
     experimental_throttle: 100,
@@ -34,6 +35,7 @@ export function Chat({ id, initialMessages, isReadonly }: ChatProps) {
     onError: () => {
       toast.error('发生错误，请重试！')
     },
+    ...useChatOptions,
   })
   const [attachments, setAttachments] = useState<Attachment[]>([])
   const { data: votes } = useSWR<Vote[]>(

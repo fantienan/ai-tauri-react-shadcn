@@ -9,12 +9,10 @@ import {
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar'
 import type { User } from '@/types'
 import { ChevronUp } from 'lucide-react'
-import { useNavigate } from 'react-router'
 import { useChatbar } from './chat/chat-provider'
 
 export function SidebarUserNav({ user }: { user: User }) {
-  const navigate = useNavigate()
-  const { signOut, theme, setTheme } = useChatbar()
+  const { onSignOut, theme, setTheme } = useChatbar()
 
   return (
     <SidebarMenu>
@@ -36,14 +34,7 @@ export function SidebarUserNav({ user }: { user: User }) {
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <button
-                type="button"
-                className="w-full cursor-pointer"
-                onClick={async () => {
-                  await signOut()
-                  navigate('/login')
-                }}
-              >
+              <button type="button" className="w-full cursor-pointer" onClick={onSignOut}>
                 退出登录
               </button>
             </DropdownMenuItem>

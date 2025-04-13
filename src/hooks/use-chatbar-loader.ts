@@ -24,7 +24,6 @@ export function convertToUIMessages(messages: DBMessage[]): UIMessage[] {
 }
 
 export const useChatbarLoader = ({ chatId }: { chatId?: string }) => {
-  const signOut = useAppStore().signOut
   const user = useAppStore().session.user
   const theme = useThemeStore().theme
   const setTheme = useThemeStore().setTheme
@@ -33,14 +32,17 @@ export const useChatbarLoader = ({ chatId }: { chatId?: string }) => {
     chatId ? `/llm/message/queryByChatId?chatId=${chatId}` : null,
     async (input: string, init?: RequestInit) => fetcher<BizResult<DBMessage[]>>(input, init).then((res) => res.data),
   )
-  return {
+  const loaderData: ChatbarProps & Omit<ChatLoaderData, 'initialMessages'> = {
     id: chatId ?? uuidv4(),
     initialMessages: Array.isArray(data) ? convertToUIMessages(data) : [],
-    signOut,
     user,
     theme,
     setTheme,
     isReadonly: false,
-    error: chatId && !isLoading && !Array.isArray(data),
-  } as ChatbarProps & Omit<ChatLoaderData, 'initialMessages'>
+    error: !!(chatId && !isLoading && !Array.isArray(data)),
+    useChatOptions: {
+      api: `${import.meta.env.BIZ_SERVER_URL}/llm/chat`,
+    },
+  }
+  return loaderData
 }
