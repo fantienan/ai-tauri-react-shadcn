@@ -1,7 +1,7 @@
 import { Chatbar } from '@/components/chat/chat-bar'
 import { useChatbarLoader } from '@/hooks/use-chatbar-loader'
 import { useAppStore } from '@/stores'
-import { Navigate, useNavigate, useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 
 export default function Page() {
   const { id } = useParams<{ id: string }>()
@@ -9,7 +9,7 @@ export default function Page() {
   const navigate = useNavigate()
   const { error, ...chatbarLoaderData } = useChatbarLoader({ chatId: id })
 
-  if (error) return <Navigate replace to="/chat" />
+  //   if (error) return <Navigate replace to="/chat" />
 
   return (
     <Chatbar

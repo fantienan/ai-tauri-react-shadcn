@@ -85,15 +85,20 @@ const components: Partial<Components> = {
       </h6>
     )
   },
+  //   p: ({ node, children, ...props }) => {
+  //     return <div {...props}>{children}</div>
+  //   },
 }
 
 const remarkPlugins = [remarkGfm]
 
 const NonMemoizedMarkdown = ({ children }: { children: string }) => {
   return (
-    <ReactMarkdown remarkPlugins={remarkPlugins} components={components}>
-      {children}
-    </ReactMarkdown>
+    <>
+      <ReactMarkdown remarkPlugins={remarkPlugins} components={components}>
+        {children}
+      </ReactMarkdown>
+    </>
   )
 }
 

@@ -1,7 +1,7 @@
 import { type ChatHistory, getChatHistoryPaginationKey } from '@/components/sidebar-history'
+import { LLM_URL } from '@/lib/constant'
 import { updateChatVisibility } from '@/services'
 import { ChatVisibilityType } from '@/types'
-import { llmUrl } from '@/utils'
 import { useMemo } from 'react'
 import useSWR, { useSWRConfig } from 'swr'
 import { unstable_serialize } from 'swr/infinite'
@@ -14,7 +14,7 @@ export function useChatVisibility({
   initialVisibility: ChatVisibilityType
 }) {
   const { mutate, cache } = useSWRConfig()
-  const history: ChatHistory = cache.get(`${llmUrl}/chat/history`)?.data
+  const history: ChatHistory = cache.get(`${LLM_URL}/chat/history`)?.data
 
   const { data: localVisibility, mutate: setLocalVisibility } = useSWR(`${chatId}-visibility`, null, {
     fallbackData: initialVisibility,

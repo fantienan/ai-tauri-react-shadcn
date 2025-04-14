@@ -9,8 +9,9 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { SidebarGroup, SidebarGroupContent, SidebarMenu, useSidebar } from '@/components/ui/sidebar'
+import { LLM_URL } from '@/lib/constant'
 import type { Chat } from '@/types'
-import { fetcher, llmUrl } from '@/utils'
+import { fetcher } from '@/utils'
 import { isToday, isYesterday, subMonths, subWeeks } from 'date-fns'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
@@ -73,13 +74,13 @@ export function getChatHistoryPaginationKey(pageIndex: number, previousPageData:
     return null
   }
 
-  if (pageIndex === 0) return `${llmUrl}/chat/history?limit=${PAGE_SIZE}`
+  if (pageIndex === 0) return `${LLM_URL}/chat/history?limit=${PAGE_SIZE}`
 
   const firstChatFromPage = previousPageData.chats.at(-1)
 
   if (!firstChatFromPage) return null
 
-  return `${llmUrl}/chat/history?ending_before=${firstChatFromPage.id}&limit=${PAGE_SIZE}`
+  return `${LLM_URL}/chat/history?ending_before=${firstChatFromPage.id}&limit=${PAGE_SIZE}`
 }
 
 export function SidebarHistory() {

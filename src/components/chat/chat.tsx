@@ -1,7 +1,8 @@
 import { Messages } from '@/components/messages'
 import { MultimodalInput } from '@/components/multimodal-input'
+import { LLM_URL } from '@/lib/constant'
 import { Vote } from '@/types'
-import { fetcher, llmUrl } from '@/utils'
+import { fetcher } from '@/utils'
 import { useChat } from '@ai-sdk/react'
 import { Attachment, UIMessage } from 'ai'
 import { useState } from 'react'
@@ -39,7 +40,7 @@ export function Chat({ id, initialMessages, isReadonly }: ChatProps) {
   })
   const [attachments, setAttachments] = useState<Attachment[]>([])
   const { data: votes } = useSWR<Vote[]>(
-    messages.length >= 2 ? `${llmUrl}/vote?chatId=${id}` : null,
+    messages.length >= 2 ? `${LLM_URL}/vote?chatId=${id}` : null,
     async (input: string, init?: RequestInit) => fetcher<Vote[]>(input, init).then((res) => res.data ?? []),
   )
   return (

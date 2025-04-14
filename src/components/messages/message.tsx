@@ -75,6 +75,7 @@ const PurePreviewMessage = ({
               const key = `message-${message.id}-part-${index}`
 
               if (type === 'reasoning') {
+                debugger
                 return <MessageReasoning key={key} isLoading={isLoading} reasoning={part.reasoning} />
               }
 

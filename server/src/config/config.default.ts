@@ -41,7 +41,7 @@ const config: BizConfig = {
   llm: {
     deepseek: {
       apiKey: process.env.DEEPSEEK_API_KEY!,
-      baseUrl: process.env.DEEPSEEK_BASE_URL!,
+      BASE_URL: process.env.DEEPSEEK_BASE_URL!,
     },
   },
   routes: {

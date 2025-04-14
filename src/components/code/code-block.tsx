@@ -1,3 +1,5 @@
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism'
 interface CodeBlockProps {
   node: any
   inline: boolean
@@ -7,14 +9,24 @@ interface CodeBlockProps {
 
 export function CodeBlock({ node, inline, className, children, ...props }: CodeBlockProps) {
   if (!inline) {
+    const match = /language-(\w+)/.exec(className || '')
+    const language = match ? match[1] : 'text'
+    debugger
     return (
       <div className="not-prose flex flex-col">
-        <pre
+        <SyntaxHighlighter
+          PreTag="div"
+          children={String(children).replace(/\n$/, '')}
+          language={language}
+          style={vs}
+          showLineNumbers
+        />
+        {/* <pre
           {...props}
           className={`text-sm w-full overflow-x-auto dark:bg-zinc-900 p-4 border border-zinc-200 dark:border-zinc-700 rounded-xl dark:text-zinc-50 text-zinc-900`}
         >
           <code className="whitespace-pre-wrap break-words">{children}</code>
-        </pre>
+        </pre> */}
       </div>
     )
   } else {

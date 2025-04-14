@@ -14,7 +14,7 @@ export type BizConfig = {
   llm: {
     deepseek: {
       apiKey: string
-      baseUrl: string
+      BASE_URL: string
     }
   }
   drizzleKit: Config & {

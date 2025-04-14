@@ -1,8 +1,9 @@
 import { CodeIcon, CopyIcon, DownloadIcon, ThumbDownIcon, ThumbUpIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { BASE_URL } from '@/lib/constant'
 import type { Vote } from '@/types'
-import { baseUrl, fetcher } from '@/utils'
+import { fetcher } from '@/utils'
 import type { Message } from 'ai'
 import equal from 'fast-deep-equal'
 import { memo } from 'react'
@@ -74,7 +75,7 @@ export function PureMessageActions({
                   loading: '点赞回复...',
                   success: () => {
                     mutate<Vote[]>(
-                      `${baseUrl}/llm/vote?chatId=${chatId}`,
+                      `${BASE_URL}/llm/vote?chatId=${chatId}`,
                       (currentVotes) => {
                         if (!currentVotes) return []
 
@@ -121,7 +122,7 @@ export function PureMessageActions({
                   loading: '反对回应...',
                   success: () => {
                     mutate<Vote[]>(
-                      `${baseUrl}/llm/vote?chatId=${chatId}`,
+                      `${BASE_URL}/llm/vote?chatId=${chatId}`,
                       (currentVotes) => {
                         if (!currentVotes) return []
 
