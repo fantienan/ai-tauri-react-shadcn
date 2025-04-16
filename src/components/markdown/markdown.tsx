@@ -1,11 +1,14 @@
 // import '@wooorm/starry-night/style/both.css'
 import 'github-markdown-css/github-markdown.css'
 import { cn } from '@/lib/utils'
+import { Check } from 'lucide-react'
 import { memo } from 'react'
+import CopyToClipboard from 'react-copy-to-clipboard'
 import { MarkdownHooks } from 'react-markdown'
 import rehypeSanitize from 'rehype-sanitize'
 import rehypeStarryNight from 'rehype-starry-night' // 使用 rehype-starry-night 插件
 import remarkGfm from 'remark-gfm'
+import { Copy2Clipboard } from '../copy-2-clipboard'
 import { CopyIcon } from '../icons'
 
 const NonMemoizedMarkdown = ({ children }: { children: string }) => {
@@ -31,10 +34,14 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
               >
                 <span className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
                   <span>{language}</span>
-                  <span className="flex items-center gap-1">
-                    <CopyIcon size={14} />
-                    复制
-                  </span>
+                  <Copy2Clipboard className="flex items-center gap-1 cursor-default" text={String(children)}>
+                    {(copied) => (
+                      <>
+                        {copied ? <Check size={14} /> : <CopyIcon size={14} />}
+                        复制
+                      </>
+                    )}
+                  </Copy2Clipboard>
                 </span>
                 {children}
               </pre>
