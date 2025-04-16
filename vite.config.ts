@@ -6,6 +6,7 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   envPrefix: ['BIZ_', 'MAPBOX_'],
   plugins: [react(), tailwindcss()],
+
   server: {
     watch: {
       ignored: [path.resolve(__dirname, 'server'), path.resolve(__dirname, ' src-tauri')],

@@ -5,15 +5,13 @@ import { github } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import RehypeSanitize from 'rehype-sanitize'
 import RemarkGfm from 'remark-gfm'
 
-import styles from './MarkdownView.less'
-
 interface MarkdownViewProps {
   content: string
 }
 
 const MarkdownView: React.FC<MarkdownViewProps> = ({ content }) => {
   return (
-    <div className={styles['markdown-body']}>
+    <div>
       <ReactMarkdown
         remarkPlugins={[RemarkGfm]}
         rehypePlugins={[RehypeSanitize]}

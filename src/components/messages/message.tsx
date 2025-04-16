@@ -75,7 +75,6 @@ const PurePreviewMessage = ({
               const key = `message-${message.id}-part-${index}`
 
               if (type === 'reasoning') {
-                debugger
                 return <MessageReasoning key={key} isLoading={isLoading} reasoning={part.reasoning} />
               }
 
@@ -107,7 +106,7 @@ const PurePreviewMessage = ({
                           'bg-primary text-primary-foreground px-3 py-2 rounded-xl': message.role === 'user',
                         })}
                       >
-                        <Markdown>{part.text}</Markdown>
+                        {message.role === 'user' ? part.text : <Markdown>{part.text}</Markdown>}
                       </div>
                     </div>
                   )

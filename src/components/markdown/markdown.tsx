@@ -1,104 +1,50 @@
-import { CodeBlock } from '@/components/code'
+// import '@wooorm/starry-night/style/both.css'
+import 'github-markdown-css/github-markdown.css'
+import { cn } from '@/lib/utils'
 import { memo } from 'react'
-import ReactMarkdown, { type Components } from 'react-markdown'
-import { Link } from 'react-router'
+import { MarkdownHooks } from 'react-markdown'
+import rehypeSanitize from 'rehype-sanitize'
+import rehypeStarryNight from 'rehype-starry-night' // 使用 rehype-starry-night 插件
 import remarkGfm from 'remark-gfm'
-
-const components: Partial<Components> = {
-  // @ts-expect-error
-  code: CodeBlock,
-  pre: ({ children }) => <>{children}</>,
-  ol: ({ node, children, ...props }) => {
-    return (
-      <ol className="list-decimal list-outside ml-4" {...props}>
-        {children}
-      </ol>
-    )
-  },
-  li: ({ node, children, ...props }) => {
-    return (
-      <li className="py-1" {...props}>
-        {children}
-      </li>
-    )
-  },
-  ul: ({ node, children, ...props }) => {
-    return (
-      <ul className="list-decimal list-outside ml-4" {...props}>
-        {children}
-      </ul>
-    )
-  },
-  strong: ({ node, children, ...props }) => {
-    return (
-      <span className="font-semibold" {...props}>
-        {children}
-      </span>
-    )
-  },
-  a: ({ node, children, ...props }) => {
-    return (
-      <Link className="text-blue-500 hover:underline" target="_blank" rel="noreferrer" {...props} to={props.href ?? ''}>
-        {children}
-      </Link>
-    )
-  },
-  h1: ({ node, children, ...props }) => {
-    return (
-      <h1 className="text-3xl font-semibold mt-6 mb-2" {...props}>
-        {children}
-      </h1>
-    )
-  },
-  h2: ({ node, children, ...props }) => {
-    return (
-      <h2 className="text-2xl font-semibold mt-6 mb-2" {...props}>
-        {children}
-      </h2>
-    )
-  },
-  h3: ({ node, children, ...props }) => {
-    return (
-      <h3 className="text-xl font-semibold mt-6 mb-2" {...props}>
-        {children}
-      </h3>
-    )
-  },
-  h4: ({ node, children, ...props }) => {
-    return (
-      <h4 className="text-lg font-semibold mt-6 mb-2" {...props}>
-        {children}
-      </h4>
-    )
-  },
-  h5: ({ node, children, ...props }) => {
-    return (
-      <h5 className="text-base font-semibold mt-6 mb-2" {...props}>
-        {children}
-      </h5>
-    )
-  },
-  h6: ({ node, children, ...props }) => {
-    return (
-      <h6 className="text-sm font-semibold mt-6 mb-2" {...props}>
-        {children}
-      </h6>
-    )
-  },
-  //   p: ({ node, children, ...props }) => {
-  //     return <div {...props}>{children}</div>
-  //   },
-}
-
-const remarkPlugins = [remarkGfm]
+import { CopyIcon } from '../icons'
 
 const NonMemoizedMarkdown = ({ children }: { children: string }) => {
   return (
-    <>
-      <ReactMarkdown remarkPlugins={remarkPlugins} components={components}>
+    <div className="markdown-body">
+      <MarkdownHooks
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeSanitize, rehypeStarryNight]}
+        components={{
+          pre: ({ children, node, className, ...props }) => {
+            const code = node?.children[0]
+            if (!code || !(code as any).properties) return <pre {...props}>{children}</pre>
+            const codeClassName = (code as any).properties.className.find((v: string) => /language-(\w+)/.exec(v))
+            const match = /language-(\w+)/.exec(codeClassName || '')
+            const language = match ? match[1] : 'text'
+            return (
+              <pre
+                {...props}
+                className={cn(
+                  className,
+                  'border border-zinc-200 dark:border-zinc-700 rounded-xl p-4 my-4 overflow-x-auto',
+                )}
+              >
+                <span className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                  <span>{language}</span>
+                  <span className="flex items-center gap-1">
+                    <CopyIcon size={14} />
+                    复制
+                  </span>
+                </span>
+                {children}
+              </pre>
+            )
+          },
+        }}
+      >
         {children}
-      </ReactMarkdown>
-    </>
+      </MarkdownHooks>
+    </div>
   )
 }
 

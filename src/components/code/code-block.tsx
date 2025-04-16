@@ -1,5 +1,4 @@
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism'
 interface CodeBlockProps {
   node: any
   inline: boolean
@@ -7,31 +6,26 @@ interface CodeBlockProps {
   children: any
 }
 
-export function CodeBlock({ node, inline, className, children, ...props }: CodeBlockProps) {
+export function CodeBlock(props: CodeBlockProps) {
+  const { node, inline, className, children, ...p } = props
   if (!inline) {
     const match = /language-(\w+)/.exec(className || '')
     const language = match ? match[1] : 'text'
-    debugger
     return (
       <div className="not-prose flex flex-col">
         <SyntaxHighlighter
-          PreTag="div"
+          {...p}
           children={String(children).replace(/\n$/, '')}
           language={language}
-          style={vs}
-          showLineNumbers
+          PreTag="div"
+          style={{}}
+          //   className={`text-sm w-full overflow-x-auto dark:bg-zinc-900 p-4 border border-zinc-200 dark:border-zinc-700 rounded-xl dark:text-zinc-50 text-zinc-900`}
         />
-        {/* <pre
-          {...props}
-          className={`text-sm w-full overflow-x-auto dark:bg-zinc-900 p-4 border border-zinc-200 dark:border-zinc-700 rounded-xl dark:text-zinc-50 text-zinc-900`}
-        >
-          <code className="whitespace-pre-wrap break-words">{children}</code>
-        </pre> */}
       </div>
     )
   } else {
     return (
-      <code className={`${className} text-sm bg-zinc-100 dark:bg-zinc-800 py-0.5 px-1 rounded-md`} {...props}>
+      <code className={`${className} text-sm bg-zinc-100 dark:bg-zinc-800 py-0.5 px-1 rounded-md`} {...p}>
         {children}
       </code>
     )

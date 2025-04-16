@@ -18,9 +18,11 @@ export const useThemeStore = create<ThemeStoreProps>((set) => ({
     if (theme === 'dark') {
       document.documentElement.classList.toggle('dark')
       document.documentElement.classList.remove('light')
+      document.documentElement.setAttribute('data-theme', 'dark')
     } else {
       document.documentElement.classList.toggle('light')
       document.documentElement.classList.remove('dark')
+      document.documentElement.setAttribute('data-theme', 'light')
     }
   },
 }))
