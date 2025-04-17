@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useCopyToClipboard, useTimeout } from 'usehooks-ts'
 
 export type Copy2ClipboardProps = {
-  text: string
+  text: string | (() => string)
   onCopy?: (text: string, result: boolean) => void
   children?: (copied?: boolean) => React.ReactNode
   className?: string
@@ -14,9 +14,10 @@ export const Copy2Clipboard = ({ className, children, text, onCopy }: Copy2Clipb
 
   const handleCopy = async () => {
     if (copied) return
-    const res = await copy(text)
+    const value = typeof text === 'function' ? text() : text
+    const res = await copy(value)
     setCopied(res)
-    onCopy?.(text, res)
+    onCopy?.(value, res)
   }
   useTimeout(
     () => {

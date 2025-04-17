@@ -19,7 +19,15 @@ export type MessageEditorProps = {
 export function MessageEditor({ message, setMode, setMessages, reload }: MessageEditorProps) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
-  const [draftContent, setDraftContent] = useState<string>(message.content)
+  const [draftContent, setDraftContent] = useState<string>(() => {
+    if (message.parts?.length) {
+      return message.parts.reduce((prev, curr) => {
+        if (curr.type === 'text') return prev + curr.text
+        return prev
+      }, '')
+    }
+    return message.content
+  })
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
@@ -90,7 +98,7 @@ export function MessageEditor({ message, setMode, setMessages, reload }: Message
             reload()
           }}
         >
-          {isSubmitting ? 'Sending...' : 'Send'}
+          {isSubmitting ? 'Sending...' : '发送'}
         </Button>
       </div>
     </div>

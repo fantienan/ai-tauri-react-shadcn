@@ -38,6 +38,7 @@ export function Chat({ id, initialMessages, isReadonly }: ChatProps) {
     },
     ...useChatOptions,
   })
+
   const [attachments, setAttachments] = useState<Attachment[]>([])
   const { data: votes } = useSWR<Vote[]>(
     messages.length >= 2 ? `${LLM_URL}/vote?chatId=${id}` : null,

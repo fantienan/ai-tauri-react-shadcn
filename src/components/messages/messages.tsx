@@ -18,7 +18,6 @@ interface MessagesProps {
 
 function PureMessages({ chatId, status, votes, messages, setMessages, reload, isReadonly }: MessagesProps) {
   const [messagesContainerRef, messagesEndRef] = useScrollToBottom<HTMLDivElement>({ status })
-  console.log(messages)
   return (
     <div ref={messagesContainerRef} className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll pt-4">
       {messages.length === 0 && <Greeting />}

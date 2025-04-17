@@ -1,9 +1,10 @@
 // import '@wooorm/starry-night/style/both.css'
 import 'github-markdown-css/github-markdown.css'
 import { cn } from '@/lib/utils'
+import { common } from '@wooorm/starry-night'
+import tsx from '@wooorm/starry-night/source.tsx'
 import { Check } from 'lucide-react'
-import { memo } from 'react'
-import CopyToClipboard from 'react-copy-to-clipboard'
+import { createRef, memo } from 'react'
 import { MarkdownHooks } from 'react-markdown'
 import rehypeSanitize from 'rehype-sanitize'
 import rehypeStarryNight from 'rehype-starry-night' // 使用 rehype-starry-night 插件
@@ -11,30 +12,49 @@ import remarkGfm from 'remark-gfm'
 import { Copy2Clipboard } from '../copy-2-clipboard'
 import { CopyIcon } from '../icons'
 
-const NonMemoizedMarkdown = ({ children }: { children: string }) => {
+const remarkPlugins = [remarkGfm]
+
+const rehypePlugins = [
+  rehypeSanitize,
+  () => rehypeStarryNight({ grammars: [...common, tsx], allowMissingScopes: true }),
+]
+
+const NonMemoizedMarkdown = ({ children, inline }: { children: string; inline?: boolean }) => {
+  if (inline) return <pre>{children}</pre>
   return (
     <div className="markdown-body">
       <MarkdownHooks
-        remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeSanitize, rehypeStarryNight]}
+        remarkPlugins={remarkPlugins}
+        rehypePlugins={rehypePlugins}
         components={{
-          pre: ({ children, node, className, ...props }) => {
-            const code = node?.children[0]
-            if (!code || !(code as any).properties) return <pre {...props}>{children}</pre>
-            const codeClassName = (code as any).properties.className.find((v: string) => /language-(\w+)/.exec(v))
-            const match = /language-(\w+)/.exec(codeClassName || '')
-            const language = match ? match[1] : 'text'
+          pre: ({ children: c, node, className, ...props }) => {
+            const ref = createRef<HTMLPreElement>()
+            const code = node?.children[0] as any
+            let language = 'text'
+            if (code?.properties?.className) {
+              const codeClassName = code.properties.className.find((v: string) => /language-(\w+)/.exec(v))
+              const match = /language-(\w+)/.exec(codeClassName || '')
+              language = match ? match[1] : 'text'
+            }
+
             return (
               <pre
                 {...props}
+                ref={ref}
                 className={cn(
                   className,
                   'border border-zinc-200 dark:border-zinc-700 rounded-xl p-4 my-4 overflow-x-auto',
                 )}
               >
                 <span className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
-                  <span>{language}</span>
-                  <Copy2Clipboard className="flex items-center gap-1 cursor-default" text={String(children)}>
+                  {language && <span>{language}</span>}
+                  <Copy2Clipboard
+                    className="flex items-center gap-1 cursor-default"
+                    text={() => {
+                      if (!ref.current) return ''
+                      return ref.current.querySelector('code')?.textContent || ''
+                    }}
+                  >
                     {(copied) => (
                       <>
                         {copied ? <Check size={14} /> : <CopyIcon size={14} />}
@@ -43,7 +63,7 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
                     )}
                   </Copy2Clipboard>
                 </span>
-                {children}
+                {c}
               </pre>
             )
           },

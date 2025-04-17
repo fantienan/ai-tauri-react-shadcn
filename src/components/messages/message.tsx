@@ -106,7 +106,7 @@ const PurePreviewMessage = ({
                           'bg-primary text-primary-foreground px-3 py-2 rounded-xl': message.role === 'user',
                         })}
                       >
-                        {message.role === 'user' ? part.text : <Markdown>{part.text}</Markdown>}
+                        <Markdown inline={message.role === 'user'}>{part.text}</Markdown>
                       </div>
                     </div>
                   )
