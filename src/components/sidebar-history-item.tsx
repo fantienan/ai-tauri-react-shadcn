@@ -39,8 +39,8 @@ const PureChatItem = ({
 
   return (
     <SidebarMenuItem>
-      <SidebarMenuButton isActive={isActive} onClick={historyChat}>
-        {chat.title}
+      <SidebarMenuButton className="overflow-hidden" isActive={isActive} onClick={historyChat}>
+        <div className="truncate">{chat.title}</div>
       </SidebarMenuButton>
       <DropdownMenu modal={true}>
         <DropdownMenuTrigger asChild>
@@ -55,17 +55,17 @@ const PureChatItem = ({
 
         <DropdownMenuContent side="bottom" align="end">
           <DropdownMenuSub>
-            <DropdownMenuSubTrigger className="cursor-pointer">
-              <ShareIcon />
-              <span>分享</span>
+            <DropdownMenuSubTrigger className="cursor-pointer flex-row justify-between">
+              <div className="flex flex-row gap-2 items-center">
+                <ShareIcon />
+                <span>分享</span>
+              </div>
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
                 <DropdownMenuItem
                   className="cursor-pointer flex-row justify-between"
-                  onClick={() => {
-                    setVisibilityType('private')
-                  }}
+                  onClick={() => setVisibilityType('private')}
                 >
                   <div className="flex flex-row gap-2 items-center">
                     <LockIcon size={12} />

@@ -1,6 +1,7 @@
 import { CodeIcon, CopyIcon, DownloadIcon, ThumbDownIcon, ThumbUpIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { useArtifact } from '@/hooks/use-artifact'
 import { BASE_URL } from '@/lib/constant'
 import type { Vote } from '@/types'
 import { fetcher } from '@/utils'
@@ -16,14 +17,19 @@ export function PureMessageActions({
   message,
   vote,
   isLoading,
+  showCode,
+  showDownload,
 }: {
   chatId: string
   message: Message
   vote: Vote | undefined
   isLoading: boolean
+  showDownload?: boolean
+  showCode?: boolean
 }) {
   const { mutate } = useSWRConfig()
-  const [_, copyToClipboard] = useCopyToClipboard()
+  const [, copyToClipboard] = useCopyToClipboard()
+  const { setArtifact } = useArtifact()
 
   if (isLoading) return null
   if (message.role === 'user') return null
@@ -151,42 +157,64 @@ export function PureMessageActions({
           </TooltipTrigger>
           <TooltipContent>反对回应</TooltipContent>
         </Tooltip>
+        {showDownload && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                data-testid="message-download"
+                className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto"
+                variant="outline"
+                onClick={async () => {
+                  const download = fetcher('', { method: 'POST' })
+                  toast.promise(download, {
+                    loading: '下载...',
+                    success: () => {
+                      return '下载成功！'
+                    },
+                    error: '下载失败',
+                  })
+                }}
+              >
+                <DownloadIcon />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>下载</TooltipContent>
+          </Tooltip>
+        )}
 
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              data-testid="message-download"
-              className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto"
-              variant="outline"
-              onClick={async () => {
-                const download = fetcher('', { method: 'POST' })
-                toast.promise(download, {
-                  loading: '下载...',
-                  success: () => {
-                    return '下载成功！'
-                  },
-                  error: '下载失败',
-                })
-              }}
-            >
-              <DownloadIcon />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>下载</TooltipContent>
-        </Tooltip>
+        {showCode && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                data-testid="message-code"
+                className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto"
+                variant="outline"
+                onClick={(event) => {
+                  const rect = event.currentTarget.getBoundingClientRect()
 
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              data-testid="message-code"
-              className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto"
-              variant="outline"
-            >
-              <CodeIcon />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>代码</TooltipContent>
-        </Tooltip>
+                  const boundingBox = {
+                    top: rect.top,
+                    left: rect.left,
+                    width: rect.width,
+                    height: rect.height,
+                  }
+                  setArtifact({
+                    documentId: 'a',
+                    kind: '',
+                    content: '',
+                    title: '',
+                    isVisible: true,
+                    status: 'idle',
+                    boundingBox,
+                  })
+                }}
+              >
+                <CodeIcon />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>代码</TooltipContent>
+          </Tooltip>
+        )}
       </div>
     </TooltipProvider>
   )

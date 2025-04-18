@@ -10,7 +10,7 @@ import type { UIMessage } from 'ai'
 import cx from 'classnames'
 import equal from 'fast-deep-equal'
 import { AnimatePresence, motion } from 'framer-motion'
-import { memo, useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { Analyze } from '../analyze'
 import { MessageActions } from './message-actions'
 import { MessageEditor } from './message-editor'
@@ -34,6 +34,18 @@ const PurePreviewMessage = ({
   isReadonly: boolean
 }) => {
   const [mode, setMode] = useState<'view' | 'edit'>('view')
+  const messageActions = useMemo(() => {
+    return message.parts?.reduce(
+      (prev, part) => {
+        if (part.type === 'tool-invocation' && part.toolInvocation.toolName === 'sqliteAnalyze') {
+          prev.showCode = true
+          prev.showDownload = true
+        }
+        return prev
+      },
+      {} as { showCode?: boolean; showDownload?: boolean },
+    )
+  }, [message])
 
   return (
     <AnimatePresence>
@@ -62,7 +74,7 @@ const PurePreviewMessage = ({
           )}
 
           <div className="flex flex-col gap-4 w-full">
-            {message.experimental_attachments && (
+            {!!message.experimental_attachments?.length && (
               <div data-testid={`message-attachments`} className="flex flex-row justify-end gap-2">
                 {message.experimental_attachments.map((attachment) => (
                   <PreviewAttachment key={attachment.url} attachment={attachment} />
@@ -79,7 +91,7 @@ const PurePreviewMessage = ({
               }
 
               if (type === 'text') {
-                if (mode === 'view') {
+                if (mode === 'view' && !!part.text.trim()) {
                   return (
                     <div key={key} className="flex flex-row gap-2 items-start">
                       {message.role === 'user' && !isReadonly && (
@@ -99,7 +111,6 @@ const PurePreviewMessage = ({
                           <TooltipContent>编辑消息</TooltipContent>
                         </Tooltip>
                       )}
-
                       <div
                         data-testid="message-content"
                         className={cn('flex flex-col gap-4', {
@@ -143,9 +154,11 @@ const PurePreviewMessage = ({
 
                 if (state === 'result') {
                   const { result } = toolInvocation
+                  const node = toolName === 'sqliteAnalyze' ? <Analyze chartRendererProps={result} /> : null
+                  if (!node) return null
                   return (
-                    <div key={toolCallId}>
-                      {toolName === 'sqliteAnalyze' ? <Analyze chartRendererProps={result} /> : null}
+                    <div data-1 key={toolCallId}>
+                      {node}
                     </div>
                   )
                 }
@@ -159,6 +172,7 @@ const PurePreviewMessage = ({
                 message={message}
                 vote={vote}
                 isLoading={isLoading}
+                {...messageActions}
               />
             )}
           </div>
