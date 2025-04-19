@@ -10,7 +10,7 @@ import type { UIMessage } from 'ai'
 import cx from 'classnames'
 import equal from 'fast-deep-equal'
 import { AnimatePresence, motion } from 'framer-motion'
-import { memo, useMemo, useState } from 'react'
+import { memo, useState } from 'react'
 import { Analyze } from '../analyze'
 import { MessageActions } from './message-actions'
 import { MessageEditor } from './message-editor'
@@ -24,6 +24,8 @@ const PurePreviewMessage = ({
   setMessages,
   reload,
   isReadonly,
+  showCode,
+  showDownload,
 }: {
   chatId: string
   message: UIMessage
@@ -32,20 +34,10 @@ const PurePreviewMessage = ({
   setMessages: UseChatHelpers['setMessages']
   reload: UseChatHelpers['reload']
   isReadonly: boolean
+  showCode?: boolean
+  showDownload?: boolean
 }) => {
   const [mode, setMode] = useState<'view' | 'edit'>('view')
-  const messageActions = useMemo(() => {
-    return message.parts?.reduce(
-      (prev, part) => {
-        if (part.type === 'tool-invocation' && part.toolInvocation.toolName === 'sqliteAnalyze') {
-          prev.showCode = true
-          prev.showDownload = true
-        }
-        return prev
-      },
-      {} as { showCode?: boolean; showDownload?: boolean },
-    )
-  }, [message])
 
   return (
     <AnimatePresence>
@@ -172,7 +164,8 @@ const PurePreviewMessage = ({
                 message={message}
                 vote={vote}
                 isLoading={isLoading}
-                {...messageActions}
+                showCode={showCode}
+                showDownload={showDownload}
               />
             )}
           </div>
@@ -185,6 +178,8 @@ const PurePreviewMessage = ({
 export const PreviewMessage = memo(PurePreviewMessage, (prevProps, nextProps) => {
   if (prevProps.isLoading !== nextProps.isLoading) return false
   if (prevProps.message.id !== nextProps.message.id) return false
+  if (prevProps.showCode !== nextProps.showCode) return false
+  if (prevProps.showDownload !== nextProps.showDownload) return false
   if (!equal(prevProps.message.parts, nextProps.message.parts)) return false
   if (!equal(prevProps.vote, nextProps.vote)) return false
 

@@ -212,7 +212,7 @@ export function SidebarHistory() {
 
                     {groupedChats.yesterday.length > 0 && (
                       <div>
-                        <div className="px-2 py-1 text-xs text-sidebar-foreground/50">Yesterday</div>
+                        <div className="px-2 py-1 text-xs text-sidebar-foreground/50">昨天</div>
                         {groupedChats.yesterday.map((chat) => (
                           <ChatItem
                             key={chat.id}

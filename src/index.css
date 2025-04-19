@@ -200,3 +200,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+.artifact-message .markdown-body {
+  --bgColor-default: transparent;
+}

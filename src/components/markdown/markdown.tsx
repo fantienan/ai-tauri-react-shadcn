@@ -19,10 +19,14 @@ const rehypePlugins = [
   () => rehypeStarryNight({ grammars: [...common, tsx], allowMissingScopes: true }),
 ]
 
-const NonMemoizedMarkdown = ({ children, inline }: { children: string; inline?: boolean }) => {
+const NonMemoizedMarkdown = ({
+  children,
+  inline,
+  className: propClassName,
+}: { children: string; inline?: boolean; className?: string }) => {
   if (inline) return <pre>{children}</pre>
   return (
-    <div className="markdown-body">
+    <div className={cn('markdown-body', propClassName)}>
       <MarkdownHooks
         remarkPlugins={remarkPlugins}
         rehypePlugins={rehypePlugins}
@@ -75,4 +79,9 @@ const NonMemoizedMarkdown = ({ children, inline }: { children: string; inline?: 
   )
 }
 
-export const Markdown = memo(NonMemoizedMarkdown, (prevProps, nextProps) => prevProps.children === nextProps.children)
+export const Markdown = memo(NonMemoizedMarkdown, (prevProps, nextProps) => {
+  if (prevProps.children !== nextProps.children) return false
+  if (prevProps.className !== nextProps.className) return false
+  if (prevProps.inline !== nextProps.inline) return false
+  return true
+})

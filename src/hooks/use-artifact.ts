@@ -25,11 +25,13 @@ export const useArtifact = () => {
     if (!localArtifact) return initialArtifactData
     return localArtifact
   }, [localArtifact])
+  debugger
 
   const setArtifact = useCallback(
     (updaterFn: UIArtifact | ((currentArtifact: UIArtifact) => UIArtifact)) => {
       setLocalArtifact((currentArtifact) => {
         const artifactToUpdate = currentArtifact || initialArtifactData
+        debugger
 
         if (typeof updaterFn === 'function') {
           return updaterFn(artifactToUpdate)
