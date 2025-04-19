@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import type { AnalyzeResult } from 'types'
-import embed, { vega, VisualizationSpec } from 'vega-embed'
+import embed, { VisualizationSpec } from 'vega-embed'
 
 type VegaChartProps = Omit<AnalyzeResult, 'chartRendererType' | 'data'> & {
   spec: VisualizationSpec
@@ -46,5 +46,5 @@ export const VegaChart = ({ spec }: VegaChartProps) => {
       // });
     }
   }, [spec, theme])
-  return <div ref={container} className="w-full w-[368px] bg-white p-5"></div>
+  return <div ref={container} className="w-full bg-white p-5"></div>
 }
