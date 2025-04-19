@@ -13,4 +13,5 @@ interface ImportMeta {
 declare interface Window {
   __biz_map: any
   __biz__fetch__: any
+  isTauri?: boolean
 }

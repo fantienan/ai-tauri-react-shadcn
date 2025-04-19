@@ -9,7 +9,11 @@ export default defineConfig({
 
   server: {
     watch: {
-      ignored: [path.resolve(__dirname, 'server'), path.resolve(__dirname, ' src-tauri')],
+      ignored: [
+        path.resolve(__dirname, 'server'),
+        path.resolve(__dirname, ' src-tauri'),
+        path.resolve(__dirname, 'packages/template'),
+      ],
     },
   },
   resolve: {

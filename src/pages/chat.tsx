@@ -12,19 +12,21 @@ export default function Page() {
   //   if (error) return <Navigate replace to="/chat" />
 
   return (
-    <Chatbar
-      showFooter
-      {...chatbarLoaderData}
-      onDeleteChat={({ chatId }) => chatbarLoaderData.id === chatId && navigate('/chat')}
-      onNewChat={() => navigate(`/chat`, { replace: true })}
-      onOpenHistoryChat={({ chatId }) => navigate(`/chat/${chatId}`, { replace: true })}
-      onSignOut={() => {
-        navigate('/login', { replace: true })
-        dispatch({ session: { user: undefined } })
-      }}
-      onCreateChat={async ({ chatId }) => {
-        navigate(`/chat/${chatId}`, { replace: true })
-      }}
-    />
+    <>
+      <Chatbar
+        showFooter
+        {...chatbarLoaderData}
+        onDeleteChat={({ chatId }) => chatbarLoaderData.id === chatId && navigate('/chat')}
+        onNewChat={() => navigate(`/chat`, { replace: true })}
+        onOpenHistoryChat={({ chatId }) => navigate(`/chat/${chatId}`, { replace: true })}
+        onSignOut={() => {
+          navigate('/login', { replace: true })
+          dispatch({ session: { user: undefined } })
+        }}
+        onCreateChat={async ({ chatId }) => {
+          navigate(`/chat/${chatId}`, { replace: true })
+        }}
+      />
+    </>
   )
 }

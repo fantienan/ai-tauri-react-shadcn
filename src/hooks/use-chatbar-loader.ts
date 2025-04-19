@@ -1,7 +1,7 @@
 import type { ChatbarProps } from '@/components/chat/chat-bar'
 import { useAppStore, useThemeStore } from '@/stores'
 import { DBMessage } from '@/types'
-import { fetcher } from '@/utils'
+import { fetcher, tauri } from '@/utils'
 import type { Attachment, UIMessage } from 'ai'
 import useSWR from 'swr'
 import { BizResult } from 'types'
@@ -42,6 +42,10 @@ export const useChatbarLoader = ({ chatId }: { chatId?: string }) => {
     error: !!(chatId && !isLoading && !Array.isArray(data)),
     useChatOptions: {
       api: `${import.meta.env.BIZ_SERVER_URL}/llm/chat`,
+    },
+    onDownloadCode: async (params) => {
+      if (window.isTauri) return tauri.downloadCode(params)
+      return fetcher<BizResult<string>>('', { method: 'POST', body: JSON.stringify(params) })
     },
   }
   return loaderData

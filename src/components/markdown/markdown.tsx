@@ -25,6 +25,7 @@ const NonMemoizedMarkdown = ({
   className: propClassName,
 }: { children: string; inline?: boolean; className?: string }) => {
   if (inline) return <pre>{children}</pre>
+
   return (
     <div className={cn('markdown-body', propClassName)}>
       <MarkdownHooks

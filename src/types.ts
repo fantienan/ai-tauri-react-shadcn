@@ -7,3 +7,7 @@ export type User = DatabaseSchema.User
 export type Chat = DatabaseSchema.Chat
 export type DBMessage = DatabaseSchema.DBMessage
 export type Vote = DatabaseSchema.Vote
+
+export type DownloadCodeParams = Pick<DBMessage, 'chatId'> & {
+  messageId: DBMessage['id']
+}

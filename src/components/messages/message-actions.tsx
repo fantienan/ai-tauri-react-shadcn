@@ -11,6 +11,7 @@ import { memo } from 'react'
 import { toast } from 'sonner'
 import { useSWRConfig } from 'swr'
 import { useCopyToClipboard } from 'usehooks-ts'
+import { useChatbar } from '../chat/chat-provider'
 
 export function PureMessageActions({
   chatId,
@@ -30,6 +31,7 @@ export function PureMessageActions({
   const { mutate } = useSWRConfig()
   const [, copyToClipboard] = useCopyToClipboard()
   const { setArtifact } = useArtifact()
+  const { onDownloadCode } = useChatbar()
 
   if (isLoading) return null
   if (message.role === 'user') return null
@@ -165,13 +167,11 @@ export function PureMessageActions({
                 className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto"
                 variant="outline"
                 onClick={async () => {
-                  const download = fetcher('', { method: 'POST' })
+                  const download = onDownloadCode({ chatId, messageId: message.id })
                   toast.promise(download, {
                     loading: '下载...',
-                    success: () => {
-                      return '下载成功！'
-                    },
-                    error: '下载失败',
+                    success: () => '下载成功！',
+                    error: (e) => (e instanceof Error ? e.message : typeof e === 'string' ? e : '下载失败'),
                   })
                 }}
               >

@@ -82,3 +82,6 @@ git-init:
 lint:
 	@echo "Running lint"
 	@pnpm lint-staged
+
+rust-fmt:
+	@cargo fmt --all -- --check

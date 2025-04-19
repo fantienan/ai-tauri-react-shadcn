@@ -1,6 +1,15 @@
 [workspace]
-members = [
-    "src-tauri",
-    "crates/utils",
-    "crates/server"
-]
+resolver = "3"
+members = [ "src-tauri", "crates/common", "crates/server" ]
+
+[workspace.package]
+rust-version = "1.85.1"
+edition = "2024"
+repository = "https://github.com/fantienan/ai-tauri-react-shadcn"
+
+[workspace.dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sqlite-compressions = { version = "0.3", default-features = false, features = ["bsdiffraw", "gzip"] }
+sqlite-hashes = { version = "0.9.0", default-features = false, features = ["md5", "aggregate", "hex"] }
+sqlx = { version = "0.8.5", features = ["sqlite", "runtime-tokio"] }

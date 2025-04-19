@@ -20,7 +20,7 @@ export default function Layout() {
         // },
       }}
     >
-      {location.pathname === '/' && <Navigate to="/map" replace />}
+      {location.pathname === '/' && <Navigate to="/chat" replace />}
       <Outlet />
       <Toaster position="top-center" />
     </SWRConfig>
