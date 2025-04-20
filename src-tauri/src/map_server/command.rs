@@ -2,10 +2,6 @@ use std::{path::Path, process::Command};
 use tauri_plugin_shell::process::CommandEvent;
 use tauri_plugin_shell::ShellExt;
 
-use crate::utils::files::get_vector_path;
-
-// use tokio::process::Command as TokioCommand;
-
 pub fn get_ogr2ogr_version() -> Result<String, String> {
   match Command::new("ogr2ogr").arg("--version").output() {
     Ok(output) => String::from_utf8(output.stdout)
@@ -110,7 +106,7 @@ where
 pub fn start_server(app_handle: &tauri::AppHandle) -> Result<(), String> {
   let shell = app_handle.shell();
   let cmd = shell.sidecar("martin").map_err(|e| e.to_string())?;
-  let workspace_path = get_vector_path();
+  let workspace_path = common::files::get_vector_path();
   println!(
     "{}",
     format!(

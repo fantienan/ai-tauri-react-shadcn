@@ -9,3 +9,5 @@ futures = {workspace = true}
 tokio = {workspace = true}
 tokio-util ={workspace = true}
 archflow = {workspace = true}
+dotenv-flow = {workspace = true}
+log={workspace = true}

@@ -41,7 +41,7 @@ export const useChatbarLoader = ({ chatId }: { chatId?: string }) => {
     isReadonly: false,
     error: !!(chatId && !isLoading && !Array.isArray(data)),
     useChatOptions: {
-      api: `${import.meta.env.BIZ_SERVER_URL}/llm/chat`,
+      api: `${import.meta.env.BIZ_NODE_SERVER_URL}/llm/chat`,
     },
     onDownloadCode: async (params) => {
       if (window.isTauri) return tauri.downloadCode(params)

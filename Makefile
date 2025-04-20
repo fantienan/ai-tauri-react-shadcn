@@ -1,5 +1,5 @@
 # Variables
-PROJECT := aitaurireactshadcn
+NODE_SERVER_PATH := packages/server
 
 # To pass extra arguments, call with: make install ARGS="arg1 arg2 ..."
 install:
@@ -15,39 +15,43 @@ client-dev:
 server-dev:
 	@echo "Running dev server"
 	@chcp 65001
-	@pnpm -C server dev
+	@cd packages/server && yarn dev
 
 server-install:
 	@echo "Installing server dependencies"
-	@cd server && yarn install
+	@cd packages/server && yarn install
+
+server-add:
+	@echo "Adding server dependencies"
+	@cd packages/server && yarn add $(ARGS)
 
 db-check:
 	@echo "Checking database"
-	@pnpm -C server db:check
+	@cd packages/server && yarn db:check
 
 db-generate:
 	@echo "Generating database"
-	@pnpm -C server db:generate
+	@cd packages/server && yarn db:generate
 
 db-migrate:
 	@echo "Running database migration"
-	@pnpm -C server db:migrate
+	@cd packages/server && yarn db:migrate
 
 db-pull:
 	@echo "Pulling database"
-	@pnpm -C server db:pull
+	@cd packages/server && yarn db:pull
 
 db-push:
 	@echo "Pushing database"
-	@pnpm -C server db:push
+	@cd packages/server && yarn db:push
 
 db-studio:
 	@echo "Running database studio"
-	@pnpm -C server db:studio
+	@cd packages/server && yarn db:studio
 
 db-up:
 	@echo "Running database up"
-	@pnpm -C server db:up
+	@cd packages/server && yarn db:up
 
 app-dev:
 	@echo "Running dev app"

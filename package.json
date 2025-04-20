@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "prepare": "husky",
-    "app:build": "yarn mask && tauri build",
+    "app:build": "tauri build",
     "app:dev": " tauri dev",
     "build": "tsc -b && vite build",
     "dev": "vite",
@@ -51,6 +51,7 @@
     "@tauri-apps/plugin-dialog": "~2",
     "@tauri-apps/plugin-fs": "~2",
     "@tauri-apps/plugin-log": "~2",
+    "@tauri-apps/plugin-notification": "~2",
     "@tauri-apps/plugin-shell": "~2",
     "@types/markdown-it": "^14.1.2",
     "@types/papaparse": "^5.3.15",

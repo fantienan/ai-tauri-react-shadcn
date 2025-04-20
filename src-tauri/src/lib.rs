@@ -1,10 +1,7 @@
 use std::path;
-use tokio::io::DuplexStream;
-use tokio_util::io::ReaderStream;
 mod map_server;
 mod shapefile_server;
 mod utils;
-mod web_server;
 
 #[tauri::command]
 fn disk_read_dir(path: Option<&str>) -> Result<serde_json::Value, String> {
@@ -37,7 +34,7 @@ async fn create_server(
     .and_then(|name| name.to_str())
     .ok_or_else(|| "无法获取文件名".to_string())?;
 
-  let mbtiles_path = utils::files::get_mbtiles_path();
+  let mbtiles_path = common::files::get_mbtiles_path();
 
   let output_path = mbtiles_path.join(format!("{}.mbtiles", file_name));
 
@@ -63,30 +60,17 @@ async fn create_server(
     "成功".to_string(),
   ))
 }
-
-#[tauri::command]
-fn download_code() -> Result<serde_json::Value, String> {
-    // let template_dir = utils::files::get_resources_path().join("template");
-
-    // common::code::download(&template_dir)
-    Ok(utils::response::create_response::<()>(
-        true,
-        None,
-        "成功".to_string(),
-    ))
-}
-
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
   tauri::Builder::default()
+    .plugin(tauri_plugin_notification::init())
     .plugin(tauri_plugin_fs::init())
     .plugin(tauri_plugin_dialog::init())
     .plugin(tauri_plugin_shell::init())
     .plugin(tauri_plugin_log::Builder::new().build())
     .setup(|app| {
       utils::window::init_window_config(&app.handle())?;
-      utils::files::init_workspace();
-      web_server::run();
+      common::files::init_workspace();
       Ok(())
     })
     .plugin(tauri_plugin_opener::init())
@@ -96,7 +80,6 @@ pub fn run() {
       shapefile_to_record,
       create_server,
       shapefile_to_geojson,
-      download_code
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");

@@ -1,19 +1,11 @@
 use std::{fs, path};
-
-// 获取当前路径
-pub fn get_current_path() -> path::PathBuf {
-  let current_dir = std::env::current_dir().unwrap();
-  current_dir
-}
+use crate::env;
 
 pub fn get_workspace_path() -> path::PathBuf {
-  let current_dir = get_current_path();
-  current_dir.join("workspace")
-}
-
-pub fn get_resources_path() -> path::PathBuf {
-  let current_dir = get_current_path();
-  current_dir.join("resources")
+env::dotenv();
+    std::env::var("BIZ_WORKSPACE")
+        .map(path::PathBuf::from)
+        .unwrap_or_else(|_| std::env::current_dir().unwrap())
 }
 
 pub fn get_vector_path() -> path::PathBuf {
@@ -26,7 +18,12 @@ pub fn get_mbtiles_path() -> path::PathBuf {
   vector_path.join("mbtiles")
 }
 
-pub fn create_workspace() -> std::io::Result<()> {
+pub fn get_log_path() -> path::PathBuf {
+  let workspace_path = get_workspace_path();
+  workspace_path.join(".logs")
+}
+
+pub fn create_workspace() -> std::io::Result<String> {
   let workspace_path = path::Path::new("workspace");
   if !workspace_path.exists() {
     fs::create_dir(workspace_path)?;
@@ -45,20 +42,27 @@ pub fn create_workspace() -> std::io::Result<()> {
   // 创建config.yaml 文件 并写入内容
   let config_path = vector_path.join("config.yaml");
   if !config_path.exists() {
-    let content = format!(r#"
+    let content = format!(
+      r#"
       mbtiles:
         paths: mbtiles
-    "#);
+    "#
+    );
     fs::write(config_path, content)?;
   }
 
-  Ok(())
+  let log_path = workspace_path.join(".logs");
+  if !log_path.exists() {
+    fs::create_dir(log_path)?;
+  }
+
+  Ok("Workspace created successfully".to_string())
 }
 
 pub fn init_workspace() {
   match create_workspace() {
-    Ok(_) => {
-      log::info!("Workspace initialized successfully");
+    Ok(msg) => {
+      log::info!("{}", msg);
     }
     Err(e) => {
       log::error!("Failed to initialize workspace: {}", e);

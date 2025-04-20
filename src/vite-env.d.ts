@@ -2,8 +2,8 @@
 /// <reference path="./components/react-charts/types/index.d.ts"/>
 
 interface ImportMetaEnv {
-  readonly BIZ_SERVER_URL: string
-  readonly MAPBOX_ACCESS_TOKEN: string
+  readonly BIZ_NODE_SERVER_URL: string
+  readonly BIZ_MAPBOX_ACCESS_TOKEN: string
 }
 
 interface ImportMeta {

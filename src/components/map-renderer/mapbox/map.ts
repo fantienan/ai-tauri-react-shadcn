@@ -11,7 +11,7 @@ export type MapboxRendererInstance = InstanceType<typeof MapboxRenderer>
 
 const defaultMapOptions: MapOptions = {
   container: 'map',
-  accessToken: import.meta.env.MAPBOX_ACCESS_TOKEN,
+  accessToken: import.meta.env.BIZ_MAPBOX_ACCESS_TOKEN,
   center: [112.32716994959941, 32.8823769011904],
   projection: { name: 'globe' },
   preserveDrawingBuffer: true,
