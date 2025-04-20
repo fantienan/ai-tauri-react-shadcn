@@ -4,6 +4,7 @@
 interface ImportMetaEnv {
   readonly BIZ_NODE_SERVER_URL: string
   readonly BIZ_MAPBOX_ACCESS_TOKEN: string
+  readonly BIZ_RUST_WEB_SERVER_URL: string
 }
 
 interface ImportMeta {

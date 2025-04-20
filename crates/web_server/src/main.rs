@@ -1,55 +1,60 @@
-use axum::{
-    routing::{get, post},
-    http::StatusCode,
-    Json, Router,
-};
+use axum::{ routing::{get, post}, Router };
 use std::env;
-use serde::{Deserialize, Serialize};
+use tower_http::trace::{self, TraceLayer};
+use tracing::{Level, info,  error};
+use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, EnvFilter};
+use local_ip_address::list_afinet_netifas;
+mod routes;
 
 #[tokio::main]
 async fn main()  {
     common::env::dotenv();
-    tracing_subscriber::fmt::init();
+    // 初始化日志系统，使用更完善的配置
+    tracing_subscriber::registry()
+        .with(EnvFilter::try_from_default_env()
+            .unwrap_or_else(|_| "web_server=debug,tower_http=debug".into()))
+        .with(tracing_subscriber::fmt::layer())
+        .init();
+    
+    info!("初始化 Web 服务器...");
     let app = Router::new()
-        .route("/", get(root))
-        .route("/download/code", post(download_code));
+        .route("/", get(routes::root))
+        .route("/download/code", post(routes::download_code))
+        // 添加请求响应跟踪层
+        .layer(
+            TraceLayer::new_for_http()
+                .make_span_with(trace::DefaultMakeSpan::new().level(Level::INFO))
+                .on_response(trace::DefaultOnResponse::new().level(Level::INFO))
+                .on_request(trace::DefaultOnRequest::new().level(Level::INFO))
+        );
 
     let port = env::var("BIZ_RUST_WEB_SERVER_PORT").unwrap_or_else(|_| "3001".to_string());
-    let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{}", port)).await.unwrap();
-    axum::serve(listener, app).await.unwrap();
+
+    let listener = match tokio::net::TcpListener::bind(format!("0.0.0.0:{}", port)).await {
+        Ok(listener) => listener,
+        Err(err) => {
+            error!("服务器启动失败: {}", err);
+            std::process::exit(1);
+        }
+    }; 
+
+    info!("服务器启动成功");
+    // 获取并显示所有网络接口的IP地址
+    match list_afinet_netifas() {
+        Ok(network_interfaces) => {
+            for (_, ip) in network_interfaces.iter() {
+                if ip.is_ipv4() {
+                    info!("服务器地址: http://{:?}:{}",  ip, port);
+                }
+            }
+        },
+        Err(e) => error!("无法获取网络接口信息: {}", e),
+    }
+
+
+
+    if let Err(err) = axum::serve(listener, app).await {
+        error!("服务器运行时错误: {}", err);
+    }
 }
 
-// basic handler that responds with a static string
-async fn root() -> &'static str {
-    "Hello, World!"
-}
-
-async fn download_code(
-    // this argument tells axum to parse the request body
-    // as JSON into a `CreateUser` type
-    Json(payload): Json<DownloadCode>,
-) -> (StatusCode, Json<User>) {
-
-    log::info!("正在下载代码，chart_id: {}, message_id: {}", payload.chart_id, payload.message_id);
-    let user  = User {
-        id: 1,
-        username: "martin".to_string(),
-    };
-    // this will be converted into a JSON response
-    // with a status code of `201 Created`
-    (StatusCode::CREATED, Json(user))
-}
-
-// the input to our `create_user` handler
-#[derive(Deserialize)]
-struct DownloadCode {
-   chart_id: String,
-   message_id: String,
-}
-
-// the output to our `create_user` handler
-#[derive(Serialize)]
-struct User {
-    id: u64,
-    username: String,
-}

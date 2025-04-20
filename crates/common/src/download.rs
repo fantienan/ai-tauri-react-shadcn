@@ -6,7 +6,7 @@ use tokio::io::{duplex, DuplexStream};
 use tokio_util::io::ReaderStream;
 use walkdir::WalkDir;
 
-pub async fn download( src_dir: &PathBuf) -> Result<ReaderStream<DuplexStream>, String> {
+pub async fn code( src_dir: &PathBuf) -> Result<ReaderStream<DuplexStream>, String> {
     if !src_dir.exists() {
         return Err(format!("模板目录不存在: {:?}", src_dir));
     } 

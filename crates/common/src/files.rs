@@ -23,6 +23,11 @@ pub fn get_log_path() -> path::PathBuf {
   workspace_path.join(".logs")
 }
 
+pub fn get_template_path() -> path::PathBuf {
+  let workspace_path = get_workspace_path();
+  workspace_path.join("template")
+}
+
 pub fn create_workspace() -> std::io::Result<String> {
   let workspace_path = path::Path::new("workspace");
   if !workspace_path.exists() {

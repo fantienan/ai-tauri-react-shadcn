@@ -10,16 +10,18 @@ export default defineConfig({
   server: {
     watch: {
       ignored: [
-        path.resolve(__dirname, 'server'),
-        path.resolve(__dirname, ' src-tauri'),
+        path.resolve(__dirname, 'packages/server'),
+        path.resolve(__dirname, 'src-tauri'),
         path.resolve(__dirname, 'packages/template'),
+        path.resolve(__dirname, 'crates'),
+        path.resolve(__dirname, 'Makefile'),
       ],
     },
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
-      '@@/server': path.resolve(__dirname, 'server/src'),
+      '@@/server': path.resolve(__dirname, 'packages/server/src'),
     },
   },
 })

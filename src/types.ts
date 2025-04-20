@@ -11,3 +11,12 @@ export type Vote = DatabaseSchema.Vote
 export type DownloadCodeParams = Pick<DBMessage, 'chatId'> & {
   messageId: DBMessage['id']
 }
+
+export type BizScope = {
+  config: {
+    SM_MAPBOX_TOKEN: string
+    SM_GEOVIS_TOKEN: string
+    SM_TIANDITU_TOKEN: string
+    template_src_dir: string
+  }
+}

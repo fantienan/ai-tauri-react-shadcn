@@ -86,6 +86,11 @@ git-init:
 lint:
 	@echo "Running lint"
 	@pnpm lint-staged
+	@cargo fmt --all -- --check
 
 rust-fmt:
 	@cargo fmt --all -- --check
+
+axum-dev:
+	@echo "Running dev axum"
+	@cargo run --bin web_server
