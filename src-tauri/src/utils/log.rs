@@ -3,8 +3,7 @@ use crate::utils;
 
 // 初始化日志
 pub fn init() -> impl tauri::plugin::Plugin<tauri::Wry> {
-  let log_file_path = utils::files::get_current_path()
-    .join("resources")
+  let log_file_path = utils::files::get_resources_path()
     .join("app")
     .to_string_lossy()
     .to_string();

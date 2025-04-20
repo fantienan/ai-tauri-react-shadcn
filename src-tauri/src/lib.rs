@@ -1,7 +1,10 @@
 use std::path;
+use tokio::io::DuplexStream;
+use tokio_util::io::ReaderStream;
 mod map_server;
 mod shapefile_server;
 mod utils;
+mod web_server;
 
 #[tauri::command]
 fn disk_read_dir(path: Option<&str>) -> Result<serde_json::Value, String> {
@@ -63,11 +66,13 @@ async fn create_server(
 
 #[tauri::command]
 fn download_code() -> Result<serde_json::Value, String> {
-     
+    // let template_dir = utils::files::get_resources_path().join("template");
+
+    // common::code::download(&template_dir)
     Ok(utils::response::create_response::<()>(
         true,
         None,
-        "下载成功".to_string(),
+        "成功".to_string(),
     ))
 }
 
@@ -81,6 +86,7 @@ pub fn run() {
     .setup(|app| {
       utils::window::init_window_config(&app.handle())?;
       utils::files::init_workspace();
+      web_server::run();
       Ok(())
     })
     .plugin(tauri_plugin_opener::init())

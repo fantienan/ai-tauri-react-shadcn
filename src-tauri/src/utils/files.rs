@@ -11,6 +11,11 @@ pub fn get_workspace_path() -> path::PathBuf {
   current_dir.join("workspace")
 }
 
+pub fn get_resources_path() -> path::PathBuf {
+  let current_dir = get_current_path();
+  current_dir.join("resources")
+}
+
 pub fn get_vector_path() -> path::PathBuf {
   let workspace_path = get_workspace_path();
   workspace_path.join("vector")
