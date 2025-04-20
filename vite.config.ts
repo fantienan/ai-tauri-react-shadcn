@@ -21,7 +21,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
-      '@@/server': path.resolve(__dirname, 'packages/server/src'),
+      '@@/ai-server': path.resolve(__dirname, 'packages/ai-server/src'),
     },
   },
 })

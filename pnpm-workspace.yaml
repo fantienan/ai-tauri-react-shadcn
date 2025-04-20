@@ -4,4 +4,4 @@ onlyBuiltDependencies:
   - "better-sqlite3"
 packages:
   - "packages/*"
-  - "!pacakges/server"
+  - "!pacakges/ai-server"

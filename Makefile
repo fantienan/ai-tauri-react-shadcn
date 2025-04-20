@@ -1,57 +1,57 @@
 # Variables
-NODE_SERVER_PATH := packages/server
+NODE_SERVER_PATH := packages/ai-server
 
 # To pass extra arguments, call with: make install ARGS="arg1 arg2 ..."
 install:
 	@echo "Installing client dependencies"
 	@pnpm install 
-	@echo "Installing server dependencies"
-	@cd server && yarn install
+	@echo "Installing ai-server dependencies"
+	@cd packages/ai-server && yarn install
 
 client-dev:
 	@echo "Running dev client"
 	@pnpm dev
 
-server-dev:
-	@echo "Running dev server"
+ai-server-dev:
+	@echo "Running dev ai server"
 	@chcp 65001
-	@cd packages/server && yarn dev
+	@cd packages/ai-server && yarn dev
 
-server-install:
-	@echo "Installing server dependencies"
-	@cd packages/server && yarn install
+ai-server-install:
+	@echo "Installing ai server dependencies"
+	@cd packages/ai-server && yarn install
 
-server-add:
-	@echo "Adding server dependencies"
-	@cd packages/server && yarn add $(ARGS)
+ai-server-add:
+	@echo "Adding ai server dependencies"
+	@cd packages/ai-server && yarn add $(ARGS)
 
 db-check:
 	@echo "Checking database"
-	@cd packages/server && yarn db:check
+	@cd packages/ai-server && yarn db:check
 
 db-generate:
 	@echo "Generating database"
-	@cd packages/server && yarn db:generate
+	@cd packages/ai-server && yarn db:generate
 
 db-migrate:
 	@echo "Running database migration"
-	@cd packages/server && yarn db:migrate
+	@cd packages/ai-server && yarn db:migrate
 
 db-pull:
 	@echo "Pulling database"
-	@cd packages/server && yarn db:pull
+	@cd packages/ai-server && yarn db:pull
 
 db-push:
 	@echo "Pushing database"
-	@cd packages/server && yarn db:push
+	@cd packages/ai-server && yarn db:push
 
 db-studio:
 	@echo "Running database studio"
-	@cd packages/server && yarn db:studio
+	@cd packages/ai-server && yarn db:studio
 
 db-up:
 	@echo "Running database up"
-	@cd packages/server && yarn db:up
+	@cd packages/ai-server && yarn db:up
 
 app-dev:
 	@echo "Running dev app"
@@ -91,6 +91,6 @@ lint:
 rust-fmt:
 	@cargo fmt --all -- --check
 
-axum-dev:
-	@echo "Running dev axum"
+web-server-dev:
+	@echo "Running dev web server"
 	@cargo run --bin web_server

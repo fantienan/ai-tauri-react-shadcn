@@ -1,5 +1,5 @@
 import { fetcher } from '@/utils'
-import { llm, user } from '@@/server/schemas'
+import { llm, user } from '@@/ai-server/schemas'
 import { z } from 'zod'
 import type { Chat, User } from './types'
 
