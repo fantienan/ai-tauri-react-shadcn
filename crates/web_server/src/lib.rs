@@ -3,15 +3,22 @@ use axum::{
   routing::{get, post},
 };
 use local_ip_address::list_afinet_netifas;
+use sea_orm::{Database, DatabaseConnection};
 use std::env;
 use tower_http::cors::{Any, CorsLayer};
 use tower_http::trace::{self, TraceLayer};
 use tracing::{Level, error, info};
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
+mod migration;
 mod routes;
 
+#[derive(Clone)]
+struct AppState {
+    conn: DatabaseConnection,
+}
+
 #[tokio::main]
-async fn main() {
+async fn start() {
   common::env::dotenv();
   // 初始化日志系统，使用更完善的配置
   tracing_subscriber::registry()
@@ -21,7 +28,13 @@ async fn main() {
     )
     .with(tracing_subscriber::fmt::layer())
     .init();
-
+  info!("初始化数据库链接");
+  let db_url = env::var("DATABASE_URL").expect(".env 文件中未设置 DATABASE_URL");
+  let conn = Database::connect(db_url)
+    .await
+    .expect("数据库连接失败");
+  // Migrator::up(&conn, None).await.unwrap();
+    let state = AppState {  conn };
   info!("初始化 Web 服务器...");
   let app = Router::new()
     .route("/", get(routes::root))
@@ -33,7 +46,13 @@ async fn main() {
         .on_response(trace::DefaultOnResponse::new().level(Level::INFO))
         .on_request(trace::DefaultOnRequest::new().level(Level::INFO)),
     )
-    .layer(CorsLayer::new().allow_origin(Any).allow_methods(Any).allow_headers(Any));
+    .layer(
+      CorsLayer::new()
+        .allow_origin(Any)
+        .allow_methods(Any)
+        .allow_headers(Any),
+    )
+    .with_state(state);
 
   let port = env::var("BIZ_RUST_WEB_SERVER_PORT").unwrap_or_else(|_| "3001".to_string());
   let listener = match tokio::net::TcpListener::bind(format!("0.0.0.0:{}", port)).await {
@@ -60,4 +79,8 @@ async fn main() {
   if let Err(err) = axum::serve(listener, app).await {
     error!("服务器运行时错误: {}", err);
   }
+}
+
+pub fn main() {
+  start();
 }

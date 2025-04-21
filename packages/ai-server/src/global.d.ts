@@ -21,7 +21,7 @@ declare global {
       POSTGRES_PORT: number
       POSTGRES_USER: string
       POSTGRES_PASSWORD: string
-      SQLITE_URL: string
+      DATABASE_URL: string
       BIZ_NODE_SERVER_PORT: number
       BIZ_NODE_SERVER_URL: string
       BIZ_TIAN_DI_TU_API_KEY: string

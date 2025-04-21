@@ -31,11 +31,11 @@ const config: BizConfig = {
     out: path.resolve(__dirname, '../database/migrations'),
     dialect: 'sqlite',
     dbCredentials: {
-      url: process.env.SQLITE_URL!,
+      url: process.env.DATABASE_URL!,
     },
   },
   sqlite: {
-    databaseUrl: process.env.SQLITE_URL!,
+    databaseUrl: process.env.DATABASE_URL!,
   },
   tianditu: {
     apiKey: process.env.BIZ_TIAN_DI_TU_API_KEY!,
