@@ -7,6 +7,7 @@ repository.workspace = true
 
 [dependencies]
 axum = "0.8.3"
+tokio-util ={workspace = true}
 tokio = {workspace = true}
 serde = {workspace = true}
 common = { path = "../common" }
@@ -17,4 +18,5 @@ tracing-subscriber = {version = "0.3.19", features = ["fmt", "env-filter", "json
 tracing = "0.1.41"
 tower-http = { version = "0.6.2", features = ["full"] }
 local-ip-address = "0.6.3"
-
+percent-encoding = "2.3.1"
+sea-orm = "1.1.10"

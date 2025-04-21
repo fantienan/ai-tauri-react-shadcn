@@ -1,11 +1,11 @@
-use std::{fs, path};
 use crate::env;
+use std::{fs, path};
 
 pub fn get_workspace_path() -> path::PathBuf {
-env::dotenv();
-    std::env::var("BIZ_WORKSPACE")
-        .map(path::PathBuf::from)
-        .unwrap_or_else(|_| std::env::current_dir().unwrap())
+  env::dotenv();
+  std::env::var("BIZ_WORKSPACE")
+    .map(path::PathBuf::from)
+    .unwrap_or_else(|_| std::env::current_dir().unwrap())
 }
 
 pub fn get_vector_path() -> path::PathBuf {

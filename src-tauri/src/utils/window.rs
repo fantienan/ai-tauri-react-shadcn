@@ -2,7 +2,7 @@ use tauri::Manager;
 
 pub fn init_window_config(app_handle: &tauri::AppHandle) -> Result<(), Box<dyn std::error::Error>> {
   let window = app_handle.get_webview_window("main").unwrap();
-    
+
   let js = format!(
     r#"
     console.log("Injecting window config...");

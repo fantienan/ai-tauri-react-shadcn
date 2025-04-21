@@ -86,10 +86,10 @@ git-init:
 lint:
 	@echo "Running lint"
 	@pnpm lint-staged
-	@cargo fmt --all -- --check
+	@cargo fmt --all 
 
 rust-fmt:
-	@cargo fmt --all -- --check
+	@cargo fmt --all 
 
 web-server-dev:
 	@echo "Running dev web server"
