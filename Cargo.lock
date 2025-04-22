@@ -3,10 +3,6 @@
 version = 4
 
 [[package]]
-name = "a"
-version = "0.1.0"
-
-[[package]]
 name = "addr2line"
 version = "0.24.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3019,14 +3015,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "488016bfae457b036d996092f6cb448677611ce4449e970ceaf42695203f218a"
 dependencies = [
  "autocfg",
-]
-
-[[package]]
-name = "migration"
-version = "0.1.0"
-dependencies = [
- "async-std",
- "sea-orm-migration",
 ]
 
 [[package]]
@@ -6721,13 +6709,29 @@ dependencies = [
  "log",
  "percent-encoding",
  "sea-orm",
- "sea-orm-migration",
  "serde",
  "tokio",
  "tokio-util",
  "tower-http",
  "tracing",
  "tracing-subscriber",
+ "web_server_entity",
+ "web_server_migration",
+]
+
+[[package]]
+name = "web_server_entity"
+version = "0.1.0"
+dependencies = [
+ "sea-orm",
+]
+
+[[package]]
+name = "web_server_migration"
+version = "0.1.0"
+dependencies = [
+ "async-std",
+ "sea-orm-migration",
 ]
 
 [[package]]

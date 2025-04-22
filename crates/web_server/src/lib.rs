@@ -9,11 +9,13 @@ use tower_http::cors::{Any, CorsLayer};
 use tower_http::trace::{self, TraceLayer};
 use tracing::{Level, error, info};
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
+use web_server_migration::{Migrator, MigratorTrait};
+// use web_server_entity
 mod routes;
 
 #[derive(Clone)]
 struct AppState {
-  conn: DatabaseConnection,
+  connection: DatabaseConnection,
 }
 
 #[tokio::main]
@@ -35,18 +37,24 @@ async fn start() {
   info!("数据库链接: {}", db_url);
 
   let opt = ConnectOptions::new(&db_url);
-  let conn = Database::connect(opt).await.expect("数据库连接失败");
+  let connection = Database::connect(opt).await.expect("数据库连接失败");
 
   // 检查连接是否有效
-  match conn.ping().await {
+  match connection.ping().await {
     Ok(_) => info!("数据库连接成功"),
     Err(err) => {
       error!("数据库连接失败: {}", err);
       std::process::exit(1);
     }
   }
-
-  let state = AppState { conn };
+  match Migrator::up(&connection, None).await {
+    Ok(_) => info!("数据库迁移成功"),
+    Err(err) => {
+      error!("数据库迁移失败: {}", err);
+      std::process::exit(1);
+    }
+  }
+  let state = AppState { connection };
 
   info!("初始化 Web 服务...");
 
@@ -70,14 +78,16 @@ async fn start() {
 
   let port = env::var("BIZ_RUST_WEB_SERVER_PORT").unwrap_or_else(|_| "3001".to_string());
   let listener = match tokio::net::TcpListener::bind(format!("0.0.0.0:{}", port)).await {
-    Ok(listener) => listener,
+    Ok(listener) => {
+      info!("服务启动成功");
+      listener
+    }
     Err(err) => {
       error!("服务启动失败: {}", err);
       std::process::exit(1);
     }
   };
 
-  info!("服务启动成功");
   // 获取并显示所有网络接口的IP地址
   match list_afinet_netifas() {
     Ok(network_interfaces) => {

@@ -25,6 +25,5 @@ local-ip-address = "0.6.3"
 percent-encoding = "2.3.1"
 anyhow = {workspace = true}
 sea-orm = { workspace = true}
-sea-orm-migration = {workspace = true}
-entity = { path = "../web_server_entity" }
-migration = { path = "../web_server_migration" }
+web_server_entity = { path = "../web_server_entity" }
+web_server_migration = { path = "../web_server_migration" }

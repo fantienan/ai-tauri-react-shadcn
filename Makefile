@@ -1,5 +1,8 @@
 # Variables
-# DATABASE_URL= sqlite:///${BIZ_WORKSPACE}\\db\\databaseseaorm.db
+ENV ?= dev
+-include .env
+-include .env.$(ENV)
+-include .env.local
 
 # To pass extra arguments, call with: make install ARGS="arg1 arg2 ..."
 install:
@@ -101,7 +104,7 @@ sea-db-migrate:
 	@cargo install sea-orm-cli
 	@sea-orm-cli migrate init -d crates/web_server_migration
 
-# sea-db-generate-entity:
-# 	@echo "Generating sea database entity"
-# 	@cargo install sea-orm-cli
-# 	@sea-orm-cli generate entity -o crates/web_server/src/entity -u sqlite:///C:\workspace\codes\@ai\ai-tauri-react-shadcn\workspace\db\databaseseaorm.db
+sea-db-generate-entity:
+	@echo "Generating sea database generate entity"
+	@cargo install sea-orm-cli
+	@sea-orm-cli generate entity -o crates/web_server_entity -u ${DATABASE_URL} 
