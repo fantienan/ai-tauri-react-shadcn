@@ -7,3 +7,4 @@ repository.workspace = true
 
 [dependencies]
 sea-orm = { workspace = true}
+serde = {workspace = true}

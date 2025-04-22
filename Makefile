@@ -4,6 +4,7 @@ ENV ?= dev
 -include .env.$(ENV)
 -include .env.local
 
+
 # To pass extra arguments, call with: make install ARGS="arg1 arg2 ..."
 install:
 	@echo "Installing client dependencies"
@@ -99,12 +100,18 @@ web-server-dev:
 	@cargo run --bin web_server
 
 # https://github.com/SeaQL/sea-orm/tree/master/examples/axum_example/migration
-sea-db-migrate:
+sea-db-migrate-init:
 	@echo "Running sea database migration"
 	@cargo install sea-orm-cli
-	@sea-orm-cli migrate init -d crates/web_server_migration
+	@sea-orm-cli migrate init -d ${SEA_ROM_MIGRATION_PATH} -v
+
+
+sea-db-migrate-generate:
+	@echo "Running sea database migration"
+	@cargo install sea-orm-cli
+	@sea-orm-cli migrate generate generate --local-time -d ${SEA_ROM_MIGRATION_PATH} -v
 
 sea-db-generate-entity:
 	@echo "Generating sea database generate entity"
 	@cargo install sea-orm-cli
-	@sea-orm-cli generate entity -o crates/web_server_entity -u ${DATABASE_URL} 
+	@sea-orm-cli generate entity -o ${SEA_ROM_ENTITY_PATH} -u ${DATABASE_URL} -v

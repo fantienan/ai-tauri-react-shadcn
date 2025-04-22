@@ -47,6 +47,7 @@ async fn start() {
       std::process::exit(1);
     }
   }
+  // 应用所有迁移
   match Migrator::up(&connection, None).await {
     Ok(_) => info!("数据库迁移成功"),
     Err(err) => {
