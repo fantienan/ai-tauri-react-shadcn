@@ -1,5 +1,5 @@
 # Variables
-NODE_SERVER_PATH := packages/ai-server
+# DATABASE_URL= sqlite:///${BIZ_WORKSPACE}\\db\\databaseseaorm.db
 
 # To pass extra arguments, call with: make install ARGS="arg1 arg2 ..."
 install:
@@ -25,32 +25,32 @@ ai-server-add:
 	@echo "Adding ai server dependencies"
 	@cd packages/ai-server && yarn add $(ARGS)
 
-db-check:
-	@echo "Checking database"
+drizzle-check:
+	@echo "Checking drizzle database"
 	@cd packages/ai-server && yarn db:check
 
-db-generate:
-	@echo "Generating database"
+drizzle-generate:
+	@echo "Generating drizzle database"
 	@cd packages/ai-server && yarn db:generate
 
-db-migrate:
-	@echo "Running database migration"
+drizzle-migrate:
+	@echo "Running drizzle database migration"
 	@cd packages/ai-server && yarn db:migrate
 
-db-pull:
-	@echo "Pulling database"
+drizzle-pull:
+	@echo "Pulling drizzle database"
 	@cd packages/ai-server && yarn db:pull
 
-db-push:
-	@echo "Pushing database"
+drizzle-push:
+	@echo "Pushing drizzle database"
 	@cd packages/ai-server && yarn db:push
 
-db-studio:
-	@echo "Running database studio"
+drizzle-studio:
+	@echo "Running drizzle database studio"
 	@cd packages/ai-server && yarn db:studio
 
-db-up:
-	@echo "Running database up"
+drizzle-up:
+	@echo "Running drizzle database up"
 	@cd packages/ai-server && yarn db:up
 
 app-dev:
@@ -94,3 +94,14 @@ rust-fmt:
 web-server-dev:
 	@echo "Running dev web server"
 	@cargo run --bin web_server
+
+# https://github.com/SeaQL/sea-orm/tree/master/examples/axum_example/migration
+sea-db-migrate:
+	@echo "Running sea database migration"
+	@cargo install sea-orm-cli
+	@sea-orm-cli migrate init -d crates/web_server_migration
+
+# sea-db-generate-entity:
+# 	@echo "Generating sea database entity"
+# 	@cargo install sea-orm-cli
+# 	@sea-orm-cli generate entity -o crates/web_server/src/entity -u sqlite:///C:\workspace\codes\@ai\ai-tauri-react-shadcn\workspace\db\databaseseaorm.db

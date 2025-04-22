@@ -3,18 +3,17 @@ use axum::{
   routing::{get, post},
 };
 use local_ip_address::list_afinet_netifas;
-use sea_orm::{Database, DatabaseConnection};
+use sea_orm::{ConnectOptions, Database, DatabaseConnection, DbErr};
 use std::env;
 use tower_http::cors::{Any, CorsLayer};
 use tower_http::trace::{self, TraceLayer};
 use tracing::{Level, error, info};
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
-mod migration;
 mod routes;
 
 #[derive(Clone)]
 struct AppState {
-    conn: DatabaseConnection,
+  conn: DatabaseConnection,
 }
 
 #[tokio::main]
@@ -28,14 +27,29 @@ async fn start() {
     )
     .with(tracing_subscriber::fmt::layer())
     .init();
-  info!("初始化数据库链接");
+
+  info!("初始化数据库链接...");
+
   let db_url = env::var("DATABASE_URL").expect(".env 文件中未设置 DATABASE_URL");
-  let conn = Database::connect(db_url)
-    .await
-    .expect("数据库连接失败");
-  // Migrator::up(&conn, None).await.unwrap();
-    let state = AppState {  conn };
-  info!("初始化 Web 服务器...");
+
+  info!("数据库链接: {}", db_url);
+
+  let opt = ConnectOptions::new(&db_url);
+  let conn = Database::connect(opt).await.expect("数据库连接失败");
+
+  // 检查连接是否有效
+  match conn.ping().await {
+    Ok(_) => info!("数据库连接成功"),
+    Err(err) => {
+      error!("数据库连接失败: {}", err);
+      std::process::exit(1);
+    }
+  }
+
+  let state = AppState { conn };
+
+  info!("初始化 Web 服务...");
+
   let app = Router::new()
     .route("/", get(routes::root))
     .route("/download/code", post(routes::download_code))
@@ -58,18 +72,18 @@ async fn start() {
   let listener = match tokio::net::TcpListener::bind(format!("0.0.0.0:{}", port)).await {
     Ok(listener) => listener,
     Err(err) => {
-      error!("服务器启动失败: {}", err);
+      error!("服务启动失败: {}", err);
       std::process::exit(1);
     }
   };
 
-  info!("服务器启动成功");
+  info!("服务启动成功");
   // 获取并显示所有网络接口的IP地址
   match list_afinet_netifas() {
     Ok(network_interfaces) => {
       for (_, ip) in network_interfaces.iter() {
         if ip.is_ipv4() {
-          info!("服务器地址: http://{:?}:{}", ip, port);
+          info!("服务地址: http://{:?}:{}", ip, port);
         }
       }
     }
@@ -77,7 +91,7 @@ async fn start() {
   }
 
   if let Err(err) = axum::serve(listener, app).await {
-    error!("服务器运行时错误: {}", err);
+    error!("服务运行时错误: {}", err);
   }
 }
 

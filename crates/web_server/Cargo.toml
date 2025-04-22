@@ -5,6 +5,10 @@ rust-version.workspace = true
 edition.workspace = true
 repository.workspace = true
 
+[lib]
+name="web_server"
+path = "src/lib.rs"
+
 [dependencies]
 axum = "0.8.3"
 tokio-util ={workspace = true}
@@ -19,6 +23,8 @@ tracing = "0.1.41"
 tower-http = { version = "0.6.2", features = ["full"] }
 local-ip-address = "0.6.3"
 percent-encoding = "2.3.1"
-sea-orm = {version = "1.1.10", features = ["sqlx-sqlite", "macros", "runtime-tokio-rustls"]}
-anyhow = "1.0.98"
-sea-orm-migration = "1.1.10"
+anyhow = {workspace = true}
+sea-orm = { workspace = true}
+sea-orm-migration = {workspace = true}
+entity = { path = "../web_server_entity" }
+migration = { path = "../web_server_migration" }
