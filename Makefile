@@ -111,7 +111,9 @@ sea-db-migrate-generate:
 	@cargo install sea-orm-cli
 	@sea-orm-cli migrate generate generate --local-time -d ${SEA_ROM_MIGRATION_PATH} -v
 
-sea-db-generate-entity:
+sea-db-entity-generate:
 	@echo "Generating sea database generate entity"
+	@echo "DATABASE_URL: ${DATABASE_URL}"
+	@echo "SEA_ROM_ENTITY_PATH :${SEA_ROM_ENTITY_PATH}"
 	@cargo install sea-orm-cli
 	@sea-orm-cli generate entity -o ${SEA_ROM_ENTITY_PATH} -u ${DATABASE_URL} -v
