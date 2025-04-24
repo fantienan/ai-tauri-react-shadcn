@@ -3,6 +3,7 @@ ENV ?= dev
 -include .env
 -include .env.$(ENV)
 -include .env.local
+DATABASE_URL = sqlite:///${SQLITE_DATABASE_URL}
 
 
 # To pass extra arguments, call with: make install ARGS="arg1 arg2 ..."
@@ -113,7 +114,7 @@ sea-db-migrate-generate:
 
 sea-db-entity-generate:
 	@echo "Generating sea database generate entity"
-	@echo "DATABASE_URL: ${DATABASE_URL}"
+	@echo "SQLITE_DATABASE_URL: ${DATABASE_URL}"
 	@echo "SEA_ROM_ENTITY_PATH :${SEA_ROM_ENTITY_PATH}"
 	@cargo install sea-orm-cli
-	@sea-orm-cli generate entity -o ${SEA_ROM_ENTITY_PATH} -u ${DATABASE_URL} -v
+	@sea-orm-cli generate entity -o ${SEA_ROM_ENTITY_PATH} -u ${DATABASE_URL} -v -l

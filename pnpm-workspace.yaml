@@ -3,5 +3,6 @@ onlyBuiltDependencies:
   - "esbuild"
   - "better-sqlite3"
 packages:
-  - "packages/*"
-  - "!pacakges/ai-server"
+  - "packages/common"
+  - "pacakges/template"
+  - "pacakges/types"

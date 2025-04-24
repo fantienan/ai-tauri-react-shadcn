@@ -32,7 +32,7 @@ async fn start() {
 
   info!("初始化数据库链接...");
 
-  let db_url = env::var("DATABASE_URL").expect(".env 文件中未设置 DATABASE_URL");
+  let db_url = format!("sqlite:///{}", env::var("SQLITE_DATABASE_URL").expect(".env 文件中未设置 SQLITE_DATABASE_URL"));
 
   info!("数据库链接: {}", db_url);
 
