@@ -230,42 +230,42 @@
           "name": "customer_code",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "member_code": {
           "autoincrement": false,
           "name": "member_code",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "visit_date": {
           "autoincrement": false,
           "name": "visit_date",
           "type": "text(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "visit_time_period": {
           "autoincrement": false,
           "name": "visit_time_period",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "weixin_id": {
           "autoincrement": false,
           "name": "weixin_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "pv": {
           "autoincrement": false,
           "name": "pv",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "compositePrimaryKeys": {},
@@ -289,91 +289,91 @@
           "name": "customer_code",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "custormer_type": {
           "autoincrement": false,
           "name": "custormer_type",
           "type": "text(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "province": {
           "autoincrement": false,
           "name": "province",
           "type": "text(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "city": {
           "autoincrement": false,
           "name": "city",
           "type": "text(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "city_level": {
           "autoincrement": false,
           "name": "city_level",
           "type": "text(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "store_type": {
           "autoincrement": false,
           "name": "store_type",
           "type": "text(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "store_code": {
           "autoincrement": false,
           "name": "store_code",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "custromer_code": {
           "autoincrement": false,
           "name": "custromer_code",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "baby_age_group": {
           "autoincrement": false,
           "name": "baby_age_group",
           "type": "text(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "gender": {
           "autoincrement": false,
           "name": "gender",
           "type": "text(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "crowd_type": {
           "autoincrement": false,
           "name": "crowd_type",
           "type": "text(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "online_order": {
           "autoincrement": false,
           "name": "online_order",
           "type": "text(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "payment_date": {
           "autoincrement": false,
           "name": "payment_date",
           "type": "text(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "write_off_date": {
           "autoincrement": false,
@@ -394,28 +394,28 @@
           "name": "first_category",
           "type": "text(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "secondary_category": {
           "autoincrement": false,
           "name": "secondary_category",
           "type": "text(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "related_first_category": {
           "autoincrement": false,
           "name": "related_first_category",
           "type": "text(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "related_secondary_category": {
           "autoincrement": false,
           "name": "related_secondary_category",
           "type": "text(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "brand_name": {
           "autoincrement": false,
@@ -436,7 +436,7 @@
           "name": "online_commodity_code",
           "type": "text(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "related_online_commodity_code": {
           "autoincrement": false,
@@ -450,14 +450,14 @@
           "name": "marketing_campaign_type",
           "type": "text(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "scene_name": {
           "autoincrement": false,
           "name": "scene_name",
           "type": "text(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "payment_write_off_days_difference": {
           "autoincrement": false,
@@ -471,14 +471,14 @@
           "name": "online_sales",
           "type": "real",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "related_sales": {
           "autoincrement": false,
           "name": "related_sales",
           "type": "real",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "compositePrimaryKeys": {},

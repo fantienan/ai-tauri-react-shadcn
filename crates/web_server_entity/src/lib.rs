@@ -2,4 +2,9 @@
 
 pub mod prelude;
 
-pub mod post;
+pub mod chat;
+pub mod daily_summary;
+pub mod message;
+pub mod order_product_details;
+pub mod user;
+pub mod vote;

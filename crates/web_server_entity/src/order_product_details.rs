@@ -5,56 +5,58 @@ use sea_orm::entity::prelude::*;
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq)]
 #[sea_orm(table_name = "order_product_details")]
 pub struct Model {
-  pub customer_code: Option<i32>,
-  #[sea_orm(column_type = "Text", nullable)]
-  pub custormer_type: Option<String>,
-  #[sea_orm(column_type = "Text", nullable)]
-  pub province: Option<String>,
-  #[sea_orm(column_type = "Text", nullable)]
-  pub city: Option<String>,
-  #[sea_orm(column_type = "Text", nullable)]
-  pub city_level: Option<String>,
-  #[sea_orm(column_type = "Text", nullable)]
-  pub store_type: Option<String>,
-  pub store_code: Option<i32>,
-  pub custromer_code: Option<i32>,
-  #[sea_orm(column_type = "Text", nullable)]
-  pub baby_age_group: Option<String>,
-  #[sea_orm(column_type = "Text", nullable)]
-  pub gender: Option<String>,
-  #[sea_orm(column_type = "Text", nullable)]
-  pub crowd_type: Option<String>,
-  #[sea_orm(column_type = "Text", nullable)]
-  pub online_order: Option<String>,
-  #[sea_orm(column_name = "\r\npayment_date", column_type = "Text", nullable)]
-  pub payment_date: Option<String>,
+  #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
+  pub id: String,
+  pub customer_code: i32,
+  #[sea_orm(column_type = "Text")]
+  pub custormer_type: String,
+  #[sea_orm(column_type = "Text")]
+  pub province: String,
+  #[sea_orm(column_type = "Text")]
+  pub city: String,
+  #[sea_orm(column_type = "Text")]
+  pub city_level: String,
+  #[sea_orm(column_type = "Text")]
+  pub store_type: String,
+  pub store_code: i32,
+  pub custromer_code: i32,
+  #[sea_orm(column_type = "Text")]
+  pub baby_age_group: String,
+  #[sea_orm(column_type = "Text")]
+  pub gender: String,
+  #[sea_orm(column_type = "Text")]
+  pub crowd_type: String,
+  #[sea_orm(column_type = "Text")]
+  pub online_order: String,
+  #[sea_orm(column_type = "Text")]
+  pub payment_date: String,
   #[sea_orm(column_type = "Text", nullable)]
   pub write_off_date: Option<String>,
   #[sea_orm(column_type = "Text", nullable)]
   pub associated_order_number: Option<String>,
-  #[sea_orm(column_type = "Text", nullable)]
-  pub first_category: Option<String>,
-  #[sea_orm(column_type = "Text", nullable)]
-  pub secondary_category: Option<String>,
-  #[sea_orm(column_type = "Text", nullable)]
-  pub related_first_category: Option<String>,
-  #[sea_orm(column_type = "Text", nullable)]
-  pub related_secondary_category: Option<String>,
+  #[sea_orm(column_type = "Text")]
+  pub first_category: String,
+  #[sea_orm(column_type = "Text")]
+  pub secondary_category: String,
+  #[sea_orm(column_type = "Text")]
+  pub related_first_category: String,
+  #[sea_orm(column_type = "Text")]
+  pub related_secondary_category: String,
   #[sea_orm(column_type = "Text", nullable)]
   pub brand_name: Option<String>,
   #[sea_orm(column_type = "Text", nullable)]
   pub related_brand_name: Option<String>,
-  #[sea_orm(column_type = "Text", nullable)]
-  pub online_commodity_code: Option<String>,
+  #[sea_orm(column_type = "Text")]
+  pub online_commodity_code: String,
   #[sea_orm(column_type = "Text", nullable)]
   pub related_online_commodity_code: Option<String>,
-  #[sea_orm(column_type = "Text", nullable)]
-  pub marketing_campaign_type: Option<String>,
-  #[sea_orm(column_type = "Text", nullable)]
-  pub scene_name: Option<String>,
+  #[sea_orm(column_type = "Text")]
+  pub marketing_campaign_type: String,
+  #[sea_orm(column_type = "Text")]
+  pub scene_name: String,
   pub payment_write_off_days_difference: Option<i32>,
-  pub online_sales: Option<Decimal>,
-  pub related_sales: Option<Decimal>,
+  pub online_sales: Decimal,
+  pub related_sales: Decimal,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
