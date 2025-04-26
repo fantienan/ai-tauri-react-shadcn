@@ -1,5 +1,5 @@
 use sea_orm_migration::{prelude::*, schema::*};
-use super::m20250426_093200_chat::Chat;
+use super::m20220101_000001_create_table::Chat;
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;

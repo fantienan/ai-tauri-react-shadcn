@@ -118,3 +118,7 @@ sea-db-entity-generate:
 	@echo "SEA_ROM_ENTITY_PATH :${SEA_ROM_ENTITY_PATH}"
 	@cargo install sea-orm-cli
 	@sea-orm-cli generate entity -o ${SEA_ROM_ENTITY_PATH} -u ${DATABASE_URL} -v -l
+
+common-build:
+	@echo "Building common"
+	@pnpm -C packages/common build

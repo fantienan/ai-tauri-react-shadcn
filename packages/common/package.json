@@ -20,12 +20,8 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/content-disposition": "^0.5.8",
     "typescript": "~5.7.2",
     "vite": "^6.3.1",
     "vite-plugin-dts": "^4.5.3"
-  },
-  "dependencies": {
-    "content-disposition": "^0.5.4"
   }
 }
