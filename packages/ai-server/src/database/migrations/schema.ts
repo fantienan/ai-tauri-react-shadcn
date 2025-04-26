@@ -1,5 +1,4 @@
-import { sql } from 'drizzle-orm'
-import { AnySQLiteColumn, foreignKey, integer, primaryKey, real, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { integer, primaryKey, real, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
 export const vote = sqliteTable(
   'vote',

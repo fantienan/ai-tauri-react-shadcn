@@ -3,7 +3,7 @@ use axum::{
   routing::{get, post},
 };
 use local_ip_address::list_afinet_netifas;
-use sea_orm::{ConnectOptions, Database, DatabaseConnection, DbErr};
+use sea_orm::{ConnectOptions, Database, DatabaseConnection};
 use std::env;
 use tower_http::cors::{Any, CorsLayer};
 use tower_http::trace::{self, TraceLayer};
