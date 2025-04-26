@@ -6,7 +6,7 @@ pub struct AppState {
   pub db: sea_orm::DatabaseConnection,
 }
 
-pub fn list_afinet_netifas(port: &String) {
+pub fn list_afinet_netifas(port: &u16) {
   // 获取并显示所有网络接口的IP地址
   match local_ip_address::list_afinet_netifas() {
     Ok(network_interfaces) => {

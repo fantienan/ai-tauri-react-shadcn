@@ -2,7 +2,7 @@ use std::env;
 
 pub struct Config {
   pub db_url: String,
-  pub port: String,
+  pub port: u16,
   pub max_connections: u32,
   pub min_connections: u32,
   pub connect_timeout_secs: u64,
@@ -19,7 +19,10 @@ impl Config {
         "sqlite:///{}",
         env::var("SQLITE_DATABASE_URL").expect(".env 文件中未设置 SQLITE_DATABASE_URL")
       ),
-      port: env::var("BIZ_RUST_WEB_SERVER_PORT").unwrap_or_else(|_| "3001".to_string()),
+      port: env::var("BIZ_RUST_WEB_SERVER_PORT")
+        .ok()
+        .and_then(|v| v.parse().ok())
+        .unwrap_or(3001),
       max_connections: env::var("DB_MAX_CONNECTIONS")
         .ok()
         .and_then(|v| v.parse().ok())
