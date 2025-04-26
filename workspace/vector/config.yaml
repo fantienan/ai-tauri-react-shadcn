@@ -1,4 +1,2 @@
-
-      mbtiles:
-        paths: mbtiles
-    
+mbtiles:
+  paths: mbtiles

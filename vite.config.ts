@@ -5,7 +5,10 @@ import react from '@vitejs/plugin-react-swc'
 import { defineConfig } from 'vite'
 
 const genWatchIgnore = ({ includes }: { includes: string[] }) => {
-  return fs.readdirSync(path.resolve(__dirname)).filter((file) => includes.some((v) => v === file))
+  return fs.readdirSync(path.resolve(__dirname)).reduce((prev, file) => {
+    if (!includes.some((v) => v === file)) prev.push(path.resolve(__dirname, file))
+    return prev
+  }, [] as string[])
 }
 
 export default defineConfig({

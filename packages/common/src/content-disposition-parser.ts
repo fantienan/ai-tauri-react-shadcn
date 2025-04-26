@@ -138,7 +138,12 @@ function decodefield(str: string) {
       value = getlatin1(binary)
       break
     case 'utf-8':
-      value = Buffer.from(binary, 'binary').toString('utf8')
+      const bytes = new Uint8Array(binary.length)
+      for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i) & 0xff
+      }
+      // 使用 TextDecoder 解码为 UTF-8
+      value = new TextDecoder('utf-8').decode(bytes)
       break
     default:
       throw new TypeError('unsupported charset in extended field')
@@ -187,7 +192,7 @@ export function parse(string: string) {
   let value: any = null
 
   // calculate index to start at
-  index = PARAM_REGEXP.lastIndex = match[0].substring(-1) === ';' ? index - 1 : index
+  index = PARAM_REGEXP.lastIndex = match[0].at(-1) === ';' ? index - 1 : index
 
   // match parameters
   while ((match = PARAM_REGEXP.exec(string))) {

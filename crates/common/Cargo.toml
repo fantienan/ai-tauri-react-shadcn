@@ -11,3 +11,4 @@ tokio-util ={workspace = true}
 dotenv-flow = {workspace = true}
 log={workspace = true}
 archflow = "0.1.4"
+percent-encoding = "2.3.1"
