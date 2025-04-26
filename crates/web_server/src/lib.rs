@@ -1,4 +1,5 @@
 use sea_orm::{ConnectOptions, Database};
+use std::time::Duration;
 use tracing::{error, info};
 use web_server_migration::{Migrator, MigratorTrait};
 mod controller;
@@ -15,8 +16,15 @@ async fn start() {
   utils::tracing::init_tracing();
   info!("初始化日志系统成功");
   info!("初始化数据库链接...");
-  let opt = ConnectOptions::new(&config.db_url);
-  let db = Database::connect(opt).await.expect("数据库连接失败");
+  let mut options = ConnectOptions::new(&config.db_url);
+  options
+    .max_connections(config.max_connections)
+    .min_connections(config.min_connections)
+    .connect_timeout(Duration::from_secs(config.connect_timeout_secs))
+    .idle_timeout(Duration::from_secs(config.idle_timeout_secs))
+    .max_lifetime(Duration::from_secs(config.max_lifetime_secs))
+    .sqlx_logging(config.sqlx_logging);
+  let db = Database::connect(options).await.expect("数据库连接失败");
   if let Err(err) = db.ping().await {
     error!("数据库连接失败: {}", err);
     std::process::exit(1);

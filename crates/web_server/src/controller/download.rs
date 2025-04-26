@@ -1,6 +1,7 @@
 use crate::service::chat;
 use crate::service::message;
 use crate::utils::{common::AppState, error::DownloadError};
+
 use axum::{
   Json,
   body::Body,
@@ -10,19 +11,17 @@ use axum::{
 };
 use serde::Deserialize;
 use std::path;
+use tracing::{debug, info};
 
 pub async fn download_code(
   state: State<AppState>,
   Json(payload): Json<DownloadCode>,
 ) -> Result<Response, DownloadError> {
   let file_type = payload.file_type.as_deref().unwrap_or("zip");
-  log::info!("正在下载代码...");
-  log::info!(
+  info!("正在下载代码...");
+  info!(
     "参数 chart_id: {}, message_id: {}, template_src_dir: {}, file_type: {}",
-    payload.chat_id,
-    payload.message_id,
-    payload.template_src_dir,
-    file_type
+    payload.chat_id, payload.message_id, payload.template_src_dir, file_type
   );
   let chat = chat::find_by_id(&state.db, &payload.chat_id)
     .await
@@ -33,6 +32,7 @@ pub async fn download_code(
     .await
     .map_err(|e| DownloadError::MessageQueryError(e.to_string()))?
     .ok_or_else(|| DownloadError::MessageNotFound(payload.message_id.clone()))?;
+  debug!("{:?}", message);
 
   let path = path::PathBuf::from(&payload.template_src_dir);
   let file_bytes = common::download::code(&path)
