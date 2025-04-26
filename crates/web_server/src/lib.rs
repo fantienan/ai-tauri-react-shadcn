@@ -50,7 +50,18 @@ async fn start() {
   };
   info!("服务启动成功");
 
-  utils::common::list_afinet_netifas(&config.port);
+  // 获取并显示所有网络接口的IP地址
+  match local_ip_address::list_afinet_netifas() {
+    Ok(network_interfaces) => {
+      for (_, ip) in network_interfaces.iter() {
+        if ip.is_ipv4() && !ip.is_loopback() {
+          info!("服务地址: http://{:?}:{}", ip, config.port);
+        }
+      }
+    }
+    Err(e) => error!("无法获取网络接口信息: {}", e),
+  }
+
   if let Err(err) = axum::serve(listener, app).await {
     error!("服务运行时错误: {}", err);
   }
