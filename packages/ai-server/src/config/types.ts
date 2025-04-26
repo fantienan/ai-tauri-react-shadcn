@@ -1,5 +1,4 @@
 import type { FastifyCorsOptions, FastifyCorsOptionsDelegate } from '@fastify/cors'
-import type { Config } from 'drizzle-kit'
 
 export type BizConfig = {
   isProductionEnvironment: boolean
@@ -15,11 +14,6 @@ export type BizConfig = {
     deepseek: {
       apiKey: string
       BASE_URL: string
-    }
-  }
-  drizzleKit: Config & {
-    dbCredentials: {
-      url: string
     }
   }
   sqlite: {

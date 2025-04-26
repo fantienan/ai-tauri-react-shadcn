@@ -1,4 +1,12 @@
+import './src/config/env.ts'
 import { defineConfig } from 'drizzle-kit'
-import { config } from './src/config/index.ts'
 
-export default defineConfig({ ...config.drizzleKit, out: './src/database/migrations' })
+export default defineConfig({
+  schema: './src/database/schema.ts',
+  out: './src/database/migrations',
+  dialect: 'sqlite',
+  verbose: true,
+  dbCredentials: {
+    url: process.env.SQLITE_DATABASE_URL!,
+  },
+})

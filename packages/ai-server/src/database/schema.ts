@@ -2,44 +2,52 @@ import { type InferSelectModel } from 'drizzle-orm'
 import { integer, primaryKey, real, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 import { v4 as uuidv4 } from 'uuid'
 
-export const orderProductDetails = sqliteTable('order_product_details', {
-  客户编码: integer('客户编码'),
-  客户类型: text('客户类型', { length: 255 }),
-  省份: text('省份', { length: 255 }),
-  城市: text('城市', { length: 255 }),
-  城市等级: text('城市等级', { length: 255 }),
-  门店类型: text('门店类型', { length: 255 }),
-  门店编码: integer('门店编码'),
-  会员编码: integer('会员编码'),
-  宝宝年龄段: text('宝宝年龄段', { length: 255 }),
-  性别: text('性别', { length: 255 }),
-  人群分类: text('人群分类', { length: 255 }),
-  线上订单号: text('线上订单号', { length: 255 }),
-  支付日期: text('支付日期', { length: 255 }),
-  核销日期: text('核销日期', { length: 255 }),
-  关联订单号: text('关联订单号', { length: 255 }),
-  '1级品类': text('1级品类', { length: 255 }),
-  '2级品类': text('2级品类', { length: 255 }),
-  连带1级品类: text('连带1级品类', { length: 255 }),
-  连带2级品类: text('连带2级品类', { length: 255 }),
-  品牌名称: text('品牌名称', { length: 255 }),
-  连带品牌名称: text('连带品牌名称', { length: 255 }),
-  线上商品编码: text('线上商品编码', { length: 255 }),
-  连带商品编码: text('连带商品编码', { length: 255 }),
-  营销活动类型: text('营销活动类型', { length: 255 }),
-  场景名称: text('场景名称', { length: 255 }),
-  支付核销天数差: integer('支付核销天数差'),
-  线上销售额: real('线上销售额'),
-  连带销售额: real('连带销售额'),
+export const dailySummary = sqliteTable('daily_summary', {
+  id: text('id')
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => uuidv4()),
+  customerCode: integer('customer_code'),
+  memberCode: integer('member_code'),
+  visitDate: text('visit_date', { length: 255 }),
+  visitTimePeriod: integer('visit_time_period'),
+  weixinId: integer('weixin_id'),
+  pv: integer(),
 })
 
-export const dailySummary = sqliteTable('daily_summary', {
-  客户编码: integer('客户编码'),
-  会员编码: integer('会员编码'),
-  访问日期: text('访问日期', { length: 255 }),
-  访问时段: integer('访问时段'),
-  微信场景id: integer('微信场景ID'),
-  pv: integer('PV'),
+export const orderProductDetails = sqliteTable('order_product_details', {
+  id: text('id')
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => uuidv4()),
+  customerCode: integer('customer_code'),
+  custormerType: text('custormer_type', { length: 255 }),
+  province: text({ length: 255 }),
+  city: text({ length: 255 }),
+  cityLevel: text('city_level', { length: 255 }),
+  storeType: text('store_type', { length: 255 }),
+  storeCode: integer('store_code'),
+  custromerCode: integer('custromer_code'),
+  babyAgeGroup: text('baby_age_group', { length: 255 }),
+  gender: text({ length: 255 }),
+  crowdType: text('crowd_type', { length: 255 }),
+  onlineOrder: text('online_order', { length: 255 }),
+  paymentDate: text('payment_date', { length: 255 }),
+  writeOffDate: text('write_off_date', { length: 255 }),
+  associatedOrderNumber: text('associated_order_number', { length: 255 }),
+  firstCategory: text('first_category', { length: 255 }),
+  secondaryCategory: text('secondary_category', { length: 255 }),
+  relatedFirstCategory: text('related_first_category', { length: 255 }),
+  relatedSecondaryCategory: text('related_secondary_category', { length: 255 }),
+  brandName: text('brand_name', { length: 255 }),
+  relatedBrandName: text('related_brand_name', { length: 255 }),
+  onlineCommodityCode: text('online_commodity_code', { length: 255 }),
+  relatedOnlineCommodityCode: text('related_online_commodity_code', { length: 255 }),
+  marketingCampaignType: text('marketing_campaign_type', { length: 255 }),
+  sceneName: text('scene_name', { length: 255 }),
+  paymentWriteOffDaysDifference: integer('payment_write_off_days_difference'),
+  onlineSales: real('online_sales'),
+  relatedSales: real('related_sales'),
 })
 
 export const user = sqliteTable('user', {

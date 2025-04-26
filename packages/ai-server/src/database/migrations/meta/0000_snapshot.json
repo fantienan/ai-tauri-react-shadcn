@@ -1,49 +1,105 @@
 {
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
   "version": "6",
   "dialect": "sqlite",
-  "id": "0675019c-74ff-4cdb-9f99-3b05b3a5cd9e",
-  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
+    "vote": {
+      "name": "vote",
+      "columns": {
+        "chat_id": {
+          "autoincrement": false,
+          "name": "chat_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "message_id": {
+          "autoincrement": false,
+          "name": "message_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_upvoted": {
+          "autoincrement": false,
+          "name": "is_upvoted",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "vote_chat_id_message_id_pk": {
+          "columns": ["chat_id", "message_id"],
+          "name": "vote_chat_id_message_id_pk"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "vote_message_id_message_id_fk": {
+          "name": "vote_message_id_message_id_fk",
+          "tableFrom": "vote",
+          "tableTo": "message",
+          "columnsFrom": ["message_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "vote_chat_id_chat_id_fk": {
+          "name": "vote_chat_id_chat_id_fk",
+          "tableFrom": "vote",
+          "tableTo": "chat",
+          "columnsFrom": ["chat_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
     "chat": {
       "name": "chat",
       "columns": {
         "id": {
+          "autoincrement": false,
           "name": "id",
           "type": "text",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "created_at": {
+          "autoincrement": false,
           "name": "created_at",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "title": {
+          "autoincrement": false,
           "name": "title",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "user_id": {
+          "autoincrement": false,
           "name": "user_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "visibility": {
+          "default": "'private'",
+          "autoincrement": false,
           "name": "visibility",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'private'"
+          "notNull": true
         }
       },
+      "compositePrimaryKeys": {},
       "indexes": {},
       "foreignKeys": {
         "chat_user_id_user_id_fk": {
@@ -56,59 +112,6 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
-    "daily_summary": {
-      "name": "daily_summary",
-      "columns": {
-        "客户编码": {
-          "name": "客户编码",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "会员编码": {
-          "name": "会员编码",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "访问日期": {
-          "name": "访问日期",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "访问时段": {
-          "name": "访问时段",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "微信场景ID": {
-          "name": "微信场景ID",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "PV": {
-          "name": "PV",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
@@ -116,48 +119,49 @@
       "name": "message",
       "columns": {
         "id": {
+          "autoincrement": false,
           "name": "id",
           "type": "text",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "chat_id": {
+          "autoincrement": false,
           "name": "chat_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "role": {
+          "autoincrement": false,
           "name": "role",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "parts": {
+          "autoincrement": false,
           "name": "parts",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "attachments": {
+          "autoincrement": false,
           "name": "attachments",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "created_at": {
+          "autoincrement": false,
           "name": "created_at",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
+      "compositePrimaryKeys": {},
       "indexes": {},
       "foreignKeys": {
         "message_chat_id_chat_id_fk": {
@@ -170,213 +174,6 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
-    "order_product_details": {
-      "name": "order_product_details",
-      "columns": {
-        "客户编码": {
-          "name": "客户编码",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "客户类型": {
-          "name": "客户类型",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "省份": {
-          "name": "省份",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "城市": {
-          "name": "城市",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "城市等级": {
-          "name": "城市等级",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "门店类型": {
-          "name": "门店类型",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "门店编码": {
-          "name": "门店编码",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "会员编码": {
-          "name": "会员编码",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "宝宝年龄段": {
-          "name": "宝宝年龄段",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "性别": {
-          "name": "性别",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "人群分类": {
-          "name": "人群分类",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "线上订单号": {
-          "name": "线上订单号",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "支付日期": {
-          "name": "支付日期",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "核销日期": {
-          "name": "核销日期",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "关联订单号": {
-          "name": "关联订单号",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "1级品类": {
-          "name": "1级品类",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "2级品类": {
-          "name": "2级品类",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "连带1级品类": {
-          "name": "连带1级品类",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "连带2级品类": {
-          "name": "连带2级品类",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "品牌名称": {
-          "name": "品牌名称",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "连带品牌名称": {
-          "name": "连带品牌名称",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "线上商品编码": {
-          "name": "线上商品编码",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "连带商品编码": {
-          "name": "连带商品编码",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "营销活动类型": {
-          "name": "营销活动类型",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "场景名称": {
-          "name": "场景名称",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "支付核销天数差": {
-          "name": "支付核销天数差",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "线上销售额": {
-          "name": "线上销售额",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "连带销售额": {
-          "name": "连带销售额",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
@@ -384,92 +181,309 @@
       "name": "user",
       "columns": {
         "id": {
+          "autoincrement": false,
           "name": "id",
           "type": "text",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "email": {
+          "autoincrement": false,
           "name": "email",
           "type": "text(64)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "password": {
+          "autoincrement": false,
           "name": "password",
           "type": "text(64)",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": false
         },
         "created_at": {
+          "autoincrement": false,
           "name": "created_at",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
+      "compositePrimaryKeys": {},
       "indexes": {},
       "foreignKeys": {},
-      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
-    "vote": {
-      "name": "vote",
+    "daily_summary": {
+      "name": "daily_summary",
       "columns": {
-        "chat_id": {
-          "name": "chat_id",
+        "id": {
+          "autoincrement": false,
+          "name": "id",
           "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "primaryKey": true,
+          "notNull": true
         },
-        "message_id": {
-          "name": "message_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "is_upvoted": {
-          "name": "is_upvoted",
+        "customer_code": {
+          "autoincrement": false,
+          "name": "customer_code",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "vote_chat_id_chat_id_fk": {
-          "name": "vote_chat_id_chat_id_fk",
-          "tableFrom": "vote",
-          "tableTo": "chat",
-          "columnsFrom": ["chat_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "notNull": false
         },
-        "vote_message_id_message_id_fk": {
-          "name": "vote_message_id_message_id_fk",
-          "tableFrom": "vote",
-          "tableTo": "message",
-          "columnsFrom": ["message_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+        "member_code": {
+          "autoincrement": false,
+          "name": "member_code",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "visit_date": {
+          "autoincrement": false,
+          "name": "visit_date",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "visit_time_period": {
+          "autoincrement": false,
+          "name": "visit_time_period",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "weixin_id": {
+          "autoincrement": false,
+          "name": "weixin_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pv": {
+          "autoincrement": false,
+          "name": "pv",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
         }
       },
-      "compositePrimaryKeys": {
-        "pk": {
-          "columns": ["chat_id", "message_id"],
-          "name": "pk"
+      "compositePrimaryKeys": {},
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "order_product_details": {
+      "name": "order_product_details",
+      "columns": {
+        "id": {
+          "autoincrement": false,
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "customer_code": {
+          "autoincrement": false,
+          "name": "customer_code",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "custormer_type": {
+          "autoincrement": false,
+          "name": "custormer_type",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "province": {
+          "autoincrement": false,
+          "name": "province",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "city": {
+          "autoincrement": false,
+          "name": "city",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "city_level": {
+          "autoincrement": false,
+          "name": "city_level",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "store_type": {
+          "autoincrement": false,
+          "name": "store_type",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "store_code": {
+          "autoincrement": false,
+          "name": "store_code",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "custromer_code": {
+          "autoincrement": false,
+          "name": "custromer_code",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "baby_age_group": {
+          "autoincrement": false,
+          "name": "baby_age_group",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "gender": {
+          "autoincrement": false,
+          "name": "gender",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crowd_type": {
+          "autoincrement": false,
+          "name": "crowd_type",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "online_order": {
+          "autoincrement": false,
+          "name": "online_order",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "payment_date": {
+          "autoincrement": false,
+          "name": "payment_date",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "write_off_date": {
+          "autoincrement": false,
+          "name": "write_off_date",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "associated_order_number": {
+          "autoincrement": false,
+          "name": "associated_order_number",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "first_category": {
+          "autoincrement": false,
+          "name": "first_category",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "secondary_category": {
+          "autoincrement": false,
+          "name": "secondary_category",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "related_first_category": {
+          "autoincrement": false,
+          "name": "related_first_category",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "related_secondary_category": {
+          "autoincrement": false,
+          "name": "related_secondary_category",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "brand_name": {
+          "autoincrement": false,
+          "name": "brand_name",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "related_brand_name": {
+          "autoincrement": false,
+          "name": "related_brand_name",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "online_commodity_code": {
+          "autoincrement": false,
+          "name": "online_commodity_code",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "related_online_commodity_code": {
+          "autoincrement": false,
+          "name": "related_online_commodity_code",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "marketing_campaign_type": {
+          "autoincrement": false,
+          "name": "marketing_campaign_type",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "scene_name": {
+          "autoincrement": false,
+          "name": "scene_name",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "payment_write_off_days_difference": {
+          "autoincrement": false,
+          "name": "payment_write_off_days_difference",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "online_sales": {
+          "autoincrement": false,
+          "name": "online_sales",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "related_sales": {
+          "autoincrement": false,
+          "name": "related_sales",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
         }
       },
+      "compositePrimaryKeys": {},
+      "indexes": {},
+      "foreignKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
     }
@@ -480,8 +494,5 @@
     "schemas": {},
     "tables": {},
     "columns": {}
-  },
-  "internal": {
-    "indexes": {}
   }
 }
