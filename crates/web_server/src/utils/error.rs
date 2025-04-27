@@ -1,8 +1,3 @@
-use axum::{
-  body::Body,
-  http::{Response, StatusCode},
-  response::IntoResponse,
-};
 use thiserror::Error;
 
 #[derive(Debug, Error)]
@@ -11,6 +6,8 @@ pub enum DownloadError {
   ChatQueryError(String),
   #[error("查询消息错误: {0}")]
   MessageQueryError(String),
+  #[error("解析消息错误: {0}")]
+  MessageParseError(String),
   #[error("未找到聊天记录: {0}")]
   ChatNotFound(String),
   #[error("未找到消息: {0}")]

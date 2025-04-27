@@ -4,5 +4,4 @@ onlyBuiltDependencies:
   - "better-sqlite3"
 packages:
   - "packages/common"
-  - "pacakges/template"
   - "pacakges/types"

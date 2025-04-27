@@ -17,6 +17,5 @@ export type BizScope = {
     SM_MAPBOX_TOKEN: string
     SM_GEOVIS_TOKEN: string
     SM_TIANDITU_TOKEN: string
-    template_src_dir: string
   }
 }

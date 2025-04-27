@@ -39,7 +39,10 @@ async fn start() {
 
   info!("初始化Web服务...");
 
-  let app = utils::app::create_app(utils::common::AppState { db });
+  let app = utils::app::create_app(utils::common::AppState {
+    db,
+    config: config.clone(),
+  });
 
   let listener = match tokio::net::TcpListener::bind(format!("0.0.0.0:{}", config.port)).await {
     Ok(listener) => listener,
@@ -54,7 +57,7 @@ async fn start() {
   match local_ip_address::list_afinet_netifas() {
     Ok(network_interfaces) => {
       for (_, ip) in network_interfaces.iter() {
-        if ip.is_ipv4() && !ip.is_loopback() {
+        if ip.is_ipv4() {
           info!("服务地址: http://{:?}:{}", ip, config.port);
         }
       }

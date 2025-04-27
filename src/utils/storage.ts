@@ -10,7 +10,6 @@ const getScope = () => {
       SM_MAPBOX_TOKEN: '',
       SM_GEOVIS_TOKEN: '',
       SM_TIANDITU_TOKEN: '',
-      template_src_dir: '',
     },
   }
   return defautlBizScope

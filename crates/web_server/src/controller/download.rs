@@ -11,18 +11,27 @@ use axum::{
 };
 use serde::Deserialize;
 use std::path;
-use tracing::{debug, info};
+use tracing::info;
+use web_server_entity::message::{InvocationResult, MessagePart, Model};
 
 pub async fn download_code(
   state: State<AppState>,
   Json(payload): Json<DownloadCode>,
 ) -> Result<Response, DownloadError> {
-  let file_type = payload.file_type.as_deref().unwrap_or("zip");
+  let file_type = payload
+    .file_type
+    .as_deref()
+    .unwrap_or_else(|| state.config.download_code_file_type.as_str());
+  let template_src_dir = payload
+    .template_src_dir
+    .as_deref()
+    .unwrap_or(&state.config.template_src_dir);
   info!("正在下载代码...");
   info!(
     "参数 chart_id: {}, message_id: {}, template_src_dir: {}, file_type: {}",
-    payload.chat_id, payload.message_id, payload.template_src_dir, file_type
+    payload.chat_id, payload.message_id, template_src_dir, file_type
   );
+
   let chat = chat::find_by_id(&state.db, &payload.chat_id)
     .await
     .map_err(|e| DownloadError::ChatQueryError(e.to_string()))?
@@ -32,9 +41,10 @@ pub async fn download_code(
     .await
     .map_err(|e| DownloadError::MessageQueryError(e.to_string()))?
     .ok_or_else(|| DownloadError::MessageNotFound(payload.message_id.clone()))?;
-  debug!("{:?}", message);
 
-  let path = path::PathBuf::from(&payload.template_src_dir);
+  let data = extract_analyze_result(&message);
+
+  let path = path::PathBuf::from(&template_src_dir);
   let file_bytes = common::download::code(&path)
     .await
     .map_err(|e| DownloadError::DownloadFailed(e.to_string()))?;
@@ -58,7 +68,7 @@ pub async fn download_code(
 pub struct DownloadCode {
   chat_id: String,
   message_id: String,
-  template_src_dir: String,
+  template_src_dir: Option<String>,
   file_type: Option<String>,
 }
 
@@ -71,7 +81,21 @@ impl IntoResponse for DownloadError {
       DownloadError::ChatNotFound(_) | DownloadError::MessageNotFound(_) => {
         (StatusCode::NOT_FOUND, self.to_string())
       }
+      DownloadError::MessageParseError(_) => (StatusCode::BAD_REQUEST, self.to_string()),
     };
     (status, message).into_response()
   }
+}
+
+fn extract_analyze_result(message: &Model) -> Option<InvocationResult> {
+  if let Ok(parts) = message.parse_parts() {
+    for part in parts {
+      if let MessagePart::ToolInvocation { data } = part {
+        if data.tool_name == "sqliteAnalyze" && data.state == "result" {
+          return Some(data.result);
+        }
+      }
+    }
+  }
+  None
 }
