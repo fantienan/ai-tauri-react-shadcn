@@ -1,13 +1,13 @@
 use crate::service::chat;
 use crate::service::message;
-use crate::utils::{common::AppState, error::DownloadError};
+use crate::utils::{common::AppState, error::*};
 
 use axum::{
   Json,
   body::Body,
   extract::State,
   http::{StatusCode, header},
-  response::{IntoResponse, Response},
+  response::Response,
 };
 use serde::Deserialize;
 use std::path;
@@ -17,7 +17,7 @@ use web_server_entity::message::{InvocationResult, MessagePart, Model};
 pub async fn download_code(
   state: State<AppState>,
   Json(payload): Json<DownloadCode>,
-) -> Result<Response, DownloadError> {
+) -> Result<Response, AppError> {
   let file_type = payload
     .file_type
     .as_deref()
@@ -34,20 +34,20 @@ pub async fn download_code(
 
   let chat = chat::find_by_id(&state.db, &payload.chat_id)
     .await
-    .map_err(|e| DownloadError::ChatQueryError(e.to_string()))?
-    .ok_or_else(|| DownloadError::ChatNotFound(payload.chat_id.clone()))?;
+    .map_err(|e| AppError::ChatQueryError(e.to_string()))?
+    .ok_or_else(|| AppError::ChatNotFound(payload.chat_id.clone()))?;
 
   let message = message::find_by_id(&state.db, &payload.message_id)
     .await
-    .map_err(|e| DownloadError::MessageQueryError(e.to_string()))?
-    .ok_or_else(|| DownloadError::MessageNotFound(payload.message_id.clone()))?;
+    .map_err(|e| AppError::MessageQueryError(e.to_string()))?
+    .ok_or_else(|| AppError::MessageNotFound(payload.message_id.clone()))?;
 
   let data = extract_analyze_result(&message);
 
   let path = path::PathBuf::from(&template_src_dir);
   let file_bytes = common::download::code(&path)
     .await
-    .map_err(|e| DownloadError::DownloadFailed(e.to_string()))?;
+    .map_err(|e| AppError::DownloadFailed(e.to_string()))?;
 
   let filename = format!("{}.{}", chat.title, file_type);
   // 使用 UTF-8 编码和 RFC 8187 格式处理文件名
@@ -70,21 +70,6 @@ pub struct DownloadCode {
   message_id: String,
   template_src_dir: Option<String>,
   file_type: Option<String>,
-}
-
-impl IntoResponse for DownloadError {
-  fn into_response(self) -> Response<Body> {
-    let (status, message) = match &self {
-      DownloadError::ChatQueryError(_)
-      | DownloadError::MessageQueryError(_)
-      | DownloadError::DownloadFailed(_) => (StatusCode::INTERNAL_SERVER_ERROR, self.to_string()),
-      DownloadError::ChatNotFound(_) | DownloadError::MessageNotFound(_) => {
-        (StatusCode::NOT_FOUND, self.to_string())
-      }
-      DownloadError::MessageParseError(_) => (StatusCode::BAD_REQUEST, self.to_string()),
-    };
-    (status, message).into_response()
-  }
 }
 
 fn extract_analyze_result(message: &Model) -> Option<InvocationResult> {

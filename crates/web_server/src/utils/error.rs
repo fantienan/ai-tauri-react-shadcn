@@ -1,7 +1,11 @@
 use thiserror::Error;
 
 #[derive(Debug, Error)]
-pub enum DownloadError {
+pub enum AppError {
+  #[error("Resource not found")]
+  NotFound,
+  #[error("Template rendering error: {0}")]
+  Render(#[from] askama::Error),
   #[error("查询聊天记录错误: {0}")]
   ChatQueryError(String),
   #[error("查询消息错误: {0}")]

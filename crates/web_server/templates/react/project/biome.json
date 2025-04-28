@@ -7,7 +7,8 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": ["**/node_modules", "public", "src-tauri"]
+    "ignore": ["**/node_modules", "public", "src-tauri", "**/dist", "**/build"],
+    "include": ["crates/**/*.{ts,tsx}"]
   },
   "formatter": {
     "enabled": true,
@@ -19,7 +20,8 @@
     "lineWidth": 120,
     "attributePosition": "auto",
     "bracketSpacing": true,
-    "ignore": ["src/assets", "**/node_modules", "**/*.hbs", "**/*.md", "**/*.svg"]
+    "include": ["crates/**/*.{ts,tsx}"],
+    "ignore": ["**/dist", "**/build", "**/assets", "**/node_modules", "**/*.hbs", "**/*.md", "**/*.svg", ".env*"]
   },
   "organizeImports": {
     "enabled": true

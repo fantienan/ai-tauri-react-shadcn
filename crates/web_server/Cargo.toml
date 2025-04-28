@@ -29,3 +29,5 @@ web_server_entity = { path = "../web_server_entity" }
 web_server_migration = { path = "../web_server_migration" }
 thiserror.workspace = true
 askama = "0.14.0"
+handlebars = "6.3.2"
+askama_web = "0.14.0"
