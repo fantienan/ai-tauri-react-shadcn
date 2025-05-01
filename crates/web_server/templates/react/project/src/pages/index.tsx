@@ -5,7 +5,7 @@
 // import useSWR from 'swr'
 
 export default function IndexPage() {
-//   const { data } = useSWR<PageConfig>('app.json', fetcher, { fallbackData: defaultPageConfig })
+  //   const { data } = useSWR<PageConfig>('app.json', fetcher, { fallbackData: defaultPageConfig })
   return (
     <div className="overflow-hidden w-dvw h-dvh justify-center flex">
       <div className="w-200 flex flex-col gap-4">
