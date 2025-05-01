@@ -26,15 +26,17 @@ const a = [
 
 export default async function (fastify: FastifyInstance) {
   const agent = fastify.bizAgent
-  const dashboard = fastify.bizDashboard
+  const dashboardSchema = fastify.bizDashboardSchema
   const model = agent.utils.llmProvider.languageModel('chat-model-reasoning')
   fastify
     .withTypeProvider<FastifyZodOpenApiTypeProvider>()
     .post(fastify.bizAppConfig.routes.test.dashboard, async function (request, reply) {
       const result = await generateObject({
         model,
-        schema: dashboard.zod,
-        prompt: '生成dashboard页面配置，数据源为：' + JSON.stringify(a),
+        schema: dashboardSchema.zod,
+        // prompt: '生成dashboardSchema页面配置，数据源为：' + JSON.stringify(a),
+        messages: [],
+
         // tools: agent.tools,
       })
 

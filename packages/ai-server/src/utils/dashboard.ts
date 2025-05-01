@@ -13,7 +13,7 @@ const genSchemaItem = (name: string) => {
   )
 }
 
-const dashboardSchema = z.object({
+const zodSchema = z.object({
   title: genSchemaItem('Dashboard 标题'),
   chart: z
     .array(
@@ -50,7 +50,4 @@ const dashboardSchema = z.object({
     .optional(),
 })
 
-export const dashboard = {
-  zod: dashboardSchema,
-  json: zodToJsonSchema(dashboardSchema),
-}
+export const dashboardSchema = { zod: zodSchema, json: zodToJsonSchema(zodSchema) }

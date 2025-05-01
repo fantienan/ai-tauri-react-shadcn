@@ -15,7 +15,12 @@ import { z } from 'zod'
 type ResponseMessageWithoutId = CoreToolMessage | CoreAssistantMessage
 type ResponseMessage = ResponseMessageWithoutId & { id: string }
 
-export const regularPrompt = `你是一位友善的助手！请保持你的回答简洁且有帮助。`
+export const regularPrompt = `你是一位友善的助手，你的回答要满足如下要求：
+- 保持你的回答简洁且有帮助，
+- 返回markdown格式
+- 如果用户想分析数据，则分析结果数据的结构要满足如下要求：
+    - 用value作为统计值的字段名称
+    - 用name作为统计字段的字段名称`
 
 export const systemPrompt = () => {
   return regularPrompt

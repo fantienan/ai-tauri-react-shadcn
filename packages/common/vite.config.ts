@@ -6,7 +6,10 @@ export default defineConfig({
   plugins: [
     dts({
       include: ['src'],
-      //   rollupTypes: true,
+      rollupTypes: true, // 将所有 .d.ts 合并为一个文件
+      insertTypesEntry: true, // 在输出目录生成统一的 index.d.ts
+      copyDtsFiles: true, // 同时复制引用的其他 .d.ts 文件
+      tsconfigPath: './tsconfig.json',
     }),
   ],
   build: {
@@ -20,11 +23,6 @@ export default defineConfig({
       // 将你不想打包进库的依赖放在这里
       external: [],
       output: {
-        globals: {},
-        // 保持目录结构
-        // preserveModules: true,
-        preserveModulesRoot: 'src',
-
         // 手动分块，将第三方依赖放到单独文件中
         manualChunks: (id) => {
           // 将 node_modules 中的代码单独打包

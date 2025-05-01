@@ -116,3 +116,24 @@ export const vote = sqliteTable(
 )
 
 export type Vote = InferSelectModel<typeof vote>
+
+export const dashboard = sqliteTable(
+  'dashboard',
+  {
+    chatId: text('chat_id')
+      .notNull()
+      .references(() => chat.id),
+    messageId: text('message_id')
+      .notNull()
+      .references(() => message.id),
+    createdAt: text('created_at')
+      .notNull()
+      .$defaultFn(() => new Date().toISOString()),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id),
+    data: text('data', { mode: 'json' }).notNull(),
+  },
+
+  (table) => [primaryKey({ name: 'pk', columns: [table.chatId, table.messageId] })],
+)

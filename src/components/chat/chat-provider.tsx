@@ -1,9 +1,8 @@
 import { ThemeStoreProps } from '@/stores'
 import type { User } from '@/types'
-import { fetcher } from '@/utils'
+import type { MakeReqiured } from '@/types'
 import type { UseChatOptions } from '@ai-sdk/react'
 import React from 'react'
-import type { MakeReqiured } from 'types'
 
 export type ChatbarContextProps = Pick<ThemeStoreProps, 'theme' | 'setTheme'> & {
   user?: User

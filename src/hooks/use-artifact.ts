@@ -3,8 +3,6 @@ import { useCallback, useMemo } from 'react'
 import useSWR from 'swr'
 
 export const initialArtifactData: UIArtifact = {
-  documentId: 'init',
-  content: '',
   kind: 'text',
   title: '',
   status: 'idle',
@@ -40,13 +38,9 @@ export const useArtifact = () => {
     },
     [setLocalArtifact],
   )
-  const { data: localArtifactMetadata, mutate: setLocalArtifactMetadata } = useSWR<any>(
-    () => (artifact.documentId ? `artifact-metadata-${artifact.documentId}` : null),
-    null,
-    {
-      fallbackData: null,
-    },
-  )
+  const { data: localArtifactMetadata, mutate: setLocalArtifactMetadata } = useSWR<any>(null, null, {
+    fallbackData: null,
+  })
   return useMemo(
     () => ({
       artifact,

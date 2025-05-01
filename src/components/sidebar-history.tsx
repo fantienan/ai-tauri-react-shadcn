@@ -94,7 +94,7 @@ export function SidebarHistory() {
     mutate,
   } = useSWRInfinite<ChatHistory>(
     getChatHistoryPaginationKey,
-    (input, init) => fetcher(input, init).then((res) => res.data as any),
+    (input: string, init?: RequestInit) => fetcher(input, init).then((res) => res.data as any),
     { fallbackData: [] },
   )
 

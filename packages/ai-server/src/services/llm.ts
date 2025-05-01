@@ -2,7 +2,7 @@ import { SQL, and, asc, desc, eq, gt, lt } from 'drizzle-orm'
 import type { FastifyInstance } from 'fastify'
 import { MakeOptional, MakeReqiured, MakeRequiredAndOptional } from 'types'
 import { z } from 'zod'
-import { chat, message, vote } from '../database/schema.ts'
+import { chat, dashboard, message, vote } from '../database/schema.ts'
 import * as schemas from '../schemas/index.ts'
 
 export type LlmService = ReturnType<typeof createLlmService>
@@ -146,6 +146,15 @@ export const createLlmService = (fastify: FastifyInstance) => {
           throw error
         }
       },
+      queryById: async function (id: (typeof message.$inferSelect)['id']) {
+        try {
+          const result = await db.select().from(message).where(eq(message.id, id)).limit(1)
+          return fastify.BizResult.success({ data: result[0] })
+        } catch (error) {
+          fastify.log.error(error)
+          throw error
+        }
+      },
       queryMessageByChatId: async function (params: Pick<typeof message.$inferSelect, 'chatId'>) {
         try {
           const result = await db
@@ -173,6 +182,17 @@ export const createLlmService = (fastify: FastifyInstance) => {
         try {
           await voteMessage(params)
           return fastify.BizResult.success()
+        } catch (error) {
+          fastify.log.error(error)
+          throw error
+        }
+      },
+    },
+    dashboard: {
+      insert: async function (params: typeof dashboard.$inferInsert) {
+        try {
+          const result = await db.insert(dashboard).values(params).returning()
+          return fastify.BizResult.success({ data: result[0] })
         } catch (error) {
           fastify.log.error(error)
           throw error

@@ -34,4 +34,7 @@ export const llm = {
     self: z.object({ chatId: z.string({ description: '聊天记录id' }) }),
     batch: createInsertSchema(schema.vote),
   },
+  dashboard: {
+    insert: createInsertSchema(schema.dashboard).pick({ chatId: true, messageId: true }),
+  },
 }

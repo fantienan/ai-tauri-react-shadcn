@@ -23,10 +23,11 @@ function PreviewMessageWrap(props: ComponentProps<typeof PreviewMessage>) {
         if (part.type === 'tool-invocation' && part.toolInvocation.toolName === 'sqliteAnalyze') {
           prev.showCode = true
           prev.showDownload = true
+          prev.showDashboard = true
         }
         return prev
       },
-      {} as { showCode?: boolean; showDownload?: boolean },
+      {} as { showCode?: boolean; showDownload?: boolean; showDashboard?: boolean },
     )
   }, [props.message])
   return <PreviewMessage {...props} {...messageActions} />

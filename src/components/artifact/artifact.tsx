@@ -6,17 +6,21 @@ import { UseChatHelpers } from '@ai-sdk/react'
 import { Attachment, UIMessage } from 'ai'
 import equal from 'fast-deep-equal'
 import { AnimatePresence, motion } from 'framer-motion'
+import { Download } from 'lucide-react'
 import { memo } from 'react'
 import { useWindowSize } from 'usehooks-ts'
+import { Dashboard } from '../dashboard'
 import { MultimodalInput } from '../multimodal-input'
+import { Button } from '../ui/button'
+import { Card } from '../ui/card'
 import { ArtifactCloseButton } from './artifact-close-button'
 import { ArtifactMessages } from './artifact-messages'
 
-export interface UIArtifact {
+const panelWidth = 500
+
+export type UIArtifact = {
   title: string
-  documentId: string
   kind: string
-  content: string
   isVisible: boolean
   status: 'streaming' | 'idle'
   boundingBox: {
@@ -25,7 +29,24 @@ export interface UIArtifact {
     width: number
     height: number
   }
-}
+} & (
+  | {
+      kind: 'dashboard'
+      paramater: {
+        chatId: string
+        messageId: string
+      }
+    }
+  | {
+      kind: 'document'
+      paramater: {
+        documentId: string
+      }
+    }
+  | {
+      kind: 'text'
+    }
+)
 
 function PureArtifact({
   chatId,
@@ -62,7 +83,7 @@ function PureArtifact({
   const { width: windowWidth, height: windowHeight } = useWindowSize()
   const isMobile = useIsMobile()
   const { open: isSidebarOpen } = useSidebar()
-
+  debugger
   return (
     <AnimatePresence>
       {artifact.isVisible && (
@@ -89,72 +110,63 @@ function PureArtifact({
           )}
 
           {!isMobile && (
-            <motion.div
-              className="relative w-[400px] bg-muted dark:bg-background h-dvh shrink-0"
-              initial={{ opacity: 0, x: 10, scale: 1 }}
-              animate={{
-                opacity: 1,
-                x: 0,
-                scale: 1,
-                transition: {
-                  delay: 0.2,
-                  type: 'spring',
-                  stiffness: 200,
-                  damping: 30,
-                },
-              }}
-              exit={{
-                opacity: 0,
-                x: 0,
-                scale: 1,
-                transition: { duration: 0 },
-              }}
-            >
-              {/* <AnimatePresence>
-                {!isCurrentVersion && (
-                  <motion.div
-                    className="left-0 absolute h-dvh w-[400px] top-0 bg-zinc-900/50 z-50"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                  />
-                )}
-              </AnimatePresence> */}
-
-              <div className="flex flex-col h-full justify-between items-center gap-4">
-                <ArtifactMessages
-                  chatId={chatId}
-                  status={status}
-                  votes={votes}
-                  messages={messages}
-                  setMessages={setMessages}
-                  reload={reload}
-                  isReadonly={isReadonly}
-                  artifactStatus={artifact.status}
-                />
-
-                <form className="flex flex-row gap-2 relative items-end w-full px-4 pb-4">
-                  <MultimodalInput
+            <div style={{ width: panelWidth }}>
+              <motion.div
+                className="relative w-full bg-muted dark:bg-background h-dvh shrink-0"
+                initial={{ opacity: 0, x: 10, scale: 1 }}
+                animate={{
+                  opacity: 1,
+                  x: 0,
+                  scale: 1,
+                  transition: {
+                    delay: 0.2,
+                    type: 'spring',
+                    stiffness: 200,
+                    damping: 30,
+                  },
+                }}
+                exit={{
+                  opacity: 0,
+                  x: 0,
+                  scale: 1,
+                  transition: { duration: 0 },
+                }}
+              >
+                <div className="flex flex-col h-full justify-between items-center gap-4">
+                  <ArtifactMessages
                     chatId={chatId}
-                    input={input}
-                    setInput={setInput}
-                    handleSubmit={handleSubmit}
                     status={status}
-                    stop={stop}
-                    attachments={attachments}
-                    setAttachments={setAttachments}
+                    votes={votes}
                     messages={messages}
-                    append={append}
-                    className="bg-background dark:bg-muted"
                     setMessages={setMessages}
+                    reload={reload}
+                    isReadonly={isReadonly}
+                    artifactStatus={artifact.status}
                   />
-                </form>
-              </div>
-            </motion.div>
+
+                  <form className="flex flex-row gap-2 relative items-end w-full px-4 pb-4">
+                    <MultimodalInput
+                      chatId={chatId}
+                      input={input}
+                      setInput={setInput}
+                      handleSubmit={handleSubmit}
+                      status={status}
+                      stop={stop}
+                      attachments={attachments}
+                      setAttachments={setAttachments}
+                      messages={messages}
+                      append={append}
+                      className="bg-background dark:bg-muted"
+                      setMessages={setMessages}
+                    />
+                  </form>
+                </div>
+              </motion.div>
+            </div>
           )}
 
           <motion.div
-            className="fixed dark:bg-muted bg-background h-dvh flex flex-col overflow-y-scroll md:border-l dark:border-zinc-700 border-zinc-200"
+            className="fixed dark:bg-muted bg-background h-dvh flex flex-col overflow-y-auto md:border-l dark:border-zinc-700 border-zinc-200"
             initial={
               isMobile
                 ? {
@@ -193,10 +205,10 @@ function PureArtifact({
                   }
                 : {
                     opacity: 1,
-                    x: 400,
+                    x: panelWidth,
                     y: 0,
                     height: windowHeight,
-                    width: windowWidth ? windowWidth - 400 : 'calc(100dvw-400px)',
+                    width: windowWidth ? windowWidth - panelWidth : `calc(100dvw - ${panelWidth}px)`,
                     borderRadius: 0,
                     transition: {
                       delay: 0,
@@ -218,79 +230,18 @@ function PureArtifact({
               },
             }}
           >
-            <div className="p-2 flex flex-row justify-between items-start">
-              <div className="flex flex-row gap-4 items-start">
-                <ArtifactCloseButton />
-
-                <div className="flex flex-col">
-                  <div className="font-medium">{artifact.title}</div>
-
-                  {/* {isContentDirty ? (
-                    <div className="text-sm text-muted-foreground">Saving changes...</div>
-                  ) : document ? (
-                    <div className="text-sm text-muted-foreground">
-                      {`Updated ${formatDistance(new Date(document.createdAt), new Date(), {
-                        addSuffix: true,
-                      })}`}
-                    </div>
-                  ) : (
-                    <div className="w-32 h-3 mt-2 bg-muted-foreground/20 rounded-md animate-pulse" />
-                  )} */}
-                </div>
+            <div className="p-2 flex flex-row justify-between items-center gap-4">
+              <ArtifactCloseButton />
+              <div className="font-medium">{artifact.title}</div>
+              <div className="flex-1 text-right">
+                <Button variant="ghost">
+                  <Download />
+                </Button>
               </div>
-
-              {/* <ArtifactActions
-                artifact={artifact}
-                currentVersionIndex={currentVersionIndex}
-                handleVersionChange={handleVersionChange}
-                isCurrentVersion={isCurrentVersion}
-                mode={mode}
-                metadata={metadata}
-                setMetadata={setMetadata}
-              /> */}
             </div>
-
-            {/* <div className="dark:bg-muted bg-background h-full overflow-y-scroll !max-w-full items-center">
-              <artifactDefinition.content
-                title={artifact.title}
-                content={isCurrentVersion ? artifact.content : getDocumentContentById(currentVersionIndex)}
-                mode={mode}
-                status={artifact.status}
-                currentVersionIndex={currentVersionIndex}
-                suggestions={[]}
-                onSaveContent={saveContent}
-                isInline={false}
-                isCurrentVersion={isCurrentVersion}
-                getDocumentContentById={getDocumentContentById}
-                isLoading={isDocumentsFetching && !artifact.content}
-                metadata={metadata}
-                setMetadata={setMetadata}
-              />
-
-              <AnimatePresence>
-                {isCurrentVersion && (
-                  <Toolbar
-                    isToolbarVisible={isToolbarVisible}
-                    setIsToolbarVisible={setIsToolbarVisible}
-                    append={append}
-                    status={status}
-                    stop={stop}
-                    setMessages={setMessages}
-                    artifactKind={artifact.kind}
-                  />
-                )}
-              </AnimatePresence>
-            </div> */}
-
-            {/* <AnimatePresence>
-              {!isCurrentVersion && (
-                <VersionFooter
-                  currentVersionIndex={currentVersionIndex}
-                  documents={documents}
-                  handleVersionChange={handleVersionChange}
-                />
-              )}
-            </AnimatePresence> */}
+            <Card className="flex-1 m-2 rounded-lg">
+              {artifact.kind === 'dashboard' && <Dashboard {...artifact.paramater} />}
+            </Card>
           </motion.div>
         </motion.div>
       )}
