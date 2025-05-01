@@ -40,6 +40,10 @@ const config: BizConfig = {
       message: '/message',
     },
     user: '/user',
+    test: {
+      prefix: '/test',
+      dashboard: '/dashboard',
+    },
   },
 }
 
