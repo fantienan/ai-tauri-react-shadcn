@@ -1,5 +1,5 @@
+import type { AnalyzeResult } from '@/types'
 import { useEffect, useRef } from 'react'
-import type { AnalyzeResult } from 'types'
 import embed, { VisualizationSpec } from 'vega-embed'
 
 type VegaChartProps = Omit<AnalyzeResult, 'chartRendererType' | 'data'> & {

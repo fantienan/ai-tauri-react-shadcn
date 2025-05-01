@@ -30,6 +30,7 @@ export type BizConfig = {
       chat: string
       vote: string
       message: string
+      dashboard: string
     }
     test: {
       prefix: string

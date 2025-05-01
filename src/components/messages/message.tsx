@@ -26,6 +26,7 @@ const PurePreviewMessage = ({
   isReadonly,
   showCode,
   showDownload,
+  showDashboard,
 }: {
   chatId: string
   message: UIMessage
@@ -36,6 +37,7 @@ const PurePreviewMessage = ({
   isReadonly: boolean
   showCode?: boolean
   showDownload?: boolean
+  showDashboard?: boolean
 }) => {
   const [mode, setMode] = useState<'view' | 'edit'>('view')
 
@@ -105,7 +107,7 @@ const PurePreviewMessage = ({
                       )}
                       <div
                         data-testid="message-content"
-                        className={cn('flex flex-col gap-4', {
+                        className={cn('flex flex-col gap-4 overflow-hidden', {
                           'bg-primary text-primary-foreground px-3 py-2 rounded-xl': message.role === 'user',
                         })}
                       >
@@ -166,6 +168,7 @@ const PurePreviewMessage = ({
                 isLoading={isLoading}
                 showCode={showCode}
                 showDownload={showDownload}
+                showDashboard={showDashboard}
               />
             )}
           </div>

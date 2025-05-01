@@ -1,4 +1,5 @@
-import { appendResponseMessages, createDataStreamResponse, streamText } from 'ai'
+import { appendResponseMessages, createDataStreamResponse, generateObject, streamText } from 'ai'
+import { convertToUIMessages } from 'common'
 import type { FastifyInstance } from 'fastify'
 import type { FastifyZodOpenApiTypeProvider } from 'fastify-zod-openapi'
 import { v4 as uuidv4 } from 'uuid'
@@ -30,15 +31,6 @@ export default async function (fastify: FastifyInstance) {
       },
     },
     async function (request, reply) {
-      //   const result = streamText({
-      //     model,
-      //     system: agent.utils.systemPrompt(),
-      //     messages: request.body.messages,
-      //     tools: agent.tools,
-      //     maxSteps: 5,
-      //     experimental_generateMessageId: uuidv4,
-      //   })
-      //   return reply.send(result.toDataStreamResponse({ getErrorMessage: agent.utils.getErrorMessage }))
       const { messages, id } = request.body
       const userMessage = agent.utils.getMostRecentUserMessage(messages)
 
@@ -79,6 +71,9 @@ export default async function (fastify: FastifyInstance) {
               maxSteps: 10,
               // experimental_transform: smoothStream({ chunking: 'word' }),
               experimental_generateMessageId: uuidv4,
+              onStepFinish: async ({ request }) => {
+                fastify.log.info(`onStepFinish: ${JSON.stringify(request.body)}`)
+              },
               onFinish: async ({ response }) => {
                 if (session.user?.id) {
                   try {
@@ -121,7 +116,8 @@ export default async function (fastify: FastifyInstance) {
             result.consumeStream()
             result.mergeIntoDataStream(dataStream, { sendReasoning: true })
           },
-          onError: () => {
+          onError: (error) => {
+            fastify.log.error(error)
             return 'Oops, an error occured!'
           },
         }),
@@ -228,6 +224,34 @@ export default async function (fastify: FastifyInstance) {
       const chat = await getChatById(request.query.chatId)
       if (!chat.success) return chat
       return service.message.queryMessageByChatId(request.query)
+    },
+  )
+
+  fastify.withTypeProvider<FastifyZodOpenApiTypeProvider>().post(
+    fastify.bizAppConfig.routes.llm.dashboard + '/insert',
+    {
+      schema: {
+        body: llmSchema.dashboard.insert,
+      },
+    },
+    async function (request) {
+      fastify.log.info('执行生成Dashboard配置')
+      const chat = await getChatById(request.body.chatId)
+      if (!chat.success) return chat
+      const message = await service.message.queryById(request.body.messageId)
+      if (!message.success) return message
+      fastify.log.info(`生成Dashboard配置参数：${JSON.stringify(message.data)}`)
+      const { object } = await generateObject({
+        model,
+        schema: fastify.bizDashboardSchema.zod,
+        // prompt: '生成dashboardSchema页面配置，数据源为：' + JSON.stringify(a),
+        // prompt: '',
+        messages: convertToUIMessages(message.data),
+
+        // tools: agent.tools,
+      })
+      fastify.log.info(`生成Dashboard配置结果：${JSON.stringify(object)}`)
+      return service.dashboard.insert({ ...request.body, data: JSON.stringify(object), userId: session.user.id })
     },
   )
 }

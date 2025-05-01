@@ -1,7 +1,7 @@
+import type { AnalyzeResult } from '@/types'
 import { Chart, type G2Spec } from '@antv/g2'
 import classNames from 'classnames'
 import { useEffect, useRef } from 'react'
-import type { AnalyzeResult } from 'types'
 
 export type ChartViewProps = Omit<AnalyzeResult, 'chartRendererType' | 'data'> & {
   prefixCls?: string

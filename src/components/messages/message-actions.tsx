@@ -1,4 +1,4 @@
-import { CodeIcon, CopyIcon, DownloadIcon, ThumbDownIcon, ThumbUpIcon } from '@/components/icons'
+import { CopyIcon, DownloadIcon, ThumbDownIcon, ThumbUpIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { useArtifact } from '@/hooks/use-artifact'
@@ -7,6 +7,7 @@ import type { Vote } from '@/types'
 import { fetcher } from '@/utils'
 import type { Message } from 'ai'
 import equal from 'fast-deep-equal'
+import { Gauge } from 'lucide-react'
 import { memo } from 'react'
 import { toast } from 'sonner'
 import { useSWRConfig } from 'swr'
@@ -18,8 +19,9 @@ export function PureMessageActions({
   message,
   vote,
   isLoading,
-  showCode,
+  //   showCode,
   showDownload,
+  showDashboard,
 }: {
   chatId: string
   message: Message
@@ -27,6 +29,7 @@ export function PureMessageActions({
   isLoading: boolean
   showDownload?: boolean
   showCode?: boolean
+  showDashboard?: boolean
 }) {
   const { mutate } = useSWRConfig()
   const [, copyToClipboard] = useCopyToClipboard()
@@ -182,7 +185,7 @@ export function PureMessageActions({
           </Tooltip>
         )}
 
-        {showCode && (
+        {/* {showCode && (
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -191,7 +194,6 @@ export function PureMessageActions({
                 variant="outline"
                 onClick={(event) => {
                   const rect = event.currentTarget.getBoundingClientRect()
-
                   const boundingBox = {
                     top: rect.top,
                     left: rect.left,
@@ -213,6 +215,37 @@ export function PureMessageActions({
               </Button>
             </TooltipTrigger>
             <TooltipContent>代码</TooltipContent>
+          </Tooltip>
+        )} */}
+        {showDashboard && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                data-testid="message-dashboard"
+                className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto"
+                variant="outline"
+                onClick={(event) => {
+                  const rect = event.currentTarget.getBoundingClientRect()
+                  debugger
+                  setArtifact({
+                    kind: 'dashboard',
+                    title: '仪表盘',
+                    isVisible: true,
+                    status: 'idle',
+                    boundingBox: {
+                      top: rect.top,
+                      left: rect.left,
+                      width: rect.width,
+                      height: rect.height,
+                    },
+                    paramater: { chatId, messageId: message.id },
+                  })
+                }}
+              >
+                <Gauge />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>仪表盘</TooltipContent>
           </Tooltip>
         )}
       </div>

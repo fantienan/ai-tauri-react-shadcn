@@ -1,10 +1,10 @@
 import type { ChatbarProps } from '@/components/chat/chat-bar'
 import { useAppStore, useThemeStore } from '@/stores'
 import { DBMessage } from '@/types'
+import { BizResult } from '@/types'
 import { fetcher, tauri } from '@/utils'
-import type { Attachment, UIMessage } from 'ai'
+import { convertToUIMessages } from 'common'
 import useSWR from 'swr'
-import { BizResult } from 'types'
 import { v4 as uuidv4 } from 'uuid'
 
 export type ChatLoaderData = {
@@ -12,16 +12,16 @@ export type ChatLoaderData = {
   error?: boolean
 }
 
-export function convertToUIMessages(messages: DBMessage[]): UIMessage[] {
-  return messages.map((message) => ({
-    id: message.id,
-    parts: message.parts as UIMessage['parts'],
-    role: message.role as UIMessage['role'],
-    content: '',
-    createdAt: new Date(message.createdAt),
-    experimental_attachments: (message.attachments as Attachment[]) ?? [],
-  }))
-}
+// export function convertToUIMessages(messages: DBMessage[]): UIMessage[] {
+//   return messages.map((message) => ({
+//     id: message.id,
+//     parts: message.parts as UIMessage['parts'],
+//     role: message.role as UIMessage['role'],
+//     content: '',
+//     createdAt: new Date(message.createdAt),
+//     experimental_attachments: (message.attachments as Attachment[]) ?? [],
+//   }))
+// }
 
 export const useChatbarLoader = ({ chatId }: { chatId?: string }) => {
   const user = useAppStore().session.user

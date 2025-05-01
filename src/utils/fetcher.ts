@@ -1,5 +1,5 @@
 import { BASE_URL } from '@/lib/constant'
-import { BizResult } from 'types'
+import { BizResult } from '@/types'
 
 // 函数重载声明
 export function fetcher<T>(input: RequestInfo | URL, init?: RequestInit & { response: true }): Promise<Response>

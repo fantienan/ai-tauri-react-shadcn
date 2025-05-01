@@ -1,0 +1,20 @@
+import type { Attachment, UIMessage } from 'ai'
+
+export function convertToUIMessages(
+  messages: {
+    id: string
+    parts: any[]
+    role: string
+    createdAt: string
+    attachments: any[]
+  }[],
+): UIMessage[] {
+  return messages.map((message) => ({
+    id: message.id,
+    parts: message.parts as UIMessage['parts'],
+    role: message.role as UIMessage['role'],
+    content: '',
+    createdAt: new Date(message.createdAt),
+    experimental_attachments: (message.attachments as Attachment[]) ?? [],
+  }))
+}

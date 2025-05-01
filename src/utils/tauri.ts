@@ -3,7 +3,7 @@ import { contentDisposition } from 'common'
 import { saveAs } from 'file-saver-es'
 import { fetcher } from './fetcher'
 // import { invoke } from '@tauri-apps/api/core'
-// import { BizResult } from 'types'
+// import { BizResult } from '@/types'
 
 const downloadCode = async (params: DownloadCodeParams) => {
   const res = await fetcher(`${import.meta.env.BIZ_RUST_WEB_SERVER_URL}/download/code`, {

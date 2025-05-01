@@ -1,4 +1,4 @@
-import { AnalyzeResult } from 'types'
+import { AnalyzeResult } from '@/types'
 import { G2Chart } from './g2-chart'
 import { Recharts } from './recharts'
 import { VegaChart } from './vega'

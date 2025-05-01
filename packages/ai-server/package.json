@@ -28,6 +28,7 @@
     "ai": "4.3.9",
     "better-sqlite3": "11.9.1",
     "cors": "2.8.5",
+    "common": "file:../common",
     "dotenv": "16.5.0",
     "dotenv-expand": "12.0.2",
     "drizzle-orm": "0.43.0",

@@ -1,6 +1,6 @@
 {
   "name": "common",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "type": "module",
   "main": "./dist/index.cjs.js",
@@ -22,6 +22,10 @@
   "devDependencies": {
     "typescript": "~5.7.2",
     "vite": "^6.3.1",
-    "vite-plugin-dts": "^4.5.3"
+    "vite-plugin-dts": "^4.5.3",
+    "ai": "^4.3.12"
+  },
+  "peerDependencies": {
+    "ai": ">=4.3.12"
   }
 }

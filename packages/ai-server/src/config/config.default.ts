@@ -38,6 +38,7 @@ const config: BizConfig = {
       chat: '/chat',
       vote: '/vote',
       message: '/message',
+      dashboard: '/dashboard',
     },
     user: '/user',
     test: {
