@@ -59,8 +59,10 @@ export const createLlmService = (fastify: FastifyInstance) => {
 
   async function deleteChatById({ id }: Pick<typeof chat.$inferSelect, 'id'>) {
     try {
+      await db.delete(dashboard).where(eq(dashboard.chatId, id))
       await db.delete(vote).where(eq(vote.chatId, id))
       await db.delete(message).where(eq(message.chatId, id))
+
       return await db.delete(chat).where(eq(chat.id, id))
     } catch (error) {
       console.error('Failed to delete chat by id from database')
@@ -192,6 +194,19 @@ export const createLlmService = (fastify: FastifyInstance) => {
       insert: async function (params: typeof dashboard.$inferInsert) {
         try {
           const result = await db.insert(dashboard).values(params).returning()
+          return fastify.BizResult.success({ data: result[0] })
+        } catch (error) {
+          fastify.log.error(error)
+          throw error
+        }
+      },
+      query: async function (params: Pick<typeof dashboard.$inferSelect, 'chatId' | 'messageId'>) {
+        try {
+          const result = await db
+            .select()
+            .from(dashboard)
+            .where(and(eq(dashboard.chatId, params.chatId), eq(dashboard.messageId, params.messageId)))
+            .limit(1)
           return fastify.BizResult.success({ data: result[0] })
         } catch (error) {
           fastify.log.error(error)

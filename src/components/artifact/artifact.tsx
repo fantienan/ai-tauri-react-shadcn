@@ -83,7 +83,6 @@ function PureArtifact({
   const { width: windowWidth, height: windowHeight } = useWindowSize()
   const isMobile = useIsMobile()
   const { open: isSidebarOpen } = useSidebar()
-  debugger
   return (
     <AnimatePresence>
       {artifact.isVisible && (

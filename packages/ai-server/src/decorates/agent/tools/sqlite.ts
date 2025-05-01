@@ -1,7 +1,7 @@
 import { tool } from 'ai'
 import type { AnalyzeResult } from 'types'
 import { z } from 'zod'
-import { chartDataSchema, logger } from '../../../utils/index.ts'
+import { logger } from '../../../utils/index.ts'
 import { createBizError } from '../../errors.ts'
 import { Result } from '../../result.ts'
 import { generateTextLayoutFromAnaylzeResult, getDatabase } from '../utils/index.ts'
@@ -52,27 +52,30 @@ export const sqliteTableField = tool({
 })
 
 export const sqliteAnalyze = tool({
-  description: `SQLite数据库分析工具`,
-  //   分析结果数据结构要求如下：
-  //         - 用value作为统计值的字段名称
-  //         - 用name作为统计分类的字段名称`,
+  description: `SQLite数据库数据分析工具，除非用户要求了图表类型，否则不用指定图表类型`,
   parameters: z.object({
     sql: z.string().describe('要执行的 SQL 查询'),
-    chartRendererType: z
-      .enum(['react-charts', 'vega', 'g2-chart', 'recharts'])
-      .optional()
-      .describe('图表渲染器类型')
-      .default('recharts'),
-    chartType: z.enum(['bar', 'line']).optional().describe('图表类型').default('bar'),
+    chartType: z.enum(['bar', 'line', 'pie', 'indicator-card']).optional().describe('图表类型'),
   }),
-  execute: async ({ sql, chartType, chartRendererType }) => {
+  execute: async ({ sql, chartType: type }) => {
     try {
       logger.info(`SQLite数据库分析工具执行sql: ${JSON.stringify(sql)}`)
       const db = getDatabase()
       const data = db.prepare(sql).all() as AnalyzeResult['data']
       db.close()
+      let chartType = type
+      if (!chartType) {
+        const { length } = data
+        if (length === 1) {
+          chartType = 'indicator-card'
+        } else if (length <= 10) {
+          chartType = 'bar'
+        } else {
+          chartType = 'line'
+        }
+      }
       let result = await generateTextLayoutFromAnaylzeResult({ data })
-      result = { ...result, chartRendererType, chartType }
+      result = { ...result, chartRendererType: 'recharts', chartType }
       logger.info(`SQLite数据库分析工具执行结果: ${JSON.stringify(result)}`)
       return result
     } catch (error) {
@@ -82,23 +85,16 @@ export const sqliteAnalyze = tool({
   },
 })
 
-export const sqliteDatabaseAnalysisSuggestion = tool({
+export const generateDashboardsBasedOnAnalysisResults = tool({
+  //   description:
+  //     'SQLite数据库分析建议工具，告诉我数据库中的数据能做哪些分析，注意考虑多表联合分析，每个建议需要给出sqlite 查询语句',
   description:
-    'SQLite数据库分析建议工具，告诉我数据库中的数据能做哪些分析，注意考虑多表联合分析，每个建议需要给出sqlite 查询语句',
+    'Dashboard页面生成工具，你首先看看数据库中所有的表能做哪些分析，然后使用SQLite数据库数据分析工具进行分析，当所有数据分析完成之后告诉我你能做哪些分析',
   parameters: z.object({
-    content: z.array(
-      z.object({ content: z.string({ description: '建议' }), sql: z.string({ description: '查询语句' }) }),
-      { description: '数据分析建议' },
-    ),
+    content: z.string().describe('分析总结'),
   }),
   execute: async (params) => {
-    logger.info(`SQLite数据库分析建议工具执行参数: ${JSON.stringify(params)}`)
+    logger.info(`Dashboard生成工具执行参数: ${JSON.stringify(params)}`)
     return params
   },
 })
-
-// export const sqliteDashboard = tool({
-//     description: 'SQLite数据库Dashboard工具，生成dashboard配置',
-//     parameters: z.object({}),
-//     execute: async () => {}
-// })

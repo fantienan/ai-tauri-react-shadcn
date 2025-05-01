@@ -1,5 +1,29 @@
+import type { Attachment, UIMessage } from 'ai'
 import { z } from 'zod'
 import { zodToJsonSchema } from 'zod-to-json-schema'
+
+export function convertToUIMessages(
+  messages: {
+    id: string
+    parts: any[]
+    role: string
+    createdAt: string
+    attachments: any[]
+  }[],
+): UIMessage[] {
+  return messages.map((message) => ({
+    id: message.id,
+    parts: message.parts as UIMessage['parts'],
+    role: message.role as UIMessage['role'],
+    content: '',
+    createdAt: new Date(message.createdAt),
+    experimental_attachments: (message.attachments as Attachment[]) ?? [],
+  }))
+}
+
+const chatZodSchema = z.array(z.object({ name: z.string(), value: z.number() }), { description: '图表数据' })
+
+export const chartDataSchema = { zod: chatZodSchema, json: zodToJsonSchema(chatZodSchema) }
 
 const genSchemaItem = (name: string) => {
   return z.object(
@@ -13,7 +37,7 @@ const genSchemaItem = (name: string) => {
   )
 }
 
-const zodSchema = z.object({
+const dashboardZodSchema = z.object({
   title: genSchemaItem('Dashboard 标题'),
   chart: z
     .array(
@@ -50,4 +74,4 @@ const zodSchema = z.object({
     .optional(),
 })
 
-export const dashboardSchema = { zod: zodSchema, json: zodToJsonSchema(zodSchema) }
+export const dashboardSchema = { zod: dashboardZodSchema, json: zodToJsonSchema(dashboardZodSchema) }

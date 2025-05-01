@@ -16,14 +16,9 @@ function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
       action: '请分析销售量最高的前5个产品',
     },
     {
-      title: '数据分析建议',
-      label: '查看数据库中的数据',
-      action: '数据库中的表能做些什么分析？',
-    },
-    {
-      title: '生成Dashboard',
-      label: '据数据库中的数据生成一个Dashboard',
-      action: '请根据数据库中的数据生成Dashboard页面配置',
+      title: 'Dashboard',
+      label: '据数据库中的数据生成Dashboard',
+      action: '请根据数据库中的数据生成Dashboard页面',
     },
   ]
 

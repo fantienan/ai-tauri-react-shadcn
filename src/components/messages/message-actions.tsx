@@ -226,7 +226,6 @@ export function PureMessageActions({
                 variant="outline"
                 onClick={(event) => {
                   const rect = event.currentTarget.getBoundingClientRect()
-                  debugger
                   setArtifact({
                     kind: 'dashboard',
                     title: '仪表盘',

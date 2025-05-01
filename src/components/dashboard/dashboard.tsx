@@ -1,5 +1,4 @@
-import type { DBMessage } from '@/types'
-import type { BizResult } from '@/types'
+import type { DashboardRecord } from '@/types'
 import { fetcher } from '@/utils'
 import { Loader2 } from 'lucide-react'
 import useSWR from 'swr'
@@ -11,13 +10,16 @@ export interface DashboardProps {
 
 export const Dashboard = ({ chatId, messageId }: DashboardProps) => {
   const { data, isLoading } = useSWR(
-    () => (chatId && messageId ? `/llm/dashboard/insert` : null),
+    () => (chatId && messageId ? `/llm/dashboard/try` : null),
     async (input: string, init?: RequestInit) => {
-      return fetcher<BizResult<DBMessage[]>>(input, {
+      return fetcher<DashboardRecord>(input, {
         ...init,
         method: 'POST',
         body: JSON.stringify({ chatId, messageId }),
-      }).then((res) => res.data)
+      }).then((res) => {
+        if (typeof res.data?.data === 'string') res.data.data = JSON.parse(res.data.data as any)
+        return res.data
+      })
     },
   )
 

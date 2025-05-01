@@ -15,14 +15,16 @@ import { z } from 'zod'
 type ResponseMessageWithoutId = CoreToolMessage | CoreAssistantMessage
 type ResponseMessage = ResponseMessageWithoutId & { id: string }
 
-export const regularPrompt = `你是一位友善的助手，你的回答要满足如下要求：
-- 保持你的回答简洁且有帮助，
-- 返回markdown格式
-- 如果用户想分析数据，则分析结果数据的结构要满足如下要求：
-    - 用value作为统计值的字段名称
-    - 用name作为统计字段的字段名称`
+export const regularPrompt = `你是一位友善的助手，保持你的回答简洁且有帮助, 使用markdown格式返回文本`
 
-export const systemPrompt = () => {
+export const systemPrompt = (type?: 'dashboard' | 'regular') => {
+  if (type === 'dashboard') {
+    return `你是一名专业的数据分析师，我给了你一份数据，分析结果存放在data属性中，根据分析结果数据生成Dashboard配置，并且需要你根据data数组的长度决定图表类型，要求如下：
+    - data数组的长度为1生成指标卡片
+    - data数组的长度小于等于10生成柱状图
+    - data数组的长度大于10生成折线图
+    `
+  }
   return regularPrompt
 }
 

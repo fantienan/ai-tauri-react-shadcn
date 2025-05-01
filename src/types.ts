@@ -1,4 +1,6 @@
 import * as DatabaseSchema from '@@/ai-server/database/schema'
+import { dashboardSchema } from 'common'
+import { z } from 'zod'
 export * from 'types'
 
 export type ChatVisibilityType = DatabaseSchema.Chat['visibility']
@@ -19,4 +21,8 @@ export type BizScope = {
     SM_GEOVIS_TOKEN: string
     SM_TIANDITU_TOKEN: string
   }
+}
+
+export type DashboardRecord = Omit<DatabaseSchema.Dashboard, 'data'> & {
+  data: z.infer<typeof dashboardSchema.zod>
 }
