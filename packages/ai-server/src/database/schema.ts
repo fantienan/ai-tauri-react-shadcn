@@ -137,3 +137,5 @@ export const dashboard = sqliteTable(
 
   (table) => [primaryKey({ name: 'pk', columns: [table.chatId, table.messageId] })],
 )
+
+export type Dashboard = InferSelectModel<typeof dashboard>

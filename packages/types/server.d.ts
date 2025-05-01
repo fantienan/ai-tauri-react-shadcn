@@ -1,7 +1,7 @@
 export type AnalyzeResult = {
   chartRendererType?: 'react-charts' | 'vega' | 'g2-chart' | 'recharts'
-  chartType?: 'bar' | 'line'
-  data: { name: string; value: number }[]
+  chartType?: 'bar' | 'line' | 'pie' | 'indicator-card'
+  data: Record<string, any>[]
   title?: string
   description?: string
   summary?: string
