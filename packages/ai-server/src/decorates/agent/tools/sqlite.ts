@@ -79,9 +79,9 @@ export const sqliteAnalyze = tool({
           ;(result as any).chartType = 'indicator-card'
           ;(result as any).data = result.data[0]
         } else if (length <= 10) {
-          result.chartType = 'bar'
-        } else {
           result.chartType = 'line'
+        } else {
+          result.chartType = 'bar'
         }
       }
       const { footer, title } = await generateDescriptionInformation(result)
@@ -98,7 +98,7 @@ export const sqliteAnalyze = tool({
 
 export const generateDashboardsBasedOnAnalysisResults = tool({
   description:
-    'Dashboard页面生成工具，你首先看看数据库中所有的表能做哪些分析，然后使用SQLite数据库数据分析工具进行分析，最后当所有数据分析工具都执行完毕后告诉我。注意此工具需要用户明确指出要生成Dashboard页面，否则你不需要执行此工具',
+    'Dashboard页面生成工具，你首先看看数据库中所有的表能做哪些分析，至少要给出4个分析方案，然后使用SQLite数据库数据分析工具进行分析，最后当所有数据分析工具都执行完毕后告诉我。注意此工具需要用户明确指出要生成Dashboard页面，否则你不需要执行此工具',
   parameters: z.object({ isFinish: z.boolean({ description: '所有SQLite数据库分析工具是否全部执行完毕' }) }),
   execute: async (params) => {
     logger.info(`Dashboard生成工具执行参数: ${JSON.stringify(params)}`)

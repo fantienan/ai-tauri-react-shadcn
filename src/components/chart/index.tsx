@@ -2,7 +2,7 @@ import type { AnalyzeResultSchema } from '@/types'
 import { IndicatorCard } from './indicator-card'
 import { Recharts } from './recharts'
 
-export type ChartRendererProps = AnalyzeResultSchema
+export type ChartRendererProps = AnalyzeResultSchema & { className?: string }
 
 export const ChartRenderer = (props: ChartRendererProps) => {
   if (!props) return null

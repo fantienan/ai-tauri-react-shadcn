@@ -38,13 +38,13 @@ export default async function (fastify: FastifyInstance) {
     if (!message.success) return message
 
     const coreMessage = convertToCoreMessages([message.data as any]).map((v) => {
-      if (v.role === 'tool' && v.content[0].type === 'tool-result' && v.content[0].toolName === 'sqliteAnalyze') {
-        const msg = v as CoreToolMessage
-        msg.content = msg.content.map((val) => {
-          const { chartType, ...result } = val.result as AnalyzeResultSchema
-          return { ...val, result }
-        })
-      }
+      //   if (v.role === 'tool' && v.content[0].type === 'tool-result' && v.content[0].toolName === 'sqliteAnalyze') {
+      //     const msg = v as CoreToolMessage
+      //     msg.content = msg.content.map((val) => {
+      //       const { chartType, ...result } = val.result as AnalyzeResultSchema
+      //       return { ...val, result }
+      //     })
+      //   }
       return v
     })
 

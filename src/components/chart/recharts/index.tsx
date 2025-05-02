@@ -4,8 +4,8 @@ import type { AnalyzeResultWithChartSchema } from '@/types'
 import { Bar, BarChart, CartesianGrid, LabelList, Line, LineChart, Pie, PieChart, XAxis } from 'recharts'
 import { CardFooterRenderer, CardHeaderRenderer, useChartUtils } from '../utils'
 
-export function Recharts(props: AnalyzeResultWithChartSchema) {
-  const { chartType = 'bar', title, data, footer, ...config } = props
+export function Recharts(props: AnalyzeResultWithChartSchema & { className?: string }) {
+  const { className, chartType = 'bar', title, data, footer, ...config } = props
   const {
     chartConfig,
     valueFieldnames,
@@ -13,7 +13,7 @@ export function Recharts(props: AnalyzeResultWithChartSchema) {
   } = useChartUtils({ config, data })
 
   return (
-    <Card>
+    <Card className={className}>
       <CardHeaderRenderer {...title} />
 
       <CardContent>

@@ -19,7 +19,7 @@ export const regularPrompt = `你是一位友善的助手，保持你的回答�
 
 export const systemPrompt = (type?: 'dashboard' | 'regular') => {
   if (type === 'dashboard') {
-    return `你是一名专业的数据分析师，我给了你一份数据，分析结果存放在data属性中，根据分析结果数据生成Dashboard配置，并且需要你根据data数组的长度决定图表类型，要求如下：
+    return `你是一名专业的数据分析师，给了你一份数据，根据data属性的值生成Dashboard配置，如果有图表类型则无效指定，如果没有图表类型则需要根据data数组的长度决定图表类型，要求如下：
     - data数组长度小于21则生成指标卡片
     - data数组的长度小于41生成柱状图
     - data数组的长度大于40生成折线图

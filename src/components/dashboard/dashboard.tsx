@@ -29,25 +29,35 @@ export function PureDashboard({ chatId, messageId }: DashboardProps) {
     if (!data?.data?.charts) return
     return data.data.charts.reduce(
       (prev, curr) => {
-        if (curr.chartType === 'indicator-card') prev.indicatorCards.push(curr)
-        else prev.charts.push(curr)
+        if (curr.chartType === 'indicator-card') {
+          prev.indicatorCards.push(curr)
+        } else if (curr.data.length > 51) {
+          prev.blockChart.push(curr)
+        } else {
+          prev.charts.push(curr)
+        }
         return prev
       },
-      { indicatorCards: [], charts: [] } as {
+      { indicatorCards: [], charts: [], blockChart: [] } as {
         indicatorCards: AnalyzeResultWithIndicatorCardSchema[]
+        blockChart: AnalyzeResultWithChartSchema[]
         charts: AnalyzeResultWithChartSchema[]
       },
     )
   }, [data])
   if (isLoading || !chartInfo) return <Loader2 size="16" className="animate-spin" />
-  debugger
 
   return (
-    <div>
+    <div className="flex flex-col gap-4 w-full">
       <IndicatorCards configs={chartInfo.indicatorCards} />
-      {chartInfo.charts.map((chart) => (
-        <ChartRenderer {...chart} />
+      {chartInfo.blockChart.map((chart) => (
+        <ChartRenderer className="flex-1 h-10" key={chart.title.value} {...chart} />
       ))}
+      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 w-full">
+        {chartInfo.charts.map((chart) => (
+          <ChartRenderer {...chart} />
+        ))}
+      </div>
     </div>
   )
 }
