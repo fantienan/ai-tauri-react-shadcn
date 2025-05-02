@@ -6,9 +6,9 @@ import {
   generateObject,
   streamText,
 } from 'ai'
+import { AnalyzeResult } from 'common/types'
 import type { FastifyInstance } from 'fastify'
 import type { FastifyZodOpenApiTypeProvider } from 'fastify-zod-openapi'
-import { AnalyzeResult } from 'types'
 import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
 import { createLlmService } from '../services/index.ts'
@@ -276,36 +276,7 @@ export default async function (fastify: FastifyInstance) {
       },
     },
     async function (request) {
-      const chat = await getChatById(request.body.chatId)
-      if (!chat.success) return chat
-      const message = await service.message.queryById(request.body.messageId)
-      if (!message.success) return message
-
-      const coreMessage = convertToCoreMessages([message.data as any]).map((v) => {
-        if (v.role === 'tool' && v.content[0].type === 'tool-result' && v.content[0].toolName === 'sqliteAnalyze') {
-          const msg = v as CoreToolMessage
-          msg.content = msg.content.map((val) => {
-            const { chartRendererType, chartType, ...result } = val.result as AnalyzeResult
-            return { ...val, result }
-          })
-        }
-        return v
-      })
-
-      fastify.log.info(`获取分析结果: ${JSON.stringify(coreMessage)}`)
-
-      fastify.log.info('生成Dashboard配置...')
-
-      const { object } = await generateObject({
-        model,
-        system: agent.utils.systemPrompt('dashboard'),
-        schema: fastify.bizDashboardSchema.zod,
-        messages: coreMessage,
-      })
-
-      fastify.log.info(`Dashboard配置：${JSON.stringify(object)}`)
-
-      return service.dashboard.insert({ ...request.body, data: JSON.stringify(object), userId: session.user.id })
+      return createDashboard(request.body)
     },
   )
   fastify

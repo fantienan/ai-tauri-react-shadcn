@@ -1,6 +1,6 @@
+import { MakeOptional, MakeReqiured, MakeRequiredAndOptional } from 'common/types'
 import { SQL, and, asc, desc, eq, gt, lt } from 'drizzle-orm'
 import type { FastifyInstance } from 'fastify'
-import { MakeOptional, MakeReqiured, MakeRequiredAndOptional } from 'types'
 import { z } from 'zod'
 import { chat, dashboard, message, vote } from '../database/schema.ts'
 import * as schemas from '../schemas/index.ts'

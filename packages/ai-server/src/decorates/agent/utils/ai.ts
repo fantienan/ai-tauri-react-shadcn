@@ -9,7 +9,7 @@ import {
   generateText,
   wrapLanguageModel,
 } from 'ai'
-import type { AnalyzeResult } from 'types'
+import type { AnalyzeResult } from 'common/types'
 import { z } from 'zod'
 
 type ResponseMessageWithoutId = CoreToolMessage | CoreAssistantMessage

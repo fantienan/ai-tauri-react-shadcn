@@ -1,29 +1,29 @@
 {
   "name": "common",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "type": "module",
-  "main": "./dist/index.cjs.js",
-  "module": "./dist/index.es.js",
-  "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.es.js",
-      "require": "./dist/index.cjs.js"
+    "./package.json": "./package.json",
+    "./types": {
+      "types": "./types/index.d.ts"
+    },
+    "./utils": {
+      "types": "./utils/dist/index.d.ts",
+      "import": "./utils/dist/index.js",
+      "require": "./utils/dist/index.cjs"
     }
   },
-  "files": ["dist"],
+  "files": ["dist/**/*", "types/**/*", "utils/dist/**/*"],
   "scripts": {
-    "dev": "vite build --watch",
-    "build": "vite build",
-    "typecheck": "tsc --noEmit"
+    "build": "tsup",
+    "build:watch": "tsup --watch",
+    "type:check": "tsc --noEmit"
   },
   "devDependencies": {
-    "typescript": "~5.7.2",
-    "vite": "^6.3.1",
-    "vite-plugin-dts": "^4.5.3",
     "ai": "^4.3.12",
+    "tsup": "^8.4.0",
+    "typescript": "~5.8.3",
     "zod": "^3.24.3",
     "zod-to-json-schema": "^3.24.5"
   },

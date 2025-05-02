@@ -1,4 +1,4 @@
-import { BizResult } from 'types'
+import { BizResult } from 'common/types'
 export class Result {
   /**
    * @description 10000 成功

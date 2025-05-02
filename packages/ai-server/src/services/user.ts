@@ -1,6 +1,6 @@
+import { MakeRequiredAndOptional } from 'common/types'
 import { eq } from 'drizzle-orm'
 import type { FastifyInstance } from 'fastify'
-import { MakeRequiredAndOptional } from 'types'
 import { user } from '../database/schema.ts'
 
 export type UserService = ReturnType<typeof createUserService>

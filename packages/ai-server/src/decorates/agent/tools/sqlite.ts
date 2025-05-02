@@ -1,5 +1,5 @@
 import { tool } from 'ai'
-import type { AnalyzeResult } from 'types'
+import type { AnalyzeResult } from 'common/types'
 import { z } from 'zod'
 import { logger } from '../../../utils/index.ts'
 import { createBizError } from '../../errors.ts'
@@ -89,9 +89,9 @@ export const generateDashboardsBasedOnAnalysisResults = tool({
   //   description:
   //     'SQLite数据库分析建议工具，告诉我数据库中的数据能做哪些分析，注意考虑多表联合分析，每个建议需要给出sqlite 查询语句',
   description:
-    'Dashboard页面生成工具，你首先看看数据库中所有的表能做哪些分析，然后使用SQLite数据库数据分析工具进行分析，当所有数据分析完成之后告诉我你能做哪些分析',
+    'Dashboard页面生成工具，你首先看看数据库中所有的表能做哪些分析，然后使用SQLite数据库数据分析工具进行分析，最后当你拿到所有分析数据后给我',
   parameters: z.object({
-    content: z.string().describe('分析总结'),
+    content: z.any({ description: '分析结果' }),
   }),
   execute: async (params) => {
     logger.info(`Dashboard生成工具执行参数: ${JSON.stringify(params)}`)

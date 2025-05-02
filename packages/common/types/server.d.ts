@@ -1,5 +1,5 @@
 export type AnalyzeResult = {
-  chartRendererType?: 'react-charts' | 'vega' | 'g2-chart' | 'recharts'
+  chartRendererType?: 'react-charts' | 'g2-chart' | 'recharts'
   chartType?: 'bar' | 'line' | 'pie' | 'indicator-card'
   data: Record<string, any>[]
   title?: string

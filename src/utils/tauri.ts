@@ -1,5 +1,5 @@
 import type { DownloadCodeParams } from '@/types'
-import { contentDisposition } from 'common'
+import { contentDisposition } from 'common/utils'
 import { saveAs } from 'file-saver-es'
 import { fetcher } from './fetcher'
 // import { invoke } from '@tauri-apps/api/core'

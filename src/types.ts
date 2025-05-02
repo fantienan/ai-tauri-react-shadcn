@@ -1,7 +1,7 @@
 import * as DatabaseSchema from '@@/ai-server/database/schema'
-import { dashboardSchema } from 'common'
+import { dashboardSchema } from 'common/utils'
 import { z } from 'zod'
-export * from 'types'
+export * from 'common/types'
 
 export type ChatVisibilityType = DatabaseSchema.Chat['visibility']
 

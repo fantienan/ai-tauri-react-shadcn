@@ -115,7 +115,6 @@
     "execa": "^9.5.2",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.0",
-    "types": "file:packages/types",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   },
