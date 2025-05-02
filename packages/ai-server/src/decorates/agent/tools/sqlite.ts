@@ -98,8 +98,8 @@ export const sqliteAnalyze = tool({
 
 export const generateDashboardsBasedOnAnalysisResults = tool({
   description:
-    'Dashboard页面生成工具，你首先看看数据库中所有的表能做哪些分析，然后使用SQLite数据库数据分析工具进行分析，最后当你拿到所有分析数据后给我。注意此工具需要用户明确指出要生成Dashboard页面，否则你不需要执行此工具',
-  parameters: z.object({ content: z.any({ description: '分析结果' }) }),
+    'Dashboard页面生成工具，你首先看看数据库中所有的表能做哪些分析，然后使用SQLite数据库数据分析工具进行分析，最后当所有数据分析工具都执行完毕后告诉我。注意此工具需要用户明确指出要生成Dashboard页面，否则你不需要执行此工具',
+  parameters: z.object({ isFinish: z.boolean({ description: '所有SQLite数据库分析工具是否全部执行完毕' }) }),
   execute: async (params) => {
     logger.info(`Dashboard生成工具执行参数: ${JSON.stringify(params)}`)
     return params

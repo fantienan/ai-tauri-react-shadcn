@@ -9,7 +9,7 @@ import {
   generateText,
   wrapLanguageModel,
 } from 'ai'
-import { AnalyzeResultSchema, genBasiceDataZodSchema } from 'common/utils'
+import { AnalyzeResultSchema } from 'common/utils'
 import { z } from 'zod'
 
 type ResponseMessageWithoutId = CoreToolMessage | CoreAssistantMessage
@@ -20,9 +20,9 @@ export const regularPrompt = `你是一位友善的助手，保持你的回答�
 export const systemPrompt = (type?: 'dashboard' | 'regular') => {
   if (type === 'dashboard') {
     return `你是一名专业的数据分析师，我给了你一份数据，分析结果存放在data属性中，根据分析结果数据生成Dashboard配置，并且需要你根据data数组的长度决定图表类型，要求如下：
-    - data数组的长度为1生成指标卡片
-    - data数组的长度小于等于10生成柱状图
-    - data数组的长度大于10生成折线图
+    - data数组长度小于21则生成指标卡片
+    - data数组的长度小于41生成柱状图
+    - data数组的长度大于40生成折线图
     `
   }
   return regularPrompt

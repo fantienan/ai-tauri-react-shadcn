@@ -1,10 +1,12 @@
 import { Card } from '@/components/ui/card'
-import { AnalyzeResultSchema } from '@/types'
+import { AnalyzeResultWithIndicatorCardSchema } from '@/types'
+import equal from 'fast-deep-equal'
+import { memo } from 'react'
 import { CardFooterRenderer, CardHeaderRenderer, useChartUtils } from '../utils'
 
-export type IndicatorCardProps = Omit<Extract<AnalyzeResultSchema, { chartType: 'indicator-card' }>, 'chartType'>
+export type IndicatorCardProps = Omit<AnalyzeResultWithIndicatorCardSchema, 'chartType'>
 
-export const IndicatorCard = ({ title, data, footer }: IndicatorCardProps) => {
+const PureIndicatorCard = ({ title, data, footer }: IndicatorCardProps) => {
   const { valueFieldnames } = useChartUtils({ data: [data] })
   return (
     <Card>
@@ -14,13 +16,22 @@ export const IndicatorCard = ({ title, data, footer }: IndicatorCardProps) => {
   )
 }
 
-export const IndicatorCards = ({ configs }: { configs: IndicatorCardProps[] }) => {
+export const IndicatorCard = memo(PureIndicatorCard, (prevProps, nextProps) => {
+  if (!equal(prevProps.title, nextProps.title)) return false
+  if (!equal(prevProps.data, nextProps.data)) return false
+  if (!equal(prevProps.footer, nextProps.footer)) return false
+  return true
+})
+
+const PureIndicatorCards = ({ configs }: { configs: IndicatorCardProps[] }) => {
   return configs.map(({ data, title }) => (
-    <div
-      key={title.value}
-      className="*:data-[slot=card]:shadow-xs @xl/main:grid-cols-2 @5xl/main:grid-cols-4 grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card lg:px-6"
-    >
+    <div key={title.value} className="@xl/main:grid-cols-2 @5xl/main:grid-cols-4 grid grid-cols-1 gap-4 ">
       <IndicatorCard title={title} data={data} />
     </div>
   ))
 }
+
+export const IndicatorCards = memo(PureIndicatorCards, (prevProps, nextProps) => {
+  if (prevProps.configs !== nextProps.configs) return false
+  return true
+})
