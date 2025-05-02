@@ -1,30 +1,20 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
-import { AnalyzeResult } from '@/types'
+import type { AnalyzeResultWithChartSchema } from '@/types'
 import { Bar, BarChart, CartesianGrid, LabelList, Line, LineChart, Pie, PieChart, XAxis } from 'recharts'
-import { IndicatorCard } from '../indicator-card'
-import { useChartUtils } from './use-chart-utils'
+import { CardFooterRenderer, CardHeaderRenderer, useChartUtils } from '../utils'
 
-type RechartsProps = Omit<AnalyzeResult, 'chartRendererType'>
-
-export function Recharts(props: RechartsProps) {
-  const { chartType = 'bar', title, description, summary, data, ...config } = props
+export function Recharts(props: AnalyzeResultWithChartSchema) {
+  const { chartType = 'bar', title, data, footer, ...config } = props
   const {
     chartConfig,
     valueFieldnames,
     nameFieldnames: [nameFieldname],
   } = useChartUtils({ config, data })
 
-  if (chartType === 'indicator-card')
-    return <IndicatorCard data={data} title={title} description={description} summary={summary} />
   return (
     <Card>
-      {!!title && !!description && (
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
-        </CardHeader>
-      )}
+      <CardHeaderRenderer {...title} />
 
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -76,7 +66,7 @@ export function Recharts(props: RechartsProps) {
           )}
         </ChartContainer>
       </CardContent>
-      {!!summary && <CardFooter className="flex-col items-start gap-2 text-sm">{summary}</CardFooter>}
+      {!!footer && <CardFooterRenderer {...footer} />}
     </Card>
   )
 }

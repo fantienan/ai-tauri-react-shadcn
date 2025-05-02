@@ -6,7 +6,7 @@ import {
   generateObject,
   streamText,
 } from 'ai'
-import { AnalyzeResult } from 'common/types'
+import { AnalyzeResultSchema } from 'common/utils'
 import type { FastifyInstance } from 'fastify'
 import type { FastifyZodOpenApiTypeProvider } from 'fastify-zod-openapi'
 import { v4 as uuidv4 } from 'uuid'
@@ -41,7 +41,7 @@ export default async function (fastify: FastifyInstance) {
       if (v.role === 'tool' && v.content[0].type === 'tool-result' && v.content[0].toolName === 'sqliteAnalyze') {
         const msg = v as CoreToolMessage
         msg.content = msg.content.map((val) => {
-          const { chartRendererType, chartType, ...result } = val.result as AnalyzeResult
+          const { chartType, ...result } = val.result as AnalyzeResultSchema
           return { ...val, result }
         })
       }
@@ -296,7 +296,7 @@ export default async function (fastify: FastifyInstance) {
       { schema: { body: fastify.bizSchemas.llm.dashboard.try } },
       async function (request) {
         const dashboard = await service.dashboard.query(request.body)
-        if (dashboard.success) return dashboard
+        if (!dashboard.success || dashboard.data) return dashboard
         return createDashboard(request.body)
       },
     )

@@ -1,9 +1,9 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
-import { AnalyzeResult } from 'common/types'
+import { AnalyzeResultSchema } from 'common/types'
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from 'recharts'
 
-type ChartBarProps = { config?: ChartConfig } & Omit<AnalyzeResult, 'chartRendererType' | 'chartType'>
+type ChartBarProps = { config?: ChartConfig } & Omit<AnalyzeResultSchema, 'chartRendererType' | 'chartType'>
 
 export function ChartBar({ config, data, title, description, summary }: ChartBarProps) {
   const chartConfig = {

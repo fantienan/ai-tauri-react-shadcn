@@ -3,7 +3,7 @@ import { serializerCompiler, validatorCompiler } from 'fastify-zod-openapi'
 import { config } from './config/index.ts'
 import { Agent, Result, errors, sqliteDb } from './decorates/index.ts'
 import * as schemas from './schemas/index.ts'
-import { chartDataSchema, dashboardSchema, getFastifyOptions } from './utils/index.ts'
+import { dashboardSchema, getFastifyOptions } from './utils/index.ts'
 
 async function main() {
   const fastify = Fastify(getFastifyOptions())
@@ -17,7 +17,6 @@ async function main() {
     .decorate('bizDb', sqliteDb)
     .decorate('bizSchemas', schemas)
     .decorate('bizDashboardSchema', dashboardSchema)
-    .decorate('bizChartSchema', chartDataSchema)
     /** @todo 需要添加用戶验证 */
     .decorate('session', { user: { id: 'localdev' } })
     .register(import('@fastify/cors'), config.cors)

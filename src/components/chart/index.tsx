@@ -1,19 +1,11 @@
-import { AnalyzeResult } from '@/types'
-import { G2Chart } from './g2-chart'
+import type { AnalyzeResultSchema } from '@/types'
+import { IndicatorCard } from './indicator-card'
 import { Recharts } from './recharts'
 
-export type ChartRendererProps = AnalyzeResult
+export type ChartRendererProps = AnalyzeResultSchema
 
 export const ChartRenderer = (props: ChartRendererProps) => {
-  const { chartRendererType, ...options } = props
-  if (!options) return null
-  const { data, ...resetOptions } = options
-  switch (chartRendererType) {
-    case 'g2-chart':
-      return <G2Chart {...resetOptions} spec={{ data }} />
-    case 'recharts':
-      return <Recharts {...options} />
-    default:
-      return null
-  }
+  if (!props) return null
+  if (props.chartType === 'indicator-card') return <IndicatorCard {...props} />
+  return <Recharts {...props} />
 }

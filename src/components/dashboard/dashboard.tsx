@@ -2,6 +2,7 @@ import type { DashboardRecord } from '@/types'
 import { fetcher } from '@/utils'
 import { Loader2 } from 'lucide-react'
 import useSWR from 'swr'
+import { ChartRenderer } from '../chart'
 
 export interface DashboardProps {
   chatId: string
@@ -22,8 +23,13 @@ export const Dashboard = ({ chatId, messageId }: DashboardProps) => {
       })
     },
   )
+  if (isLoading || !data) return <Loader2 size="16" className="animate-spin" />
 
-  if (isLoading) return <Loader2 size="16" className="animate-spin" />
-  console.log('data', data)
-  return <div></div>
+  return (
+    <div>
+      {data.data.charts?.map((chart) => (
+        <ChartRenderer {...chart} />
+      ))}
+    </div>
+  )
 }
