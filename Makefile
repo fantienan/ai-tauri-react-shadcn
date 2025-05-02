@@ -19,7 +19,6 @@ client-dev:
 
 ai-server-dev:
 	@echo "Running dev ai server"
-	@chcp 65001
 	@cd packages/ai-server && yarn dev
 
 ai-server-install:

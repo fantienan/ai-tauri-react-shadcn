@@ -5,7 +5,7 @@
   "files": ["build"],
   "scripts": {
     "build": "tsc",
-    "dev": "cross-env NODE_ENV=development tsx watch --clear-screen=false src/server.ts",
+    "dev": "chcp 65001 && cross-env NODE_ENV=development tsx watch --clear-screen=false src/server.ts",
     "ds": "tsx  watch --clear-screen=false src/stream-text/deepseek.ts",
     "dsr": "tsx  watch --clear-screen=false src/stream-text/deepseek-reasoning.ts",
     "dstc": "tsx  src/stream-text/deepseek-tool-call.ts",

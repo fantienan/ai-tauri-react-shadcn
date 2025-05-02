@@ -27,11 +27,18 @@ const genSchemaItem = (name: string) => {
       value: z.string({ description: name }),
       prefix: z.string({ description: `${name}前缀` }).optional(),
       suffix: z.string({ description: `${name}后缀` }).optional(),
-      description: z.string({ description: `${name}描述` }).optional(),
+      description: z.string({ description: `${name}描述` }),
     },
     { description: `${name}配置` },
   )
 }
+
+export const genBasiceDataZodSchema = (name: string) => genSchemaItem(name)
+export type BasicDataSchema = z.infer<ReturnType<typeof genBasiceDataZodSchema>>
+
+const analyzeResultWithChartTypeZodSchema = z.enum(['bar', 'line', 'pie', 'indicator-card'], {
+  description: '图表类型',
+})
 
 const analyzeResultWithChartZodSchema = z.object({
   chartType: z.enum(['bar', 'line', 'pie'], { description: '图表类型' }),
@@ -54,11 +61,18 @@ const analyzeResultZodSchema = z.discriminatedUnion('chartType', [
 
 export const analyzeResultSchema = { zod: analyzeResultZodSchema, json: zodToJsonSchema(analyzeResultZodSchema) }
 
+export const analyzeResultWithChartTypeSchema = {
+  zod: analyzeResultWithChartTypeZodSchema,
+  json: zodToJsonSchema(analyzeResultWithChartTypeZodSchema),
+}
+
 export type AnalyzeResultSchema = z.infer<typeof analyzeResultZodSchema>
 
 export type AnalyzeResultWithChartSchema = z.infer<typeof analyzeResultWithChartZodSchema>
 
 export type AnalyzeResultWithIndicatorCardSchema = z.infer<typeof analyzeResultWithIndicatorCardZodSchema>
+
+export type AnalyzeResultWithChartTypeSchema = z.infer<typeof analyzeResultWithChartTypeZodSchema>
 
 const dashboardZodSchema = z.object({
   title: genSchemaItem('Dashboard 标题'),

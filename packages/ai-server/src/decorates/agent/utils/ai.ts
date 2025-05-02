@@ -9,7 +9,7 @@ import {
   generateText,
   wrapLanguageModel,
 } from 'ai'
-import type { AnalyzeResultSchema } from 'common/types'
+import { AnalyzeResultSchema, genBasiceDataZodSchema } from 'common/utils'
 import { z } from 'zod'
 
 type ResponseMessageWithoutId = CoreToolMessage | CoreAssistantMessage
@@ -45,12 +45,13 @@ export const llmProvider = customProvider({
 export async function generateTitleFromUserMessage({ message }: { message: Message }) {
   const { text: title } = await generateText({
     model: llmProvider.languageModel('chat-model-reasoning'),
+    messages: [message],
     system: `\n
         - 您将根据用户开始对话的第一条消息生成一个简短的标题
         - 确保其长度不超过 80 个汉字
         - 标题应为用户消息的摘要
         - 请勿使用引号或冒号`,
-    prompt: JSON.stringify(message),
+    // prompt: JSON.stringify(message),
   })
 
   return title
@@ -59,23 +60,20 @@ export async function generateTitleFromUserMessage({ message }: { message: Messa
 export function getTrailingMessageId({ messages }: { messages: ResponseMessage[] }) {
   return messages.at(-1)?.id ?? null
 }
-
-export async function generateTextLayoutFromAnaylzeResult({ data }: { data: AnalyzeResultSchema['data'] }) {
+export async function generateDescriptionInformation({ data }: { data: AnalyzeResultSchema['data'] }) {
   const { object } = await generateObject({
     model: llmProvider.languageModel('chat-model-reasoning'),
     schema: z.object({
-      title: z.string().describe('标题'),
-      description: z.string().describe('描述'),
-      summary: z.string().describe('总结'),
-      data: z.any().describe('数据'),
+      title: z.object({
+        value: z.string({ description: '根据数据生成标题，要求准确、简洁、明了，不要超过10个汉字' }),
+        description: z.string({ description: '根据数据生成描述, 要求准确、简洁、明了，不要超过20个汉字' }),
+      }),
+      footer: z.object({
+        value: z.string({ description: '根据数据生成总结性文字, 要求准确、简洁、明了，不要超过30个汉字' }),
+        description: z.string({ description: '根据数据生成长文本, 要求准确、简洁、明了，不要超过100个汉字' }),
+      }),
     }),
-    system: `\n
-    您将根据这些数据生成一些文字，要求如下：
-        - 返回的结果是一个json对象，包含title、description、summary三个字段
-        - 根据数据生成标题，标题要求简洁明了，不要超过10个汉字，存放在title字段中
-        - 根据数据生成描述, 描述要求简洁明了，不要超过20个汉字，存放在description字段中
-        - 根据数据生成总结, 总结要求简洁明了，不要超过30个汉字，存放在summary字段中`,
     prompt: JSON.stringify(data),
   })
-  return { data, ...object } as AnalyzeResultSchema
+  return object
 }
