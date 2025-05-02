@@ -9,7 +9,7 @@ import {
   generateText,
   wrapLanguageModel,
 } from 'ai'
-import type { AnalyzeResult } from 'common/types'
+import type { AnalyzeResultSchema } from 'common/types'
 import { z } from 'zod'
 
 type ResponseMessageWithoutId = CoreToolMessage | CoreAssistantMessage
@@ -60,7 +60,7 @@ export function getTrailingMessageId({ messages }: { messages: ResponseMessage[]
   return messages.at(-1)?.id ?? null
 }
 
-export async function generateTextLayoutFromAnaylzeResult({ data }: { data: AnalyzeResult['data'] }) {
+export async function generateTextLayoutFromAnaylzeResult({ data }: { data: AnalyzeResultSchema['data'] }) {
   const { object } = await generateObject({
     model: llmProvider.languageModel('chat-model-reasoning'),
     schema: z.object({
@@ -77,5 +77,5 @@ export async function generateTextLayoutFromAnaylzeResult({ data }: { data: Anal
         - 根据数据生成总结, 总结要求简洁明了，不要超过30个汉字，存放在summary字段中`,
     prompt: JSON.stringify(data),
   })
-  return { data, ...object } as AnalyzeResult
+  return { data, ...object } as AnalyzeResultSchema
 }

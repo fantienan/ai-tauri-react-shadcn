@@ -1,9 +1,9 @@
-import type { AnalyzeResult } from '@/types'
+import type { AnalyzeResultSchema } from '@/types'
 import { Chart, type G2Spec } from '@antv/g2'
 import classNames from 'classnames'
 import { useEffect, useRef } from 'react'
 
-export type ChartViewProps = Omit<AnalyzeResult, 'chartRendererType' | 'data'> & {
+export type ChartViewProps = Omit<AnalyzeResultSchema, 'chartRendererType' | 'data'> & {
   prefixCls?: string
   className?: string
   style?: React.CSSProperties

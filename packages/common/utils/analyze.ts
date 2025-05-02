@@ -21,10 +21,6 @@ export function convertToUIMessages(
   }))
 }
 
-const chatZodSchema = z.array(z.object({ name: z.string(), value: z.number() }), { description: '图表数据' })
-
-export const chartDataSchema = { zod: chatZodSchema, json: zodToJsonSchema(chatZodSchema) }
-
 const genSchemaItem = (name: string) => {
   return z.object(
     {
@@ -37,32 +33,36 @@ const genSchemaItem = (name: string) => {
   )
 }
 
+const analyzeResultWithChartZodSchema = z.object({
+  chartType: z.enum(['bar', 'line', 'pie'], { description: '图表类型' }),
+  title: genSchemaItem('图表标题'),
+  data: z.array(z.record(z.string(), z.any()), { description: '图表数据(数组)' }),
+  footer: genSchemaItem('图表底部说明').optional(),
+})
+
+const analyzeResultWithIndicatorCardZodSchema = z.object({
+  chartType: z.literal('indicator-card', { description: '指示卡片类型' }),
+  title: genSchemaItem('指标卡标题'),
+  data: z.record(z.string(), z.any(), { description: '指示卡片数据(单个对象)' }),
+  footer: genSchemaItem('图表底部说明').optional(),
+})
+
+const analyzeResultZodSchema = z.discriminatedUnion('chartType', [
+  analyzeResultWithChartZodSchema,
+  analyzeResultWithIndicatorCardZodSchema,
+])
+
+export const analyzeResultSchema = { zod: analyzeResultZodSchema, json: zodToJsonSchema(analyzeResultZodSchema) }
+
+export type AnalyzeResultSchema = z.infer<typeof analyzeResultZodSchema>
+
+export type AnalyzeResultWithChartSchema = z.infer<typeof analyzeResultWithChartZodSchema>
+
+export type AnalyzeResultWithIndicatorCardSchema = z.infer<typeof analyzeResultWithIndicatorCardZodSchema>
+
 const dashboardZodSchema = z.object({
   title: genSchemaItem('Dashboard 标题'),
-  chart: z
-    .array(
-      z.object({
-        chartType: z.enum(['bar', 'line', 'pie'], { description: '图表类型' }),
-        title: genSchemaItem('图表标题'),
-        data: z.array(z.object({ name: z.string(), value: z.number() }), { description: '图表数据' }),
-      }),
-      {
-        description: '图表配置',
-      },
-    )
-    .optional(),
-  indicatorCard: z
-    .array(
-      z.object(
-        {
-          title: genSchemaItem('指标卡片标题'),
-          data: genSchemaItem('指标卡片数据'),
-        },
-        { description: '指标卡片' },
-      ),
-      { description: '指标卡片配置' },
-    )
-    .optional(),
+  charts: z.array(analyzeResultZodSchema, { description: '图表配置' }).optional(),
   list: z
     .array(
       z.object({
@@ -75,3 +75,5 @@ const dashboardZodSchema = z.object({
 })
 
 export const dashboardSchema = { zod: dashboardZodSchema, json: zodToJsonSchema(dashboardZodSchema) }
+
+export type DashboardSchema = z.infer<typeof dashboardZodSchema>

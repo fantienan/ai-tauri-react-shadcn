@@ -1,5 +1,5 @@
 import { tool } from 'ai'
-import type { AnalyzeResult } from 'common/types'
+import type { AnalyzeResultSchema } from 'common/utils'
 import { z } from 'zod'
 import { logger } from '../../../utils/index.ts'
 import { createBizError } from '../../errors.ts'
@@ -61,7 +61,7 @@ export const sqliteAnalyze = tool({
     try {
       logger.info(`SQLite数据库分析工具执行sql: ${JSON.stringify(sql)}`)
       const db = getDatabase()
-      const data = db.prepare(sql).all() as AnalyzeResult['data']
+      const data = db.prepare(sql).all() as AnalyzeResultSchema['data']
       db.close()
       let chartType = type
       if (!chartType) {

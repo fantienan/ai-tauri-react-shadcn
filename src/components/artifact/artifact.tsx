@@ -238,7 +238,7 @@ function PureArtifact({
                 </Button>
               </div>
             </div>
-            <Card className="flex-1 m-2 rounded-lg">
+            <Card className="flex-1 m-2 rounded-lg p-2">
               {artifact.kind === 'dashboard' && <Dashboard {...artifact.paramater} />}
             </Card>
           </motion.div>

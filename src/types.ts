@@ -1,7 +1,14 @@
 import * as DatabaseSchema from '@@/ai-server/database/schema'
-import { dashboardSchema } from 'common/utils'
-import { z } from 'zod'
+import type {
+  AnalyzeResultSchema,
+  AnalyzeResultWithChartSchema,
+  AnalyzeResultWithIndicatorCardSchema,
+  DashboardSchema,
+} from 'common/utils'
+
 export * from 'common/types'
+
+export type { DashboardSchema, AnalyzeResultSchema, AnalyzeResultWithChartSchema, AnalyzeResultWithIndicatorCardSchema }
 
 export type ChatVisibilityType = DatabaseSchema.Chat['visibility']
 
@@ -24,5 +31,5 @@ export type BizScope = {
 }
 
 export type DashboardRecord = Omit<DatabaseSchema.Dashboard, 'data'> & {
-  data: z.infer<typeof dashboardSchema.zod>
+  data: DashboardSchema
 }
