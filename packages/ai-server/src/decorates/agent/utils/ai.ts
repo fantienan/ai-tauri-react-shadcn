@@ -17,12 +17,12 @@ type ResponseMessage = ResponseMessageWithoutId & { id: string }
 
 export const regularPrompt = `你是一位友善的助手，保持你的回答简洁且有帮助, 使用markdown格式返回文本`
 
-export const systemPrompt = (type?: 'dashboard' | 'regular') => {
-  if (type === 'dashboard') {
-    return `你是一名专业的数据分析师，给了你一份数据，根据data属性的值生成Dashboard配置，如果有图表类型则无效指定，如果没有图表类型则需要根据data数组的长度决定图表类型，要求如下：
-    - data数组长度小于21则生成指标卡片
-    - data数组的长度小于41生成柱状图
-    - data数组的长度大于40生成折线图
+export const systemPrompt = (options?: { type?: 'dashboard' | 'regular' }) => {
+  if (options?.type === 'dashboard') {
+    return `
+    你是一名专业的数据分析师，根据这份数据生成Dashboard配置，要求如下：
+        -  将data数组长度为1的图表类型设置为指标卡，其余图表类型保持不变
+        - 根据所有数据为Dashboard生成标题和描述，要求准确、简洁、明了，标题在4-10个汉字之间，描述在10-30个汉字之间
     `
   }
   return regularPrompt
@@ -51,7 +51,6 @@ export async function generateTitleFromUserMessage({ message }: { message: Messa
         - 确保其长度不超过 80 个汉字
         - 标题应为用户消息的摘要
         - 请勿使用引号或冒号`,
-    // prompt: JSON.stringify(message),
   })
 
   return title
@@ -74,6 +73,17 @@ export async function generateDescriptionInformation({ data }: { data: AnalyzeRe
       }),
     }),
     prompt: JSON.stringify(data),
+  })
+  return object
+}
+
+export async function userNeedsAnalysis(messages: any[]) {
+  const { object } = await generateObject({
+    model: llmProvider.languageModel('chat-model-reasoning'),
+    messages,
+    schema: z.object({
+      isCreateDashboard: z.boolean({ description: '判断用户的意图是否是生成Dashboard' }),
+    }),
   })
   return object
 }

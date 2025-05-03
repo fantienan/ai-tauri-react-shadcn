@@ -1,4 +1,4 @@
-import type { AnalyzeResultWithChartSchema, AnalyzeResultWithIndicatorCardSchema, DashboardRecord } from '@/types'
+import type { AnalyzeResultSchema, DashboardRecord } from '@/types'
 import { fetcher } from '@/utils'
 import { Loader2 } from 'lucide-react'
 import { memo, useMemo } from 'react'
@@ -39,9 +39,9 @@ export function PureDashboard({ chatId, messageId }: DashboardProps) {
         return prev
       },
       { indicatorCards: [], charts: [], blockChart: [] } as {
-        indicatorCards: AnalyzeResultWithIndicatorCardSchema[]
-        blockChart: AnalyzeResultWithChartSchema[]
-        charts: AnalyzeResultWithChartSchema[]
+        indicatorCards: AnalyzeResultSchema[]
+        blockChart: AnalyzeResultSchema[]
+        charts: AnalyzeResultSchema[]
       },
     )
   }, [data])
@@ -49,9 +49,9 @@ export function PureDashboard({ chatId, messageId }: DashboardProps) {
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <IndicatorCards configs={chartInfo.indicatorCards} />
+      <IndicatorCards configs={chartInfo.indicatorCards} className="gap-3" />
       {chartInfo.blockChart.map((chart) => (
-        <ChartRenderer className="flex-1 h-10" key={chart.title.value} {...chart} />
+        <ChartRenderer className="h-20" key={chart.title.value} {...chart} />
       ))}
       <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 w-full">
         {chartInfo.charts.map((chart) => (

@@ -6,9 +6,6 @@
   "scripts": {
     "build": "tsc",
     "dev": "chcp 65001 && cross-env NODE_ENV=development tsx watch --clear-screen=false src/server.ts",
-    "ds": "tsx  watch --clear-screen=false src/stream-text/deepseek.ts",
-    "dsr": "tsx  watch --clear-screen=false src/stream-text/deepseek-reasoning.ts",
-    "dstc": "tsx  src/stream-text/deepseek-tool-call.ts",
     "db:check": "drizzle-kit check",
     "db:generate": "drizzle-kit generate",
     "_db:migrate": "tsx src/database/migrate.ts",

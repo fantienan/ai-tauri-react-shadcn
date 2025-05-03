@@ -16,7 +16,7 @@ import { Card } from '../ui/card'
 import { ArtifactCloseButton } from './artifact-close-button'
 import { ArtifactMessages } from './artifact-messages'
 
-const panelWidth = 500
+const panelWidth = 420
 
 export type UIArtifact = {
   title: string
@@ -199,7 +199,7 @@ function PureArtifact({
                       type: 'spring',
                       stiffness: 200,
                       damping: 30,
-                      duration: 5000,
+                      duration: 1000,
                     },
                   }
                 : {
@@ -214,7 +214,7 @@ function PureArtifact({
                       type: 'spring',
                       stiffness: 200,
                       damping: 30,
-                      duration: 5000,
+                      duration: 1000,
                     },
                   }
             }

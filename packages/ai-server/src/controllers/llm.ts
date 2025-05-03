@@ -1,12 +1,15 @@
 import {
+  CoreAssistantMessage,
   CoreToolMessage,
+  DataStreamWriter,
+  StepResult,
   appendResponseMessages,
   convertToCoreMessages,
   createDataStreamResponse,
   generateObject,
   streamText,
 } from 'ai'
-import { AnalyzeResultSchema } from 'common/utils'
+import { DashboardSchema } from 'common/utils'
 import type { FastifyInstance } from 'fastify'
 import type { FastifyZodOpenApiTypeProvider } from 'fastify-zod-openapi'
 import { v4 as uuidv4 } from 'uuid'
@@ -31,30 +34,21 @@ export default async function (fastify: FastifyInstance) {
     return chat
   }
 
-  const createDashboard = async (params: z.infer<typeof fastify.bizSchemas.llm.dashboard.insert>) => {
+  const createDashboardByAi = async (params: z.infer<typeof fastify.bizSchemas.llm.dashboard.insert>) => {
     const chat = await getChatById(params.chatId)
     if (!chat.success) return chat
     const message = await service.message.queryById(params.messageId)
     if (!message.success) return message
 
-    const coreMessage = convertToCoreMessages([message.data as any]).map((v) => {
-      //   if (v.role === 'tool' && v.content[0].type === 'tool-result' && v.content[0].toolName === 'sqliteAnalyze') {
-      //     const msg = v as CoreToolMessage
-      //     msg.content = msg.content.map((val) => {
-      //       const { chartType, ...result } = val.result as AnalyzeResultSchema
-      //       return { ...val, result }
-      //     })
-      //   }
-      return v
-    })
+    const coreMessage = convertToCoreMessages([message.data as any])
 
-    fastify.log.info(`获取分析结果: ${JSON.stringify(coreMessage)}`)
+    fastify.log.info(`获取分析数据成功`)
 
     fastify.log.info('生成Dashboard配置...')
 
     const { object } = await generateObject({
       model,
-      system: agent.utils.systemPrompt('dashboard'),
+      system: agent.utils.systemPrompt({ type: 'dashboard' }),
       schema: fastify.bizDashboardSchema.zod,
       messages: coreMessage,
     })
@@ -62,6 +56,45 @@ export default async function (fastify: FastifyInstance) {
     fastify.log.info(`Dashboard配置：${JSON.stringify(object)}`)
 
     return service.dashboard.insert({ ...params, data: JSON.stringify(object), userId: session.user.id })
+  }
+
+  const createDashboard = async ({
+    toolResults,
+    messages,
+    onFinish,
+  }: Pick<StepResult<ReturnType<typeof agent.createTools>>, 'toolResults'> & {
+    dataStream: DataStreamWriter
+    messages: ((CoreAssistantMessage | CoreToolMessage) & { id: string })[]
+    onFinish: (params: { dashboardSchema: DashboardSchema }) => void
+  }) => {
+    const createDashboardToolResult = toolResults.find(
+      (v) => v.toolName === 'generateDashboardsBasedOnDataAnalysisResults' && v.result.state === 'end',
+    )
+
+    if (createDashboardToolResult) {
+      try {
+        const dashboardSchema: DashboardSchema = {
+          title: {
+            value: 'Dashboard标题',
+            description: 'Dashboard描述',
+          },
+          charts: [],
+        }
+        let internalToolResults = toolResults
+        if (internalToolResults.length === 1) {
+          internalToolResults = (messages.filter((v) => v.role === 'tool').at(-2)?.content as any) ?? []
+        }
+
+        dashboardSchema.charts = internalToolResults.reduce(
+          (prev, curr) => {
+            if (curr.toolName === 'sqliteAnalyze' && curr.result) prev.push(curr.result as any)
+            return prev
+          },
+          [] as DashboardSchema['charts'],
+        )
+        onFinish({ dashboardSchema })
+      } catch (e) {}
+    }
   }
 
   fastify.withTypeProvider<FastifyZodOpenApiTypeProvider>().post(
@@ -103,26 +136,40 @@ export default async function (fastify: FastifyInstance) {
       reply.header('Content-Type', 'text/plain; charset=utf-8')
       return reply.send(
         createDataStreamResponse({
-          execute: (dataStream) => {
+          execute: async (dataStream) => {
+            // 判断用户的意图是否是生成Dashboard
+            const { isCreateDashboard } = await agent.utils.userNeedsAnalysis(messages)
+
+            const temporary: { dashboardSchema?: DashboardSchema } = {}
+
             const result = streamText({
               model,
               system: agent.utils.systemPrompt(),
               messages,
-              tools: agent.tools,
+              tools: agent.createTools({ dataStream, isCreateDashboard }),
               maxSteps: 10,
               // experimental_transform: smoothStream({ chunking: 'word' }),
               experimental_generateMessageId: uuidv4,
-              //   onStepFinish: async ({ request }) => {
-              //     fastify.log.info(`onStepFinish: ${JSON.stringify(request.body)}`)
-              //   },
+              onStepFinish: async ({ stepType, finishReason, toolResults, response }) => {
+                if (stepType === 'tool-result' && finishReason === 'tool-calls' && toolResults.length) {
+                  await createDashboard({
+                    dataStream,
+                    messages: response.messages,
+                    toolResults,
+                    onFinish: ({ dashboardSchema }) => {
+                      temporary.dashboardSchema = dashboardSchema
+                    },
+                  })
+                }
+              },
               onFinish: async ({ response }) => {
                 if (session.user?.id) {
                   try {
-                    const assistantId = agent.utils.getTrailingMessageId({
+                    const messageId = agent.utils.getTrailingMessageId({
                       messages: response.messages.filter((message) => message.role === 'assistant'),
                     })
 
-                    if (!assistantId) {
+                    if (!messageId) {
                       throw fastify.bizError.createBizError(fastify.BizResult.AI_CHAT_ERROR, {
                         message: 'No assistant message found!',
                       })
@@ -136,7 +183,7 @@ export default async function (fastify: FastifyInstance) {
                     await service.message.insert({
                       messages: [
                         {
-                          id: assistantId,
+                          id: messageId,
                           chatId: chat.id,
                           role: assistantMessage.role,
                           parts: assistantMessage.parts,
@@ -144,15 +191,21 @@ export default async function (fastify: FastifyInstance) {
                         },
                       ],
                     })
-                  } catch (_) {
-                    console.error('Failed to save chat')
+
+                    if (temporary.dashboardSchema) {
+                      await service.dashboard.insert({
+                        chatId: chat.id,
+                        messageId,
+                        data: temporary.dashboardSchema,
+                        userId: session.user.id,
+                      })
+                    }
+                  } catch (e) {
+                    fastify.log.error(e, 'Failed to save message')
                   }
                 }
               },
-              experimental_telemetry: {
-                isEnabled: true,
-                functionId: 'stream-text',
-              },
+              experimental_telemetry: { isEnabled: true, functionId: 'stream-text' },
             })
             result.consumeStream()
             result.mergeIntoDataStream(dataStream, { sendReasoning: true })
@@ -276,7 +329,7 @@ export default async function (fastify: FastifyInstance) {
       },
     },
     async function (request) {
-      return createDashboard(request.body)
+      return createDashboardByAi(request.body)
     },
   )
   fastify
@@ -297,7 +350,7 @@ export default async function (fastify: FastifyInstance) {
       async function (request) {
         const dashboard = await service.dashboard.query(request.body)
         if (!dashboard.success || dashboard.data) return dashboard
-        return createDashboard(request.body)
+        return createDashboardByAi(request.body)
       },
     )
 }

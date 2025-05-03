@@ -39,7 +39,7 @@ export const CardHeaderRenderer = ({ prefix, suffix, description, value }: Analy
         </div>
       )}
       {description && <CardDescription>{description}</CardDescription>}
-      {value !== undefined && <CardTitle>{value}</CardTitle>}
+      {value !== undefined && <CardTitle className="text-lg">{value}</CardTitle>}
       {suffix && (
         <div className="absolute right-4 top-4">
           <Badge variant="outline" className="flex gap-1 rounded-lg text-xs">

@@ -1,14 +1,9 @@
 import * as DatabaseSchema from '@@/ai-server/database/schema'
-import type {
-  AnalyzeResultSchema,
-  AnalyzeResultWithChartSchema,
-  AnalyzeResultWithIndicatorCardSchema,
-  DashboardSchema,
-} from 'common/utils'
+import type { AnalyzeResultSchema, DashboardSchema } from 'common/utils'
 
 export * from 'common/types'
 
-export type { DashboardSchema, AnalyzeResultSchema, AnalyzeResultWithChartSchema, AnalyzeResultWithIndicatorCardSchema }
+export type { DashboardSchema, AnalyzeResultSchema }
 
 export type ChatVisibilityType = DatabaseSchema.Chat['visibility']
 
