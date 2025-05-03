@@ -1,11 +1,11 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
-import type { AnalyzeResultWithChartSchema } from '@/types'
+import type { AnalyzeResultSchema } from '@/types'
 import { Bar, BarChart, CartesianGrid, LabelList, Line, LineChart, Pie, PieChart, XAxis } from 'recharts'
 import { CardFooterRenderer, CardHeaderRenderer, useChartUtils } from '../utils'
 
-export function Recharts(props: AnalyzeResultWithChartSchema & { className?: string }) {
-  const { className, chartType = 'bar', title, data, footer, ...config } = props
+export function Recharts(props: AnalyzeResultSchema & { className?: string }) {
+  const { className, chartType = 'bar', title, data, footer, tableName, ...config } = props
   const {
     chartConfig,
     valueFieldnames,
@@ -13,11 +13,11 @@ export function Recharts(props: AnalyzeResultWithChartSchema & { className?: str
   } = useChartUtils({ config, data })
 
   return (
-    <Card className={className}>
+    <Card>
       <CardHeaderRenderer {...title} />
 
       <CardContent>
-        <ChartContainer config={chartConfig}>
+        <ChartContainer className={className} config={chartConfig}>
           {chartType === 'line' ? (
             <LineChart
               accessibilityLayer
