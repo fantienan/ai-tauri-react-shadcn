@@ -14,6 +14,7 @@ export class Result {
   static AI_ERROR = 30000
   static AI_AGENT_TOOL_ERROR = 30001
   static AI_CHAT_ERROR = 30002
+  static TABLE_AGENT_ERROR = 30003
 
   /**
    * @description 50000 未知异常

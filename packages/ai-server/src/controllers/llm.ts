@@ -12,8 +12,8 @@ import {
 import { DashboardSchema } from 'common/utils'
 import type { FastifyInstance } from 'fastify'
 import type { FastifyZodOpenApiTypeProvider } from 'fastify-zod-openapi'
-import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
+import { ChatContext } from '../decorates/agent/context.ts'
 import { createLlmService } from '../services/index.ts'
 
 export default async function (fastify: FastifyInstance) {
@@ -137,19 +137,17 @@ export default async function (fastify: FastifyInstance) {
       return reply.send(
         createDataStreamResponse({
           execute: async (dataStream) => {
-            // 判断用户的意图是否是生成Dashboard
-            const { isCreateDashboard } = await agent.utils.userNeedsAnalysis(messages)
-
-            const temporary: { dashboardSchema?: DashboardSchema } = {}
+            const { isCreateDashboard } = await agent.utils.analyzeUserNeeds(messages)
+            const context = new ChatContext({ dataStream, isCreateDashboard })
 
             const result = streamText({
               model,
-              system: agent.utils.systemPrompt(),
+              system: agent.utils.systemPrompt({ type: isCreateDashboard ? 'dashboard' : 'regular' }),
               messages,
-              tools: agent.createTools({ dataStream, isCreateDashboard }),
+              tools: agent.createTools(context),
               maxSteps: 10,
               // experimental_transform: smoothStream({ chunking: 'word' }),
-              experimental_generateMessageId: uuidv4,
+              experimental_generateMessageId: context.genUUID,
               onStepFinish: async ({ stepType, finishReason, toolResults, response }) => {
                 if (stepType === 'tool-result' && finishReason === 'tool-calls' && toolResults.length) {
                   await createDashboard({
@@ -157,7 +155,7 @@ export default async function (fastify: FastifyInstance) {
                     messages: response.messages,
                     toolResults,
                     onFinish: ({ dashboardSchema }) => {
-                      temporary.dashboardSchema = dashboardSchema
+                      context.dashboardSchema = dashboardSchema
                     },
                   })
                 }
@@ -192,11 +190,11 @@ export default async function (fastify: FastifyInstance) {
                       ],
                     })
 
-                    if (temporary.dashboardSchema) {
+                    if (context.dashboardSchema) {
                       await service.dashboard.insert({
                         chatId: chat.id,
                         messageId,
-                        data: temporary.dashboardSchema,
+                        data: context.dashboardSchema,
                         userId: session.user.id,
                       })
                     }

@@ -1,6 +1,6 @@
 import type { AnalyzeResultSchema } from '@/types'
 import { Chart, type G2Spec } from '@antv/g2'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { useEffect, useRef } from 'react'
 
 export type ChartViewProps = Omit<AnalyzeResultSchema, 'chartRendererType' | 'data'> & {
@@ -10,8 +10,15 @@ export type ChartViewProps = Omit<AnalyzeResultSchema, 'chartRendererType' | 'da
   spec: Partial<G2Spec>
 }
 
-export const G2Chart: React.FC<ChartViewProps> = ({ prefixCls = 'g2chart', className, style, spec, ...restProps }) => {
-  const compClassName = classNames(`${prefixCls}`, className)
+export const G2Chart: React.FC<ChartViewProps> = ({
+  prefixCls = 'g2chart',
+  className,
+  style,
+  spec,
+  title,
+  ...restProps
+}) => {
+  const compClassName = clsx(`${prefixCls}`, className)
   const chartRef = useRef<HTMLDivElement>(null)
 
   const height = style?.height || 200
@@ -29,5 +36,13 @@ export const G2Chart: React.FC<ChartViewProps> = ({ prefixCls = 'g2chart', class
     }
   }, [spec])
 
-  return <div {...restProps} className={compClassName} ref={chartRef} style={{ width, height, margin: 'auto' }} />
+  return (
+    <div
+      {...restProps}
+      title={title.value}
+      className={compClassName}
+      ref={chartRef}
+      style={{ width, height, margin: 'auto' }}
+    />
+  )
 }

@@ -1,115 +1,216 @@
 {
-  "id": "00000000-0000-0000-0000-000000000000",
-  "prevId": "",
   "version": "6",
   "dialect": "sqlite",
+  "id": "02d31f46-3613-495f-80cf-2b851837fb37",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "vote": {
-      "name": "vote",
-      "columns": {
-        "chat_id": {
-          "autoincrement": false,
-          "name": "chat_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "message_id": {
-          "autoincrement": false,
-          "name": "message_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "is_upvoted": {
-          "autoincrement": false,
-          "name": "is_upvoted",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "compositePrimaryKeys": {
-        "vote_chat_id_message_id_pk": {
-          "columns": ["chat_id", "message_id"],
-          "name": "vote_chat_id_message_id_pk"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "vote_message_id_message_id_fk": {
-          "name": "vote_message_id_message_id_fk",
-          "tableFrom": "vote",
-          "tableTo": "message",
-          "columnsFrom": ["message_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "vote_chat_id_chat_id_fk": {
-          "name": "vote_chat_id_chat_id_fk",
-          "tableFrom": "vote",
-          "tableTo": "chat",
-          "columnsFrom": ["chat_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
     "chat": {
       "name": "chat",
       "columns": {
         "id": {
-          "autoincrement": false,
           "name": "id",
           "type": "text",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "created_at": {
-          "autoincrement": false,
           "name": "created_at",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "title": {
-          "autoincrement": false,
           "name": "title",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "user_id": {
-          "autoincrement": false,
           "name": "user_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "visibility": {
-          "default": "'private'",
-          "autoincrement": false,
           "name": "visibility",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'private'"
         }
       },
-      "compositePrimaryKeys": {},
       "indexes": {},
       "foreignKeys": {
         "chat_user_id_user_id_fk": {
           "name": "chat_user_id_user_id_fk",
           "tableFrom": "chat",
           "tableTo": "user",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "analyze_daily_summary": {
+      "name": "analyze_daily_summary",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "customer_code": {
+          "name": "customer_code",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "member_code": {
+          "name": "member_code",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "visit_date": {
+          "name": "visit_date",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "visit_time_period": {
+          "name": "visit_time_period",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "weixin_id": {
+          "name": "weixin_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "pv": {
+          "name": "pv",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "dashboard": {
+      "name": "dashboard",
+      "columns": {
+        "chat_id": {
+          "name": "chat_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "message_id": {
+          "name": "message_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "data": {
+          "name": "data",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "dashboard_chat_id_chat_id_fk": {
+          "name": "dashboard_chat_id_chat_id_fk",
+          "tableFrom": "dashboard",
+          "tableTo": "chat",
+          "columnsFrom": [
+            "chat_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "dashboard_message_id_message_id_fk": {
+          "name": "dashboard_message_id_message_id_fk",
+          "tableFrom": "dashboard",
+          "tableTo": "message",
+          "columnsFrom": [
+            "message_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "dashboard_user_id_user_id_fk": {
+          "name": "dashboard_user_id_user_id_fk",
+          "tableFrom": "dashboard",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "pk": {
+          "columns": [
+            "chat_id",
+            "message_id"
+          ],
+          "name": "pk"
         }
       },
       "uniqueConstraints": {},
@@ -119,61 +220,278 @@
       "name": "message",
       "columns": {
         "id": {
-          "autoincrement": false,
           "name": "id",
           "type": "text",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "chat_id": {
-          "autoincrement": false,
           "name": "chat_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "role": {
-          "autoincrement": false,
           "name": "role",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "parts": {
-          "autoincrement": false,
           "name": "parts",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "attachments": {
-          "autoincrement": false,
           "name": "attachments",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "created_at": {
-          "autoincrement": false,
           "name": "created_at",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         }
       },
-      "compositePrimaryKeys": {},
       "indexes": {},
       "foreignKeys": {
         "message_chat_id_chat_id_fk": {
           "name": "message_chat_id_chat_id_fk",
           "tableFrom": "message",
           "tableTo": "chat",
-          "columnsFrom": ["chat_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "chat_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "analyze_order_product_details": {
+      "name": "analyze_order_product_details",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "customer_code": {
+          "name": "customer_code",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "custormer_type": {
+          "name": "custormer_type",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "province": {
+          "name": "province",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "city": {
+          "name": "city",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "city_level": {
+          "name": "city_level",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "store_type": {
+          "name": "store_type",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "store_code": {
+          "name": "store_code",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "custromer_code": {
+          "name": "custromer_code",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "baby_age_group": {
+          "name": "baby_age_group",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "gender": {
+          "name": "gender",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "crowd_type": {
+          "name": "crowd_type",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "online_order": {
+          "name": "online_order",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payment_date": {
+          "name": "payment_date",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "write_off_date": {
+          "name": "write_off_date",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "associated_order_number": {
+          "name": "associated_order_number",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "first_category": {
+          "name": "first_category",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "secondary_category": {
+          "name": "secondary_category",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "related_first_category": {
+          "name": "related_first_category",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "related_secondary_category": {
+          "name": "related_secondary_category",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "brand_name": {
+          "name": "brand_name",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "related_brand_name": {
+          "name": "related_brand_name",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "online_commodity_code": {
+          "name": "online_commodity_code",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "related_online_commodity_code": {
+          "name": "related_online_commodity_code",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "marketing_campaign_type": {
+          "name": "marketing_campaign_type",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "scene_name": {
+          "name": "scene_name",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payment_write_off_days_difference": {
+          "name": "payment_write_off_days_difference",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "online_sales": {
+          "name": "online_sales",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "related_sales": {
+          "name": "related_sales",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
@@ -181,309 +499,103 @@
       "name": "user",
       "columns": {
         "id": {
-          "autoincrement": false,
           "name": "id",
           "type": "text",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "email": {
-          "autoincrement": false,
           "name": "email",
           "type": "text(64)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "password": {
-          "autoincrement": false,
           "name": "password",
           "type": "text(64)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "created_at": {
-          "autoincrement": false,
           "name": "created_at",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         }
       },
-      "compositePrimaryKeys": {},
       "indexes": {},
       "foreignKeys": {},
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
-    "daily_summary": {
-      "name": "daily_summary",
+    "vote": {
+      "name": "vote",
       "columns": {
-        "id": {
-          "autoincrement": false,
-          "name": "id",
+        "chat_id": {
+          "name": "chat_id",
           "type": "text",
-          "primaryKey": true,
-          "notNull": true
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
         },
-        "customer_code": {
-          "autoincrement": false,
-          "name": "customer_code",
+        "message_id": {
+          "name": "message_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "is_upvoted": {
+          "name": "is_upvoted",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true
-        },
-        "member_code": {
-          "autoincrement": false,
-          "name": "member_code",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "visit_date": {
-          "autoincrement": false,
-          "name": "visit_date",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "visit_time_period": {
-          "autoincrement": false,
-          "name": "visit_time_period",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "weixin_id": {
-          "autoincrement": false,
-          "name": "weixin_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "pv": {
-          "autoincrement": false,
-          "name": "pv",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         }
       },
-      "compositePrimaryKeys": {},
       "indexes": {},
-      "foreignKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
-    "order_product_details": {
-      "name": "order_product_details",
-      "columns": {
-        "id": {
-          "autoincrement": false,
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true
+      "foreignKeys": {
+        "vote_chat_id_chat_id_fk": {
+          "name": "vote_chat_id_chat_id_fk",
+          "tableFrom": "vote",
+          "tableTo": "chat",
+          "columnsFrom": [
+            "chat_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
-        "customer_code": {
-          "autoincrement": false,
-          "name": "customer_code",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "custormer_type": {
-          "autoincrement": false,
-          "name": "custormer_type",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "province": {
-          "autoincrement": false,
-          "name": "province",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "city": {
-          "autoincrement": false,
-          "name": "city",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "city_level": {
-          "autoincrement": false,
-          "name": "city_level",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "store_type": {
-          "autoincrement": false,
-          "name": "store_type",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "store_code": {
-          "autoincrement": false,
-          "name": "store_code",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "custromer_code": {
-          "autoincrement": false,
-          "name": "custromer_code",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "baby_age_group": {
-          "autoincrement": false,
-          "name": "baby_age_group",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "gender": {
-          "autoincrement": false,
-          "name": "gender",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "crowd_type": {
-          "autoincrement": false,
-          "name": "crowd_type",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "online_order": {
-          "autoincrement": false,
-          "name": "online_order",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "payment_date": {
-          "autoincrement": false,
-          "name": "payment_date",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "write_off_date": {
-          "autoincrement": false,
-          "name": "write_off_date",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "associated_order_number": {
-          "autoincrement": false,
-          "name": "associated_order_number",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "first_category": {
-          "autoincrement": false,
-          "name": "first_category",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "secondary_category": {
-          "autoincrement": false,
-          "name": "secondary_category",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "related_first_category": {
-          "autoincrement": false,
-          "name": "related_first_category",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "related_secondary_category": {
-          "autoincrement": false,
-          "name": "related_secondary_category",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "brand_name": {
-          "autoincrement": false,
-          "name": "brand_name",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "related_brand_name": {
-          "autoincrement": false,
-          "name": "related_brand_name",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "online_commodity_code": {
-          "autoincrement": false,
-          "name": "online_commodity_code",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "related_online_commodity_code": {
-          "autoincrement": false,
-          "name": "related_online_commodity_code",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "marketing_campaign_type": {
-          "autoincrement": false,
-          "name": "marketing_campaign_type",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "scene_name": {
-          "autoincrement": false,
-          "name": "scene_name",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "payment_write_off_days_difference": {
-          "autoincrement": false,
-          "name": "payment_write_off_days_difference",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "online_sales": {
-          "autoincrement": false,
-          "name": "online_sales",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "related_sales": {
-          "autoincrement": false,
-          "name": "related_sales",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": true
+        "vote_message_id_message_id_fk": {
+          "name": "vote_message_id_message_id_fk",
+          "tableFrom": "vote",
+          "tableTo": "message",
+          "columnsFrom": [
+            "message_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "pk": {
+          "columns": [
+            "chat_id",
+            "message_id"
+          ],
+          "name": "pk"
+        }
+      },
       "uniqueConstraints": {},
       "checkConstraints": {}
     }
@@ -494,5 +606,8 @@
     "schemas": {},
     "tables": {},
     "columns": {}
+  },
+  "internal": {
+    "indexes": {}
   }
 }

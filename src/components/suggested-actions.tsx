@@ -20,6 +20,12 @@ function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
       label: '据数据库中的数据生成Dashboard',
       action: '请根据数据库中的数据生成Dashboard页面',
     },
+
+    {
+      title: '创建元数据表',
+      label: '为数据集创建元数据表',
+      action: '请为数据库中的表创建元数据表',
+    },
   ]
 
   return (

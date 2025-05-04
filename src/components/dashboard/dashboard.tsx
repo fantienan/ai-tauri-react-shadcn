@@ -50,12 +50,12 @@ export function PureDashboard({ chatId, messageId }: DashboardProps) {
   return (
     <div className="flex flex-col gap-4 w-full">
       <IndicatorCards configs={chartInfo.indicatorCards} className="gap-3" />
-      {chartInfo.blockChart.map((chart) => (
-        <ChartRenderer className="h-20" key={chart.title.value} {...chart} />
+      {chartInfo.blockChart.map((chart, index) => (
+        <ChartRenderer className="h-20" key={index} {...chart} />
       ))}
       <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 w-full">
-        {chartInfo.charts.map((chart) => (
-          <ChartRenderer {...chart} />
+        {chartInfo.charts.map((chart, index) => (
+          <ChartRenderer {...chart} key={index} />
         ))}
       </div>
     </div>

@@ -2,7 +2,7 @@ import { type InferSelectModel } from 'drizzle-orm'
 import { integer, primaryKey, real, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 import { v4 as uuidv4 } from 'uuid'
 
-export const dailySummary = sqliteTable('daily_summary', {
+export const dailySummary = sqliteTable('analyze_daily_summary', {
   id: text('id')
     .primaryKey()
     .notNull()
@@ -15,7 +15,7 @@ export const dailySummary = sqliteTable('daily_summary', {
   pv: integer().notNull(),
 })
 
-export const orderProductDetails = sqliteTable('order_product_details', {
+export const orderProductDetails = sqliteTable('analyze_order_product_details', {
   id: text('id')
     .primaryKey()
     .notNull()

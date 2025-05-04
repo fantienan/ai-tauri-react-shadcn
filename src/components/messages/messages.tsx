@@ -8,6 +8,7 @@ import { PreviewMessage, ThinkingMessage } from './message'
 
 interface MessagesProps {
   chatId: string
+  stop: () => void
   status: UseChatHelpers['status']
   votes: any[] | undefined
   messages: UIMessage[]
@@ -33,7 +34,7 @@ function PreviewMessageWrap(props: ComponentProps<typeof PreviewMessage>) {
   return <PreviewMessage {...props} {...messageActions} />
 }
 
-function PureMessages({ chatId, status, votes, messages, setMessages, reload, isReadonly }: MessagesProps) {
+function PureMessages({ stop, chatId, status, votes, messages, setMessages, reload, isReadonly }: MessagesProps) {
   const [messagesContainerRef, messagesEndRef] = useScrollToBottom<HTMLDivElement>({ status })
 
   return (
@@ -42,6 +43,7 @@ function PureMessages({ chatId, status, votes, messages, setMessages, reload, is
 
       {messages.map((message, index) => (
         <PreviewMessageWrap
+          stop={stop}
           key={message.id}
           chatId={chatId}
           message={message}
@@ -68,6 +70,7 @@ export const Messages = memo(PureMessages, (prevProps, nextProps) => {
   if (prevProps.messages.length !== nextProps.messages.length) return false
   if (!equal(prevProps.messages, nextProps.messages)) return false
   if (!equal(prevProps.votes, nextProps.votes)) return false
+  if (prevProps.stop !== nextProps.stop) return false
 
   return true
 })

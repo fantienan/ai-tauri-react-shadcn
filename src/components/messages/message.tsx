@@ -4,14 +4,15 @@ import { PreviewAttachment } from '@/components/preview-attachment'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
-import type { Vote } from '@/types'
+import type { AnalyzeResultSchema, Vote } from '@/types'
 import { UseChatHelpers } from '@ai-sdk/react'
-import type { UIMessage } from 'ai'
+import type { ToolResult, UIMessage } from 'ai'
 import cx from 'classnames'
 import equal from 'fast-deep-equal'
 import { AnimatePresence, motion } from 'framer-motion'
 import { memo, useState } from 'react'
 import { Analyze } from '../analyze'
+import { ProgressCard } from '../progress-card'
 import { MessageActions } from './message-actions'
 import { MessageEditor } from './message-editor'
 import { MessageReasoning } from './message-reasoning'
@@ -27,7 +28,9 @@ const PurePreviewMessage = ({
   showCode,
   showDownload,
   showDashboard,
+  stop,
 }: {
+  stop: () => void
   chatId: string
   message: UIMessage
   vote: Vote | undefined
@@ -40,6 +43,13 @@ const PurePreviewMessage = ({
   showDashboard?: boolean
 }) => {
   const [mode, setMode] = useState<'view' | 'edit'>('view')
+
+  const createDashboardToolName = 'generateDashboardsBasedOnDataAnalysisResults'
+
+  const generatingDashboard = (params: ToolResult<string, string, any>) => {
+    const toolResult = params as Pick<AnalyzeResultSchema, 'whoCalled' | 'id'> & Record<string, any>
+    return toolResult.whoCalled === createDashboardToolName && toolResult.id
+  }
 
   return (
     <AnimatePresence>
@@ -136,25 +146,39 @@ const PurePreviewMessage = ({
 
               if (type === 'tool-invocation') {
                 const { toolInvocation } = part
-                const { toolName, toolCallId, state } = toolInvocation
+                const { toolName, toolCallId, state, args } = toolInvocation
+                const isGeneratingDashboard = generatingDashboard(args)
+
+                if (isGeneratingDashboard && toolName !== createDashboardToolName) return null
+
+                let node: React.ReactNode = null
 
                 if (state === 'call') {
+                  if (toolName === 'sqliteAnalyze') {
+                    node = <Analyze />
+                  } else if (toolName === createDashboardToolName) {
+                    node = <ProgressCard stop={stop} />
+                  }
                   return (
-                    <div key={toolCallId} className={cx({ skeleton: ['sqliteAnalyze'].includes(toolName) })}>
-                      {toolName === 'sqliteAnalyze' ? <Analyze /> : null}
-                    </div>
+                    !!node && (
+                      <div key={toolCallId} className={cx({ skeleton: ['sqliteAnalyze'].includes(toolName) })}>
+                        {node}
+                      </div>
+                    )
                   )
                 }
 
                 if (state === 'result') {
                   const { result } = toolInvocation
-                  const node = toolName === 'sqliteAnalyze' ? <Analyze chartRendererProps={result} /> : null
-                  if (!node) return null
-                  return (
-                    <div data-1 key={toolCallId}>
-                      {node}
-                    </div>
-                  )
+                  if (toolName === 'sqliteAnalyze') {
+                    node = <Analyze chartRendererProps={result} />
+                  } else if (toolName === createDashboardToolName) {
+                    node =
+                      result.state === 'start' ? (
+                        <ProgressCard stop={stop} value={result.state === 'end' ? 100 : 50} />
+                      ) : null
+                  }
+                  return node && <div key={toolCallId}>{node}</div>
                 }
               }
             })}

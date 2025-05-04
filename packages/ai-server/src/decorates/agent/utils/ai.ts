@@ -1,5 +1,5 @@
 import { deepseek } from '@ai-sdk/deepseek'
-import type { CoreAssistantMessage, CoreToolMessage } from 'ai'
+import type { CoreAssistantMessage, CoreMessage, CoreToolMessage } from 'ai'
 import {
   type Message,
   type UIMessage,
@@ -17,14 +17,10 @@ type ResponseMessage = ResponseMessageWithoutId & { id: string }
 
 export const regularPrompt = `你是一位友善的助手，保持你的回答简洁且有帮助, 使用markdown格式返回文本`
 
+export const dashboardPrompt = `不要需要生成任何描述文字`
+
 export const systemPrompt = (options?: { type?: 'dashboard' | 'regular' }) => {
-  if (options?.type === 'dashboard') {
-    return `
-    你是一名专业的数据分析师，根据这份数据生成Dashboard配置，要求如下：
-        -  将data数组长度为1的图表类型设置为指标卡，其余图表类型保持不变
-        - 根据所有数据为Dashboard生成标题和描述，要求准确、简洁、明了，标题在4-10个汉字之间，描述在10-30个汉字之间
-    `
-  }
+  if (options?.type === 'dashboard') return dashboardPrompt
   return regularPrompt
 }
 
@@ -77,7 +73,8 @@ export async function generateDescriptionInformation({ data }: { data: AnalyzeRe
   return object
 }
 
-export async function userNeedsAnalysis(messages: any[]) {
+// 根据消息分析用户需求
+export async function analyzeUserNeeds(messages: CoreMessage[] | Omit<Message, 'id'>[]) {
   const { object } = await generateObject({
     model: llmProvider.languageModel('chat-model-reasoning'),
     messages,
