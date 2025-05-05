@@ -1,3 +1,4 @@
+import {} from '@ai-sdk/ui-utils'
 import { tool } from 'ai'
 import {
   AnalyzeResultSchema,
@@ -9,7 +10,6 @@ import { logger } from '../../../utils/index.ts'
 import { createBizError } from '../../errors.ts'
 import { Result } from '../../result.ts'
 import type { ChatContextInstance } from '../context.ts'
-import { getDatabase } from '../utils/index.ts'
 
 const genParametersSchema = (context: ChatContextInstance) => {
   const schema = z.object({ sql: z.string().describe('要执行的 SQL 查询') })
@@ -24,7 +24,7 @@ export const createSqliteSchemaTool = (context: ChatContextInstance) =>
     execute: async ({ sql }) => {
       try {
         logger.info(`获取SQLite数据库表执行sql: ${sql}`)
-        const db = getDatabase()
+        const db = context.getDatabase()
         const result = (db.prepare(sql).all() as any).filter(
           (v: { name: string }) => v.name.startsWith('analyze_') && !v.name.endsWith('_metadata'),
         )
@@ -45,7 +45,7 @@ export const createSqliteTableFieldTool = (context: ChatContextInstance) =>
     execute: async ({ sql }) => {
       try {
         logger.info(`获取SQLite数据库表字段信息执行sql: ${sql}`)
-        const db = getDatabase()
+        const db = context.getDatabase()
         const result = db.prepare(sql).all()
         db.close()
         logger.info(`获取SQLite数据库表字段信息成功`)
@@ -57,7 +57,7 @@ export const createSqliteTableFieldTool = (context: ChatContextInstance) =>
     },
   })
 
-export const createSqliteMetadataTableCreationTool = ({}: ChatContextInstance) =>
+export const createSqliteMetadataTableCreationTool = (context: ChatContextInstance) =>
   tool({
     description: `
     SQLite数据库创建元数据表工具，为数据库中所有表创建元数据表，要求如下：
@@ -78,7 +78,7 @@ export const createSqliteMetadataTableCreationTool = ({}: ChatContextInstance) =
       try {
         logger.info(`SQLite数据库创建元数据表工具: ${JSON.stringify(parameters)}`)
         const { createSql, insertSql } = parameters
-        const db = getDatabase()
+        const db = context.getDatabase()
         if (createSql) db.exec(createSql)
         if (insertSql) db.prepare(insertSql).run()
         db.close()
@@ -124,21 +124,18 @@ export const createSqliteAnalyzeTool = (context: ChatContextInstance) =>
     execute: async ({ sql, title, description, summary, longText, ...parameters }) => {
       try {
         logger.info(`SQLite数据库数据分析工具执行sql: ${JSON.stringify(sql)}`)
-        const db = getDatabase()
+        const db = context.getDatabase()
         const data = db.prepare(sql).all() as Record<string, any>[]
         db.close()
         logger.info(`SQLite数据库数据分析工具执行成功`)
         const result: AnalyzeResultSchema = {
           ...parameters,
           data,
-          title: {
-            value: title,
-            description,
-          },
-          footer: {
-            value: summary,
-            description: longText,
-          },
+          title: { value: title, description },
+          footer: { value: summary, description: longText },
+        }
+        if (result.progress) {
+          result.progress = { ...result.progress, description }
         }
         return result
       } catch (error) {
@@ -154,9 +151,7 @@ export const createGenerateDashboardsBasedOnDataAnalysisResultsTool = (context: 
     Dashboard生成工具，调用此工具需要满足以下条件：
         - 用户明确指出要生成Dashboard
         - 在开始生成Dashboard和生成结束时必须调用此工具并且必须传入分析任务进度信息
-        - 在结束时调用此工具，需要生成Dashboard的标题和描述，要求如下：
-            - 标题和描述，要求准确、简洁、明了，标题在4-10个汉字之间，描述在10-30个汉字之间
-        - 将Dashboard生成工具的返回值作为参数传给所有工具
+        - 将所有SQLite数据库数据分析工具返回的title和footer
         - 调用SQLite数据库数据分析工具进行分析，至少给出8种分析方案， 分析结果以图表展示，图表类型如下：
             - 4个指标卡，图表类型为indicator-card
             - 1个折线图，图表类型为line
@@ -164,11 +159,21 @@ export const createGenerateDashboardsBasedOnDataAnalysisResultsTool = (context: 
             - 1个列表，图表类型为list，为了数据丰富要多查一些字段
             - 1个表格，图表类型为table，为了数据丰富要多查一些字段
     `,
-    parameters: generateDashboardsBasedOnDataAnalysisResultsSchema.zod,
+    parameters: generateDashboardsBasedOnDataAnalysisResultsSchema.zod.merge(
+      z.object({
+        value: z.string({ description: '标题' }),
+        description: z.string({ description: `描述` }),
+      }),
+    ),
     execute: async (parameters) => {
       if (parameters.state === 'start') {
         logger.info(`开始生成Dashboard`)
       } else if (parameters.state === 'end') {
+        const res = await context.generateDescriptionInformation()
+        if (res) {
+          parameters.title = res.title
+          parameters.description = res.description
+        }
         logger.info(`Dashboard生成完成`)
       }
       return {

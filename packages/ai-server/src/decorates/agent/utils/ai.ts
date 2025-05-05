@@ -9,7 +9,6 @@ import {
   generateText,
   wrapLanguageModel,
 } from 'ai'
-import { AnalyzeResultSchema } from 'common/utils'
 import { z } from 'zod'
 
 type ResponseMessageWithoutId = CoreToolMessage | CoreAssistantMessage
@@ -17,7 +16,7 @@ type ResponseMessage = ResponseMessageWithoutId & { id: string }
 
 export const regularPrompt = `你是一位友善的助手，保持你的回答简洁且有帮助, 使用markdown格式返回文本`
 
-export const dashboardPrompt = `不要需要生成任何描述文字`
+export const dashboardPrompt = `你是一个专业的助手，在整个过程中不要需要生成任何文字`
 
 export const systemPrompt = (options?: { type?: 'dashboard' | 'regular' }) => {
   if (options?.type === 'dashboard') return dashboardPrompt
@@ -55,20 +54,14 @@ export async function generateTitleFromUserMessage({ message }: { message: Messa
 export function getTrailingMessageId({ messages }: { messages: ResponseMessage[] }) {
   return messages.at(-1)?.id ?? null
 }
-export async function generateDescriptionInformation({ data }: { data: AnalyzeResultSchema['data'] }) {
+export async function generateDescriptionInformation(data: any) {
   const { object } = await generateObject({
     model: llmProvider.languageModel('chat-model-reasoning'),
     schema: z.object({
-      title: z.object({
-        value: z.string({ description: '根据数据生成标题，要求准确、简洁、明了，不要超过10个汉字' }),
-        description: z.string({ description: '根据数据生成描述, 要求准确、简洁、明了，不要超过20个汉字' }),
-      }),
-      footer: z.object({
-        value: z.string({ description: '根据数据生成总结性文字, 要求准确、简洁、明了，不要超过30个汉字' }),
-        description: z.string({ description: '根据数据生成长文本, 要求准确、简洁、明了，不要超过100个汉字' }),
-      }),
+      title: z.string({ description: '标题' }).max(10),
+      description: z.string({ description: '描述' }).max(30),
     }),
-    prompt: JSON.stringify(data),
+    prompt: `你是一个专业的助手，请根据数据生成标题和描述，你可以使用以下数据: ${JSON.stringify(data)}`,
   })
   return object
 }

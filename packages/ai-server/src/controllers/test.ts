@@ -14,12 +14,10 @@ export default async function (fastify: FastifyInstance) {
         schema: dashboardSchema.zod,
         // prompt: '生成dashboardSchema页面配置，数据源为：' + JSON.stringify(a),
         messages: [],
-
         // tools: agent.tools,
       })
 
       //   reply.header('Content-Type', 'text/plain; charset=utf-8')
-      console.log('result', result.object)
       return reply.send(result.object)
     })
 }

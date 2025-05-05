@@ -29,9 +29,14 @@ export function SidebarUserNav({ user }: { user: User }) {
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-width]">
-            <DropdownMenuItem className="cursor-pointer" onSelect={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
-              {`切换${theme === 'light' ? '暗黑' : '高亮'}主题`}
-            </DropdownMenuItem>
+            {false && (
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onSelect={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              >
+                {`切换${theme === 'light' ? '暗黑' : '高亮'}主题`}
+              </DropdownMenuItem>
+            )}
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <button type="button" className="w-full cursor-pointer" onClick={onSignOut}>

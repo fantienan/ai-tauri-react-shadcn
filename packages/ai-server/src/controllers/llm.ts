@@ -2,18 +2,18 @@ import {
   CoreAssistantMessage,
   CoreToolMessage,
   DataStreamWriter,
-  StepResult,
   appendResponseMessages,
   convertToCoreMessages,
   createDataStreamResponse,
   generateObject,
   streamText,
 } from 'ai'
-import { DashboardSchema } from 'common/utils'
+import { CreateDashboardProgressSchema, DashboardSchema } from 'common/utils'
 import type { FastifyInstance } from 'fastify'
 import type { FastifyZodOpenApiTypeProvider } from 'fastify-zod-openapi'
 import { z } from 'zod'
 import { ChatContext } from '../decorates/agent/context.ts'
+import { AgentToolResults } from '../decorates/index.ts'
 import { createLlmService } from '../services/index.ts'
 
 export default async function (fastify: FastifyInstance) {
@@ -61,40 +61,33 @@ export default async function (fastify: FastifyInstance) {
   const createDashboard = async ({
     toolResults,
     messages,
-    onFinish,
-  }: Pick<StepResult<ReturnType<typeof agent.createTools>>, 'toolResults'> & {
+  }: {
+    toolResults: AgentToolResults
     dataStream: DataStreamWriter
     messages: ((CoreAssistantMessage | CoreToolMessage) & { id: string })[]
-    onFinish: (params: { dashboardSchema: DashboardSchema }) => void
   }) => {
-    const createDashboardToolResult = toolResults.find(
-      (v) => v.toolName === 'generateDashboardsBasedOnDataAnalysisResults' && v.result.state === 'end',
-    )
+    try {
+      const dashboardSchema: DashboardSchema = {
+        title: {
+          value: 'Dashboard标题',
+          description: 'Dashboard描述',
+        },
+        charts: [],
+      }
+      let internalToolResults = toolResults
+      if (internalToolResults.length === 1) {
+        internalToolResults = (messages.filter((v) => v.role === 'tool').at(-2)?.content as any) ?? []
+      }
 
-    if (createDashboardToolResult) {
-      try {
-        const dashboardSchema: DashboardSchema = {
-          title: {
-            value: 'Dashboard标题',
-            description: 'Dashboard描述',
-          },
-          charts: [],
-        }
-        let internalToolResults = toolResults
-        if (internalToolResults.length === 1) {
-          internalToolResults = (messages.filter((v) => v.role === 'tool').at(-2)?.content as any) ?? []
-        }
-
-        dashboardSchema.charts = internalToolResults.reduce(
-          (prev, curr) => {
-            if (curr.toolName === 'sqliteAnalyze' && curr.result) prev.push(curr.result as any)
-            return prev
-          },
-          [] as DashboardSchema['charts'],
-        )
-        onFinish({ dashboardSchema })
-      } catch (e) {}
-    }
+      dashboardSchema.charts = internalToolResults.reduce(
+        (prev, curr) => {
+          if (curr.toolName === 'sqliteAnalyze' && curr.result) prev.push(curr.result as any)
+          return prev
+        },
+        [] as DashboardSchema['charts'],
+      )
+      return dashboardSchema
+    } catch (e) {}
   }
 
   fastify.withTypeProvider<FastifyZodOpenApiTypeProvider>().post(
@@ -148,16 +141,26 @@ export default async function (fastify: FastifyInstance) {
               maxSteps: 10,
               // experimental_transform: smoothStream({ chunking: 'word' }),
               experimental_generateMessageId: context.genUUID,
-              onStepFinish: async ({ stepType, finishReason, toolResults, response }) => {
-                if (stepType === 'tool-result' && finishReason === 'tool-calls' && toolResults.length) {
-                  await createDashboard({
-                    dataStream,
-                    messages: response.messages,
-                    toolResults,
-                    onFinish: ({ dashboardSchema }) => {
-                      context.dashboardSchema = dashboardSchema
-                    },
-                  })
+              onStepFinish: async (p) => {
+                const { stepType, finishReason, toolResults, response } = p
+                if (
+                  isCreateDashboard &&
+                  stepType === 'tool-result' &&
+                  finishReason === 'tool-calls' &&
+                  toolResults.length
+                ) {
+                  const dashboardGenerationCompleted = toolResults.some(
+                    (v) => v.toolName === 'generateDashboardsBasedOnDataAnalysisResults' && v.result.state === 'end',
+                  )
+                  const progress = toolResults.at(-1)?.result.progress as CreateDashboardProgressSchema
+                  if (progress && progress.current === progress.total) context.setToolResults(toolResults)
+                  if (dashboardGenerationCompleted) {
+                    context.dashboardSchema = await createDashboard({
+                      toolResults,
+                      dataStream,
+                      messages: response.messages,
+                    })
+                  }
                 }
               },
               onFinish: async ({ response }) => {

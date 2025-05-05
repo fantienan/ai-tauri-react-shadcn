@@ -1,7 +1,6 @@
 import { CopyIcon, DownloadIcon, ThumbDownIcon, ThumbUpIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { useArtifact } from '@/hooks/use-artifact'
 import { BASE_URL } from '@/lib/constant'
 import type { Vote } from '@/types'
 import { fetcher } from '@/utils'
@@ -22,6 +21,7 @@ export function PureMessageActions({
   //   showCode,
   showDownload,
   showDashboard,
+  onPreviewDashboard,
 }: {
   chatId: string
   message: Message
@@ -30,10 +30,10 @@ export function PureMessageActions({
   showDownload?: boolean
   showCode?: boolean
   showDashboard?: boolean
+  onPreviewDashboard?: React.ComponentProps<'button'>['onClick']
 }) {
   const { mutate } = useSWRConfig()
   const [, copyToClipboard] = useCopyToClipboard()
-  const { setArtifact } = useArtifact()
   const { onDownloadCode } = useChatbar()
 
   if (isLoading) return null
@@ -224,22 +224,7 @@ export function PureMessageActions({
                 data-testid="message-dashboard"
                 className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto"
                 variant="outline"
-                onClick={(event) => {
-                  const rect = event.currentTarget.getBoundingClientRect()
-                  setArtifact({
-                    kind: 'dashboard',
-                    title: '仪表盘',
-                    isVisible: true,
-                    status: 'idle',
-                    boundingBox: {
-                      top: rect.top,
-                      left: rect.left,
-                      width: rect.width,
-                      height: rect.height,
-                    },
-                    paramater: { chatId, messageId: message.id },
-                  })
-                }}
+                onClick={onPreviewDashboard}
               >
                 <Gauge />
               </Button>

@@ -47,4 +47,6 @@ function Button({
   return <Comp data-slot="button" className={cn(buttonVariants({ variant, size, className }))} {...props} />
 }
 
+export type ButtonProps = React.ComponentProps<typeof Button>
+
 export { Button, buttonVariants }

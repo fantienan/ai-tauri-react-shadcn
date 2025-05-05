@@ -1,8 +1,10 @@
+import { ProgressCard, useProgressCard } from '@/components/dashboard'
 import { DeepseekIcon, PencilEditIcon } from '@/components/icons'
 import { Markdown } from '@/components/markdown'
 import { PreviewAttachment } from '@/components/preview-attachment'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { useArtifact } from '@/hooks/use-artifact'
 import { cn } from '@/lib/utils'
 import type { AnalyzeResultSchema, Vote } from '@/types'
 import { UseChatHelpers } from '@ai-sdk/react'
@@ -12,7 +14,6 @@ import equal from 'fast-deep-equal'
 import { AnimatePresence, motion } from 'framer-motion'
 import { memo, useState } from 'react'
 import { Analyze } from '../analyze'
-import { ProgressCard } from '../progress-card'
 import { MessageActions } from './message-actions'
 import { MessageEditor } from './message-editor'
 import { MessageReasoning } from './message-reasoning'
@@ -43,14 +44,30 @@ const PurePreviewMessage = ({
   showDashboard?: boolean
 }) => {
   const [mode, setMode] = useState<'view' | 'edit'>('view')
-
-  const createDashboardToolName = 'generateDashboardsBasedOnDataAnalysisResults'
+  const { setArtifact } = useArtifact()
+  const { progress, dashboardInfo, createDashboardToolName } = useProgressCard({ message })
 
   const generatingDashboard = (params: ToolResult<string, string, any>) => {
     const toolResult = params as Pick<AnalyzeResultSchema, 'whoCalled' | 'id'> & Record<string, any>
     return toolResult.whoCalled === createDashboardToolName && toolResult.id
   }
 
+  const onPreviewDashboard = (event: any) => {
+    const rect = event.currentTarget.getBoundingClientRect()
+    setArtifact({
+      kind: 'dashboard',
+      title: '仪表盘',
+      isVisible: true,
+      status: 'idle',
+      boundingBox: {
+        top: rect.top,
+        left: rect.left,
+        width: rect.width,
+        height: rect.height,
+      },
+      paramater: { chatId, messageId: message.id },
+    })
+  }
   return (
     <AnimatePresence>
       <motion.div
@@ -77,7 +94,7 @@ const PurePreviewMessage = ({
             </div>
           )}
 
-          <div className="flex flex-col gap-4 flex-1 overflow-hidden">
+          <div className="flex flex-col gap-4 flex-1">
             {!!message.experimental_attachments?.length && (
               <div data-testid={`message-attachments`} className="flex flex-row justify-end gap-2">
                 {message.experimental_attachments.map((attachment) => (
@@ -157,7 +174,7 @@ const PurePreviewMessage = ({
                   if (toolName === 'sqliteAnalyze') {
                     node = <Analyze />
                   } else if (toolName === createDashboardToolName) {
-                    node = <ProgressCard stop={stop} />
+                    // node = <ProgressCard onStop={() => stop()} />
                   }
                   return (
                     !!node && (
@@ -175,7 +192,12 @@ const PurePreviewMessage = ({
                   } else if (toolName === createDashboardToolName) {
                     node =
                       result.state === 'start' ? (
-                        <ProgressCard stop={stop} value={result.state === 'end' ? 100 : 50} />
+                        <ProgressCard
+                          progress={progress}
+                          dashboardInfo={dashboardInfo}
+                          onStop={stop}
+                          onPreview={onPreviewDashboard}
+                        />
                       ) : null
                   }
                   return node && <div key={toolCallId}>{node}</div>
@@ -193,6 +215,7 @@ const PurePreviewMessage = ({
                 showCode={showCode}
                 showDownload={showDownload}
                 showDashboard={showDashboard}
+                onPreviewDashboard={onPreviewDashboard}
               />
             )}
           </div>

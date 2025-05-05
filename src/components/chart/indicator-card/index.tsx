@@ -8,7 +8,6 @@ export type IndicatorCardProps = Omit<AnalyzeResultSchema, 'chartType'> & { clas
 
 const PureIndicatorCard = ({ title, data, footer, className }: IndicatorCardProps) => {
   const { valueFieldnames } = useChartUtils({ data })
-  debugger
   return (
     <Card className={className}>
       <CardHeaderRenderer {...title} value={data[0][valueFieldnames[0]]} />
