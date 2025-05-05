@@ -36,6 +36,10 @@ export type BizConfig = {
       prefix: string
       dashboard: string
     }
+    data: {
+      prefix: string
+      getMetadata: string
+    }
     user: string
   }
 }

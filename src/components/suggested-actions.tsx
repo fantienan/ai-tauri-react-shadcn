@@ -22,9 +22,9 @@ function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
     },
 
     {
-      title: '创建元数据表',
-      label: '为数据集创建元数据表',
-      action: '请为数据库中的表创建元数据表',
+      title: '更新元数据表',
+      label: '更新所有表的元数据信息',
+      action: '请更新所有表的元数据信息',
     },
   ]
 

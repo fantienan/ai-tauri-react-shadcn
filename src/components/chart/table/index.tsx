@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -7,6 +8,8 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { MetadataRecord } from '@/types'
+import { fetcher } from '@/utils'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -22,6 +25,7 @@ import {
 import { AnalyzeResultSchema } from 'common/utils'
 import { ArrowUpDown, ChevronDown } from 'lucide-react'
 import { memo, useState } from 'react'
+import useSWR from 'swr'
 
 export type DataTableProps = Omit<AnalyzeResultSchema, 'chartType'> & { className?: string }
 
@@ -31,12 +35,25 @@ export function PureDataTable({ data }: DataTableProps) {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
 
-  const columns: ColumnDef<Record<string, any>>[] = Object.keys(data).map((key) => ({
-    accessorKey: key,
+  const { data: metadatas = [] } = useSWR<MetadataRecord[]>(
+    '/data/getMetadata',
+    (input: string, init?: RequestInit) =>
+      fetcher(input, init).then((res) => {
+        // if (Array.isArray(res.data)) {
+        //   return new Map(res.data.map((item: MetadataRecord) => [item.columnName, item]))
+        // }
+        // return new Map()
+        return res.data as any
+      }),
+    { fallbackData: [] },
+  )
+
+  const columns: ColumnDef<Record<string, any>>[] = metadatas.map((meta) => ({
+    accessorKey: meta.columnName!,
     header: ({ column }) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          {key}
+          {meta.description}
           <ArrowUpDown />
         </Button>
       )
@@ -62,7 +79,7 @@ export function PureDataTable({ data }: DataTableProps) {
   })
 
   return (
-    <div className="w-full">
+    <Card className="w-full">
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter emails..."
@@ -148,7 +165,7 @@ export function PureDataTable({ data }: DataTableProps) {
           </Button>
         </div>
       </div>
-    </div>
+    </Card>
   )
 }
 

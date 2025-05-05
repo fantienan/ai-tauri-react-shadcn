@@ -25,9 +25,7 @@ export const createSqliteSchemaTool = (context: ChatContextInstance) =>
       try {
         logger.info(`获取SQLite数据库表执行sql: ${sql}`)
         const db = context.getDatabase()
-        const result = (db.prepare(sql).all() as any).filter(
-          (v: { name: string }) => v.name.startsWith('analyze_') && !v.name.endsWith('_metadata'),
-        )
+        const result = context.filterTables(db.prepare(sql).all() as any) as any
         db.close()
         logger.info(`获取SQLite数据库表成功：${JSON.stringify(result)}`)
         return result
@@ -57,33 +55,32 @@ export const createSqliteTableFieldTool = (context: ChatContextInstance) =>
     },
   })
 
-export const createSqliteMetadataTableCreationTool = (context: ChatContextInstance) =>
+export const createUpdateMetadataInfo = (context: ChatContextInstance) =>
   tool({
     description: `
-    SQLite数据库创建元数据表工具，为数据库中所有表创建元数据表，要求如下：
-        - 元数据表名的命名规范为：表名_metadata
-        - 只有元数据表不存在时创建
-        - 元数据表中包含以下字段：
-            - column_name: 字段名
-            - data_type: 字段类型
-            - description: 字段描述，需要生成中文字段值
-            - is_nullable: 是否可为空
-            - column_default: 字段默认值
+    SQLite数据库元数据工具，该工具的作用是记录数据库中素有表的字段信息，要求如下：
+        - 你要先查询数据库中所有表的字段信息，其中包括元数据表和其它表，其它表又称为目标表
+        - 元数据表名称为metadata_info，它已经存在无需创建
+        - 元数据表结构如下：
+            - column_name: 字段名称，用于存储目标表的字段名称
+            - column_aliases: 字段别名，用于存储目标表的字段别名
+            - column_type: 字段类型，用于存储目标表的字段类型
+            - table_name: 表名称，用于存储目标表的名称
+            - table_aliases: 表别名，用于存储目标表别名
+            - is_nullable: 字段是否可为空，用于存储目标表字段是否可为空，可为空存1，非空存0
+        - 元数据表非空字段生成默认值
     `,
     parameters: z.object({
-      createSql: z.string().describe('创建元数据表的sql语句').optional(),
-      insertSql: z.string().describe('元数据表插入数据的sql语句').optional(),
+      sql: z.string().describe('sql语句'),
     }),
-    execute: async (parameters) => {
+    execute: async ({ sql }) => {
       try {
-        logger.info(`SQLite数据库创建元数据表工具: ${JSON.stringify(parameters)}`)
-        const { createSql, insertSql } = parameters
+        logger.info(`SQLite数据库创建元数据表工具: ${sql}`)
         const db = context.getDatabase()
-        if (createSql) db.exec(createSql)
-        if (insertSql) db.prepare(insertSql).run()
+        db.prepare(sql).run()
         db.close()
         logger.info(`SQLite数据库元数据表生成工具执行成功`)
-        return { ...parameters }
+        return { sql }
       } catch (error) {
         if (error instanceof Error) return createBizError(Result.AI_AGENT_TOOL_ERROR, error)
         throw error
@@ -189,5 +186,5 @@ export const createSqliteTools = (context: ChatContextInstance) => ({
   sqliteTableField: createSqliteTableFieldTool(context),
   sqliteAnalyze: createSqliteAnalyzeTool(context),
   generateDashboardsBasedOnDataAnalysisResults: createGenerateDashboardsBasedOnDataAnalysisResultsTool(context),
-  sqliteMetadataTableCreationTool: createSqliteMetadataTableCreationTool(context),
+  updateMetadataInfo: createUpdateMetadataInfo(context),
 })

@@ -6,7 +6,7 @@ export default defineConfig({
   out: './src/database/migrations',
   dialect: 'sqlite',
   verbose: true,
-  tablesFilter: ['user', 'chat', 'message', 'vote', 'order_product_details', 'daily_summary'],
+  tablesFilter: ['user', 'chat', 'message', 'vote', 'analyze_*', 'dashboard'],
   dbCredentials: {
     url: process.env.SQLITE_DATABASE_URL!,
   },

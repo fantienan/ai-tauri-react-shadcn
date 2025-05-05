@@ -5,12 +5,12 @@ import { Bar, BarChart, CartesianGrid, LabelList, Line, LineChart, Pie, PieChart
 import { CardFooterRenderer, CardHeaderRenderer, useChartUtils } from '../utils'
 
 export function Recharts(props: AnalyzeResultSchema & { className?: string }) {
-  const { className, chartType = 'bar', title, data, footer, tableName, ...config } = props
+  const { className, chartType = 'bar', title, data, footer } = props
   const {
     chartConfig,
     valueFieldnames,
     nameFieldnames: [nameFieldname],
-  } = useChartUtils({ config, data })
+  } = useChartUtils({ config: {}, data })
 
   return (
     <Card>

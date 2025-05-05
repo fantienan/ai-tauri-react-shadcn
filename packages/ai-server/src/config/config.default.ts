@@ -33,6 +33,10 @@ const config: BizConfig = {
   },
   routes: {
     root: '/api/v1',
+    data: {
+      prefix: '/data',
+      getMetadata: '/getMetadata',
+    },
     llm: {
       prefix: '/llm',
       chat: '/chat',

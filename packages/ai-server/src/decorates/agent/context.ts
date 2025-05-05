@@ -33,4 +33,7 @@ export class ChatContext {
     const data = this.toolResults.map((v) => ({ title: v.result.title, footer: v.result.footer }))
     return generateDescriptionInformation({ data })
   }
+  filterTables(result: { name: string }[]) {
+    return result.filter((v) => v.name.startsWith('analyze_'))
+  }
 }

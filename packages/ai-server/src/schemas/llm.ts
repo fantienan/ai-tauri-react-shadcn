@@ -8,7 +8,7 @@ export const llm = {
       id: z.string({ description: '聊天记录id' }),
       messages: z.any({ description: '消息列表' }),
     }),
-    inster: createInsertSchema(schema.chat).omit({ id: true, createdAt: true }),
+    insert: createInsertSchema(schema.chat).omit({ id: true, createdAt: true }),
     update: createUpdateSchema(schema.chat).required({ id: true }),
     queryById: createSelectSchema(schema.chat).pick({ id: true }).required({ id: true }),
     delete: z.object({ id: z.string({ description: '聊天记录id' }) }),

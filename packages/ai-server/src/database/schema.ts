@@ -134,8 +134,19 @@ export const dashboard = sqliteTable(
       .references(() => user.id),
     data: text('data', { mode: 'json' }).notNull(),
   },
-
-  (table) => [primaryKey({ name: 'pk', columns: [table.chatId, table.messageId] })],
+  (table) => [primaryKey({ columns: [table.chatId, table.messageId], name: 'dashboard_chat_id_message_id_pk' })],
 )
 
 export type Dashboard = InferSelectModel<typeof dashboard>
+
+export const metadataInfo = sqliteTable('metadata_info', {
+  columnName: text('column_name').notNull(),
+  columnAliases: text('column_aliases').notNull(),
+  columnType: text('column_type').notNull(),
+  isNullable: integer('is_nullable', { mode: 'boolean' }).notNull(),
+  columnDefault: text('column_default'),
+  tableName: text('table_name').notNull(),
+  tableAliases: text('table_aliases').notNull(),
+})
+
+export type MetadataInfo = InferSelectModel<typeof metadataInfo>

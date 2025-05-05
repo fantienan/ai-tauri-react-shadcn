@@ -221,10 +221,10 @@ export default async function (fastify: FastifyInstance) {
   )
 
   fastify.withTypeProvider<FastifyZodOpenApiTypeProvider>().post(
-    fastify.bizAppConfig.routes.llm.chat + '/inster',
+    fastify.bizAppConfig.routes.llm.chat + '/insert',
     {
       schema: {
-        body: llmSchema.chat.inster,
+        body: llmSchema.chat.insert,
       },
     },
     async function (request) {

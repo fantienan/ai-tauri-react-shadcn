@@ -31,17 +31,20 @@ export function PureDashboard({ chatId, messageId }: DashboardProps) {
       (prev, curr) => {
         if (curr.chartType === 'indicator-card') {
           prev.indicatorCards.push(curr)
-        } else if (curr.data.length > 51) {
+        } else if (curr.data.length >= 50) {
           prev.blockChart.push(curr)
+        } else if (curr.chartType === 'table') {
+          prev.table.push(curr)
         } else {
           prev.charts.push(curr)
         }
         return prev
       },
-      { indicatorCards: [], charts: [], blockChart: [] } as {
+      { indicatorCards: [], charts: [], blockChart: [], table: [] } as {
         indicatorCards: AnalyzeResultSchema[]
         blockChart: AnalyzeResultSchema[]
         charts: AnalyzeResultSchema[]
+        table: AnalyzeResultSchema[]
       },
     )
   }, [data])
@@ -49,15 +52,18 @@ export function PureDashboard({ chatId, messageId }: DashboardProps) {
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <IndicatorCards configs={chartInfo.indicatorCards} className="gap-3" />
+      <IndicatorCards configs={chartInfo.indicatorCards} className="gap-3 py-4" />
       {chartInfo.blockChart.map((chart, index) => (
-        <ChartRenderer className="h-20" key={index} {...chart} />
+        <ChartRenderer className="h-18" key={index} {...chart} />
       ))}
       <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 w-full">
         {chartInfo.charts.map((chart, index) => (
           <ChartRenderer {...chart} key={index} />
         ))}
       </div>
+      {chartInfo.table.map((chart, index) => (
+        <ChartRenderer className="h-20" key={index} {...chart} />
+      ))}
     </div>
   )
 }
