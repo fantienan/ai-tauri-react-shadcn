@@ -29,4 +29,4 @@ export type DashboardRecord = Omit<DatabaseSchema.Dashboard, 'data'> & {
   data: DashboardSchema
 }
 
-export type MetadataRecord = DatabaseSchema.AnalyzeDailySummaryMetadata
+export type MetadataInfo = DatabaseSchema.MetadataInfo

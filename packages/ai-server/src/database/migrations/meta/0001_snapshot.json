@@ -50,12 +50,8 @@
           "name": "chat_user_id_user_id_fk",
           "tableFrom": "chat",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -168,12 +164,8 @@
           "name": "dashboard_chat_id_chat_id_fk",
           "tableFrom": "dashboard",
           "tableTo": "chat",
-          "columnsFrom": [
-            "chat_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["chat_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -181,12 +173,8 @@
           "name": "dashboard_message_id_message_id_fk",
           "tableFrom": "dashboard",
           "tableTo": "message",
-          "columnsFrom": [
-            "message_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["message_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -194,22 +182,15 @@
           "name": "dashboard_user_id_user_id_fk",
           "tableFrom": "dashboard",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
         "dashboard_chat_id_message_id_pk": {
-          "columns": [
-            "chat_id",
-            "message_id"
-          ],
+          "columns": ["chat_id", "message_id"],
           "name": "dashboard_chat_id_message_id_pk"
         }
       },
@@ -268,12 +249,8 @@
           "name": "message_chat_id_chat_id_fk",
           "tableFrom": "message",
           "tableTo": "chat",
-          "columnsFrom": [
-            "chat_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["chat_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -623,12 +600,8 @@
           "name": "vote_chat_id_chat_id_fk",
           "tableFrom": "vote",
           "tableTo": "chat",
-          "columnsFrom": [
-            "chat_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["chat_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -636,22 +609,15 @@
           "name": "vote_message_id_message_id_fk",
           "tableFrom": "vote",
           "tableTo": "message",
-          "columnsFrom": [
-            "message_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["message_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
         "pk": {
-          "columns": [
-            "chat_id",
-            "message_id"
-          ],
+          "columns": ["chat_id", "message_id"],
           "name": "pk"
         }
       },
