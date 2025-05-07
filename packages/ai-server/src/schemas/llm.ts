@@ -35,8 +35,6 @@ export const llm = {
     batch: createInsertSchema(schema.vote),
   },
   dashboard: {
-    insert: createInsertSchema(schema.dashboard).pick({ chatId: true, messageId: true }),
     query: createSelectSchema(schema.dashboard).pick({ chatId: true, messageId: true }),
-    try: createSelectSchema(schema.dashboard).pick({ chatId: true, messageId: true }),
   },
 }

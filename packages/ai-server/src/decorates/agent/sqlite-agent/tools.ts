@@ -1,4 +1,3 @@
-import {} from '@ai-sdk/ui-utils'
 import { tool } from 'ai'
 import {
   AnalyzeResultSchema,
@@ -10,6 +9,8 @@ import { logger } from '../../../utils/index.ts'
 import { createBizError } from '../../errors.ts'
 import { Result } from '../../result.ts'
 import type { ChatContextInstance } from '../context.ts'
+
+export type SQLiteAgentTool = ReturnType<typeof createSqliteTools>
 
 const genParametersSchema = (context: ChatContextInstance) => {
   const schema = z.object({ sql: z.string().describe('要执行的 SQL 查询') })
@@ -23,7 +24,7 @@ export const createSqliteSchemaTool = (context: ChatContextInstance) =>
     parameters: genParametersSchema(context),
     execute: async ({ sql }) => {
       try {
-        logger.info(`获取SQLite数据库表执行sql: ${sql}`)
+        logger.info(`获取SQLite数据库表执行sql:`)
         const db = context.getDatabase()
         const result = context.filterTables(db.prepare(sql).all() as any) as any
         db.close()
@@ -42,7 +43,7 @@ export const createSqliteTableFieldTool = (context: ChatContextInstance) =>
     parameters: genParametersSchema(context),
     execute: async ({ sql }) => {
       try {
-        logger.info(`获取SQLite数据库表字段信息执行sql: ${sql}`)
+        logger.info(`获取SQLite数据库表字段信息执行sql:`)
         const db = context.getDatabase()
         const result = db.prepare(sql).all()
         db.close()
@@ -75,7 +76,7 @@ export const createUpdateMetadataInfo = (context: ChatContextInstance) =>
     }),
     execute: async ({ sql }) => {
       try {
-        logger.info(`SQLite数据库创建元数据表工具: ${sql}`)
+        logger.info(`SQLite数据库创建元数据表工具:`)
         const db = context.getDatabase()
         db.prepare(sql).run()
         db.close()
@@ -120,7 +121,7 @@ export const createSqliteAnalyzeTool = (context: ChatContextInstance) =>
     parameters: genAnalyzeToolParametersSchema(context),
     execute: async ({ sql, title, description, summary, longText, ...parameters }) => {
       try {
-        logger.info(`SQLite数据库数据分析工具执行sql: ${JSON.stringify(sql)}`)
+        logger.info(`SQLite数据库数据分析工具执行sql:`)
         const db = context.getDatabase()
         const data = db.prepare(sql).all() as Record<string, any>[]
         db.close()
@@ -166,10 +167,20 @@ export const createGenerateDashboardsBasedOnDataAnalysisResultsTool = (context: 
       if (parameters.state === 'start') {
         logger.info(`开始生成Dashboard`)
       } else if (parameters.state === 'end') {
-        const res = await context.generateDescriptionInformation()
-        if (res) {
-          parameters.title = res.title
-          parameters.description = res.description
+        if (context.toolResults) {
+          const data = context.toolResults
+            .reduce((prev, curr: any) => {
+              const v = curr.result as AnalyzeResultSchema
+              prev.push(`- ${v.title.value}`)
+              if (v.footer) prev.push(`- ${v.footer.value}`)
+              return prev
+            }, [] as string[])
+            .join('\n')
+          const res = await context.generateDescriptionInformation(data)
+          if (res) {
+            parameters.title = res.title
+            parameters.description = res.description
+          }
         }
         logger.info(`Dashboard生成完成`)
       }

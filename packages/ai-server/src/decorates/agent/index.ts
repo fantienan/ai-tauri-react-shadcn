@@ -1,3 +1,2 @@
-export * from './agent.ts'
+export * from './agent-controller.ts'
 export * from './llm-provider/index.ts'
-export * from './tools/index.ts'

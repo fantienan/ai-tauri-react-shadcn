@@ -61,19 +61,27 @@ export async function generateDescriptionInformation(data: any) {
       title: z.string({ description: '标题' }).max(10),
       description: z.string({ description: '描述' }).max(30),
     }),
-    prompt: `你是一个专业的助手，请根据数据生成标题和描述，你可以使用以下数据: ${JSON.stringify(data)}`,
+    prompt: `
+    你是一个专业的助手，请根据数据以下数据生成标题和描述：
+        ${JSON.stringify(data)}
+    `,
   })
   return object
 }
+
+const analyzeUserNeedsSchema = z.object({
+  isCreateDashboard: z.boolean({ description: '判断用户的意图是否是生成Dashboard' }),
+  isAnalyze: z.boolean({ description: '判断用户的意图是否是分析数据' }),
+})
+
+export type AnalyzeUserNeedsSchema = z.infer<typeof analyzeUserNeedsSchema>
 
 // 根据消息分析用户需求
 export async function analyzeUserNeeds(messages: CoreMessage[] | Omit<Message, 'id'>[]) {
   const { object } = await generateObject({
     model: llmProvider.languageModel('chat-model-reasoning'),
     messages,
-    schema: z.object({
-      isCreateDashboard: z.boolean({ description: '判断用户的意图是否是生成Dashboard' }),
-    }),
+    schema: analyzeUserNeedsSchema,
   })
   return object
 }

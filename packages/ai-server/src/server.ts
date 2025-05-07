@@ -1,7 +1,7 @@
 import Fastify from 'fastify'
 import { serializerCompiler, validatorCompiler } from 'fastify-zod-openapi'
 import { config } from './config/index.ts'
-import { Agent, Result, errors, sqliteDb } from './decorates/index.ts'
+import { AgentController, Result, errors, sqliteDb } from './decorates/index.ts'
 import * as schemas from './schemas/index.ts'
 import { dashboardSchema, getFastifyOptions } from './utils/index.ts'
 
@@ -13,7 +13,7 @@ async function main() {
     .decorate('bizAppConfig', config)
     .decorate('bizError', errors)
     .decorate('BizResult', Result)
-    .decorate('bizAgent', new Agent())
+    .decorate('bizAgentController', new AgentController())
     .decorate('bizDb', sqliteDb)
     .decorate('bizSchemas', schemas)
     .decorate('bizDashboardSchema', dashboardSchema)

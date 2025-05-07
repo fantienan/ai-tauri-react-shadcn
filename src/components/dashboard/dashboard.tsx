@@ -13,7 +13,7 @@ export interface DashboardProps {
 
 export function PureDashboard({ chatId, messageId }: DashboardProps) {
   const { data, isLoading } = useSWR(
-    () => (chatId && messageId ? `/llm/dashboard/try` : null),
+    () => (chatId && messageId ? `/llm/dashboard/query` : null),
     async (input: string, init?: RequestInit) => {
       return fetcher<DashboardRecord>(input, {
         ...init,

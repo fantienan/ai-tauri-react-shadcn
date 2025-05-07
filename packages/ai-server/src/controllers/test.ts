@@ -3,7 +3,7 @@ import type { FastifyInstance } from 'fastify'
 import type { FastifyZodOpenApiTypeProvider } from 'fastify-zod-openapi'
 
 export default async function (fastify: FastifyInstance) {
-  const agent = fastify.bizAgent
+  const agent = fastify.bizAgentController
   const dashboardSchema = fastify.bizDashboardSchema
   const model = agent.utils.llmProvider.languageModel('chat-model-reasoning')
   fastify

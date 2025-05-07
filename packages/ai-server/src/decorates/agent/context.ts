@@ -1,38 +1,39 @@
-import type { DataStreamWriter } from 'ai'
+import type { DataStreamWriter, StepResult, ToolSet } from 'ai'
 import type { DashboardSchema } from 'common/utils'
 import { v4 as uuidv4 } from 'uuid'
-import type { AgentToolResults } from './agent.ts'
-import { generateDescriptionInformation, getDatabase } from './utils/index.ts'
+import { AnalyzeUserNeedsSchema, generateDescriptionInformation, getDatabase } from './utils/index.ts'
 
-export type ChatContextInstance = InstanceType<typeof ChatContext>
+export type ChatContextInstance<TOOLS extends ToolSet = ToolSet> = InstanceType<typeof ChatContext<TOOLS>>
 
-export type ChatContextProps = {
+export type AgentToolResults<TOOLS extends ToolSet = ToolSet> = StepResult<TOOLS>['toolResults']
+
+export type ChatContextProps = AnalyzeUserNeedsSchema & {
   dataStream: DataStreamWriter
-  isCreateDashboard?: boolean
 }
-export class ChatContext {
+export class ChatContext<TOOLS extends ToolSet = ToolSet> {
   dashboardSchema?: DashboardSchema
   dataStream: DataStreamWriter
   isCreateDashboard?: boolean
+  isAnalyze?: boolean
   getDatabase = getDatabase
-  private toolResults?: AgentToolResults
+  toolResults?: AgentToolResults<TOOLS>
   constructor(props: ChatContextProps) {
     this.dataStream = props.dataStream
     this.isCreateDashboard = props.isCreateDashboard
+    this.isAnalyze = props.isAnalyze
   }
   genUUID() {
     return uuidv4()
   }
 
-  setToolResults(toolResults?: AgentToolResults) {
+  setToolResults(toolResults: AgentToolResults<TOOLS>) {
     this.toolResults = toolResults
   }
 
-  generateDescriptionInformation() {
-    if (!this.toolResults) return
-    const data = this.toolResults.map((v) => ({ title: v.result.title, footer: v.result.footer }))
+  generateDescriptionInformation(data: any) {
     return generateDescriptionInformation({ data })
   }
+
   filterTables(result: { name: string }[]) {
     return result.filter((v) => v.name.startsWith('analyze_'))
   }
