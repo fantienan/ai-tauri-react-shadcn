@@ -1,4 +1,4 @@
-import { CopyIcon, DownloadIcon, ThumbDownIcon, ThumbUpIcon } from '@/components/icons'
+import { CopyIcon, ThumbDownIcon, ThumbUpIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { BASE_URL } from '@/lib/constant'
@@ -6,35 +6,24 @@ import type { Vote } from '@/types'
 import { fetcher } from '@/utils'
 import type { Message } from 'ai'
 import equal from 'fast-deep-equal'
-import { Gauge } from 'lucide-react'
 import { memo } from 'react'
 import { toast } from 'sonner'
 import { useSWRConfig } from 'swr'
 import { useCopyToClipboard } from 'usehooks-ts'
-import { useChatbar } from '../chat/chat-provider'
 
 export function PureMessageActions({
   chatId,
   message,
   vote,
   isLoading,
-  //   showCode,
-  showDownload,
-  showDashboard,
-  onPreviewDashboard,
 }: {
   chatId: string
   message: Message
   vote: Vote | undefined
   isLoading: boolean
-  showDownload?: boolean
-  showCode?: boolean
-  showDashboard?: boolean
-  onPreviewDashboard?: React.ComponentProps<'button'>['onClick']
 }) {
   const { mutate } = useSWRConfig()
   const [, copyToClipboard] = useCopyToClipboard()
-  const { onDownloadCode } = useChatbar()
 
   if (isLoading) return null
   if (message.role === 'user') return null
@@ -162,76 +151,6 @@ export function PureMessageActions({
           </TooltipTrigger>
           <TooltipContent>反对回应</TooltipContent>
         </Tooltip>
-        {showDownload && (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                data-testid="message-download"
-                className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto"
-                variant="outline"
-                onClick={async () => {
-                  const download = onDownloadCode({ chatId, messageId: message.id })
-                  toast.promise(download, {
-                    loading: '下载...',
-                    success: () => '下载成功！',
-                    error: (e) => (e instanceof Error ? e.message : typeof e === 'string' ? e : '下载失败'),
-                  })
-                }}
-              >
-                <DownloadIcon />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>下载</TooltipContent>
-          </Tooltip>
-        )}
-
-        {/* {showCode && (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                data-testid="message-code"
-                className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto"
-                variant="outline"
-                onClick={(event) => {
-                  const rect = event.currentTarget.getBoundingClientRect()
-                  const boundingBox = {
-                    top: rect.top,
-                    left: rect.left,
-                    width: rect.width,
-                    height: rect.height,
-                  }
-                  setArtifact({
-                    documentId: 'a',
-                    kind: '',
-                    content: '',
-                    title: '',
-                    isVisible: true,
-                    status: 'idle',
-                    boundingBox,
-                  })
-                }}
-              >
-                <CodeIcon />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>代码</TooltipContent>
-          </Tooltip>
-        )} */}
-        {showDashboard && (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                data-testid="message-dashboard"
-                className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto"
-                variant="outline"
-                onClick={onPreviewDashboard}
-              >
-                <Gauge />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>仪表盘</TooltipContent>
-          </Tooltip>
-        )}
       </div>
     </TooltipProvider>
   )
@@ -240,6 +159,5 @@ export function PureMessageActions({
 export const MessageActions = memo(PureMessageActions, (prevProps, nextProps) => {
   if (!equal(prevProps.vote, nextProps.vote)) return false
   if (prevProps.isLoading !== nextProps.isLoading) return false
-
   return true
 })

@@ -15,5 +15,6 @@ export class AgentController {
     if (chatContext.isAnalyze || chatContext.isCreateDashboard) {
       return new SQLiteAgent({ chatContext })
     }
+    return new SQLiteAgent({ chatContext })
   }
 }

@@ -5,24 +5,22 @@ import { Progress } from '@/components/ui/progress'
 import classNames from 'classnames'
 import { AnalyzeResultSchema } from 'common/utils'
 import equal from 'fast-deep-equal'
-import { Fullscreen, Link } from 'lucide-react'
 import { memo } from 'react'
+import { DashboardActions } from './dashboard-actions'
 
 export const PureProgressCard = ({
   className,
-  onPreview,
-  onLink,
   progress,
   dashboardInfo,
   onStop,
-  share,
+  chatId,
+  messageId,
 }: Pick<React.ComponentProps<'div'>, 'className'> &
   Pick<AnalyzeResultSchema, 'progress'> & {
     onStop?: ButtonProps['onClick']
-    onPreview?: ButtonProps['onClick']
-    onLink?: ButtonProps['onClick']
     dashboardInfo?: { title: string; description: string }
-    share?: boolean
+    chatId: string
+    messageId: string
   }) => {
   const { current = 0, total = 100, description } = progress ?? {}
   const isFinished = current === total
@@ -39,15 +37,7 @@ export const PureProgressCard = ({
           ) : (
             <CardDescription>仪表盘生成完毕</CardDescription>
           )}
-          {share && (
-            <Button size="icon" variant="ghost" onClick={onLink}>
-              <Link size={16} />
-            </Button>
-          )}
-
-          <Button size="icon" variant="ghost" onClick={onPreview}>
-            <Fullscreen size={18} />
-          </Button>
+          <DashboardActions chatId={chatId} messageId={messageId} showPreview />
         </CardContent>
       ) : (
         <CardContent className="flex flex-col gap-2">
@@ -78,10 +68,9 @@ export const PureProgressCard = ({
 
 export const ProgressCard = memo(PureProgressCard, (prevProps, nextProps) => {
   if (prevProps.className !== nextProps.className) return false
-  if (prevProps.onPreview !== nextProps.onPreview) return false
-  if (prevProps.onLink !== nextProps.onLink) return false
   if (prevProps.onStop !== nextProps.onStop) return false
-  if (prevProps.share !== nextProps.share) return false
+  if (prevProps.chatId !== nextProps.chatId) return false
+  if (prevProps.messageId !== nextProps.messageId) return false
   if (!equal(prevProps.progress, nextProps.progress)) return false
   if (!equal(prevProps.dashboardInfo, nextProps.dashboardInfo)) return false
   return true

@@ -68,11 +68,11 @@ export default async function (fastify: FastifyInstance) {
             const { isCreateDashboard } = userNeeds
 
             const result = streamText({
-              model,
+              maxSteps: 10,
+              model: agent?.model ?? model,
               system: agentController.utils.systemPrompt({ type: isCreateDashboard ? 'dashboard' : 'regular' }),
               messages,
-              tools: agent ? agent.createTools() : undefined,
-              maxSteps: 10,
+              tools: agent?.createTools?.(),
               // experimental_transform: smoothStream({ chunking: 'word' }),
               experimental_generateMessageId: chatContext.genUUID,
               onStepFinish: async (p) => {
@@ -236,7 +236,7 @@ export default async function (fastify: FastifyInstance) {
       return service.message.queryMessageByChatId(request.query)
     },
   )
-  console.log(fastify.bizAppConfig.routes.llm.dashboard + '/query')
+
   fastify.withTypeProvider<FastifyZodOpenApiTypeProvider>().post(
     fastify.bizAppConfig.routes.llm.dashboard + '/query',
     {

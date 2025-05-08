@@ -6,12 +6,11 @@ import { UseChatHelpers } from '@ai-sdk/react'
 import { Attachment, UIMessage } from 'ai'
 import equal from 'fast-deep-equal'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Download } from 'lucide-react'
 import { memo } from 'react'
 import { useWindowSize } from 'usehooks-ts'
 import { Dashboard } from '../dashboard'
+import { DashboardActions } from '../dashboard/dashboard-actions'
 import { MultimodalInput } from '../multimodal-input'
-import { Button } from '../ui/button'
 import { Card } from '../ui/card'
 import { ArtifactCloseButton } from './artifact-close-button'
 import { ArtifactMessages } from './artifact-messages'
@@ -141,6 +140,7 @@ function PureArtifact({
                     reload={reload}
                     isReadonly={isReadonly}
                     artifactStatus={artifact.status}
+                    stop={stop}
                   />
 
                   <form className="flex flex-row gap-2 relative items-end w-full px-4 pb-4">
@@ -233,9 +233,7 @@ function PureArtifact({
               <ArtifactCloseButton />
               <div className="font-medium">{artifact.title}</div>
               <div className="flex-1 text-right">
-                <Button variant="ghost">
-                  <Download />
-                </Button>
+                {artifact.kind === 'dashboard' && <DashboardActions showDownload showShare {...artifact.paramater} />}
               </div>
             </div>
             <Card className="flex-1 m-2 rounded-lg p-2">

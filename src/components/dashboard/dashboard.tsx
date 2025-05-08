@@ -68,10 +68,8 @@ export function PureDashboard({ chatId, messageId }: DashboardProps) {
   )
 }
 
-function areEqual(prevProps: DashboardProps, nextProps: DashboardProps) {
+export const Dashboard = memo(PureDashboard, (prevProps: DashboardProps, nextProps: DashboardProps) => {
   if (prevProps.chatId !== nextProps.chatId) return false
   if (prevProps.messageId !== nextProps.messageId) return false
   return true
-}
-
-export const Dashboard = memo(PureDashboard, areEqual)
+})

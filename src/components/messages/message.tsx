@@ -4,7 +4,6 @@ import { Markdown } from '@/components/markdown'
 import { PreviewAttachment } from '@/components/preview-attachment'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { useArtifact } from '@/hooks/use-artifact'
 import { cn } from '@/lib/utils'
 import type { AnalyzeResultSchema, Vote } from '@/types'
 import { UseChatHelpers } from '@ai-sdk/react'
@@ -26,9 +25,6 @@ const PurePreviewMessage = ({
   setMessages,
   reload,
   isReadonly,
-  showCode,
-  showDownload,
-  showDashboard,
   stop,
 }: {
   stop: () => void
@@ -39,12 +35,8 @@ const PurePreviewMessage = ({
   setMessages: UseChatHelpers['setMessages']
   reload: UseChatHelpers['reload']
   isReadonly: boolean
-  showCode?: boolean
-  showDownload?: boolean
-  showDashboard?: boolean
 }) => {
   const [mode, setMode] = useState<'view' | 'edit'>('view')
-  const { setArtifact } = useArtifact()
   const { progress, dashboardInfo, createDashboardToolName } = useProgressCard({ message })
 
   const generatingDashboard = (params: ToolResult<string, string, any>) => {
@@ -52,22 +44,6 @@ const PurePreviewMessage = ({
     return toolResult.whoCalled === createDashboardToolName && toolResult.id
   }
 
-  const onPreviewDashboard = (event: any) => {
-    const rect = event.currentTarget.getBoundingClientRect()
-    setArtifact({
-      kind: 'dashboard',
-      title: '仪表盘',
-      isVisible: true,
-      status: 'idle',
-      boundingBox: {
-        top: rect.top,
-        left: rect.left,
-        width: rect.width,
-        height: rect.height,
-      },
-      paramater: { chatId, messageId: message.id },
-    })
-  }
   return (
     <AnimatePresence>
       <motion.div
@@ -193,10 +169,11 @@ const PurePreviewMessage = ({
                     node =
                       result.state === 'start' ? (
                         <ProgressCard
+                          chatId={chatId}
+                          messageId={message.id}
                           progress={progress}
                           dashboardInfo={dashboardInfo}
                           onStop={stop}
-                          onPreview={onPreviewDashboard}
                         />
                       ) : null
                   }
@@ -212,10 +189,6 @@ const PurePreviewMessage = ({
                 message={message}
                 vote={vote}
                 isLoading={isLoading}
-                showCode={showCode}
-                showDownload={showDownload}
-                showDashboard={showDashboard}
-                onPreviewDashboard={onPreviewDashboard}
               />
             )}
           </div>
@@ -228,8 +201,6 @@ const PurePreviewMessage = ({
 export const PreviewMessage = memo(PurePreviewMessage, (prevProps, nextProps) => {
   if (prevProps.isLoading !== nextProps.isLoading) return false
   if (prevProps.message.id !== nextProps.message.id) return false
-  if (prevProps.showCode !== nextProps.showCode) return false
-  if (prevProps.showDownload !== nextProps.showDownload) return false
   if (!equal(prevProps.message.parts, nextProps.message.parts)) return false
   if (!equal(prevProps.vote, nextProps.vote)) return false
 

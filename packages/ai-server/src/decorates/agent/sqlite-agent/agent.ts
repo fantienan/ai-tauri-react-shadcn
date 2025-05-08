@@ -1,6 +1,7 @@
 import { CoreAssistantMessage, CoreToolMessage, StepResult, StreamTextOnStepFinishCallback } from 'ai'
 import { CreateDashboardProgressSchema, DashboardSchema } from 'common/utils'
 import { ChatContextInstance } from '../context.ts'
+import { llmProvider } from '../utils/ai.ts'
 import { SQLiteAgentTool, createSqliteTools } from './tools.ts'
 
 export type SQLiteAgentInstance = InstanceType<typeof SQLiteAgent>
@@ -13,6 +14,7 @@ export type SQLiteAgentProps = {
 
 export class SQLiteAgent {
   chatContext: ChatContextInstance<SQLiteAgentTool>
+  model = llmProvider.languageModel('chat-model-reasoning')
   constructor(props: SQLiteAgentProps) {
     this.chatContext = props.chatContext
   }

@@ -16,6 +16,7 @@ interface ArtifactMessagesProps {
   reload: UseChatHelpers['reload']
   isReadonly: boolean
   artifactStatus: UIArtifact['status']
+  stop: () => void
 }
 
 function PureArtifactMessages({
@@ -26,6 +27,7 @@ function PureArtifactMessages({
   setMessages,
   reload,
   isReadonly,
+  stop,
 }: ArtifactMessagesProps) {
   const [messagesContainerRef, messagesEndRef] = useScrollToBottom<HTMLDivElement>({ status })
 
@@ -36,6 +38,7 @@ function PureArtifactMessages({
     >
       {messages.map((message, index) => (
         <PreviewMessage
+          stop={stop}
           chatId={chatId}
           key={message.id}
           message={message}
@@ -44,9 +47,6 @@ function PureArtifactMessages({
           setMessages={setMessages}
           reload={reload}
           isReadonly={isReadonly}
-          showCode={false}
-          showDownload={false}
-          showDashboard={false}
         />
       ))}
 
@@ -57,7 +57,7 @@ function PureArtifactMessages({
 
 function areEqual(prevProps: ArtifactMessagesProps, nextProps: ArtifactMessagesProps) {
   if (prevProps.artifactStatus === 'streaming' && nextProps.artifactStatus === 'streaming') return true
-
+  if (prevProps.stop !== nextProps.stop) return false
   if (prevProps.status !== nextProps.status) return false
   if (prevProps.status && nextProps.status) return false
   if (prevProps.messages.length !== nextProps.messages.length) return false

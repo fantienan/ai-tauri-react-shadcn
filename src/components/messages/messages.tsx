@@ -3,7 +3,7 @@ import { useScrollToBottom } from '@/hooks/use-scroll-to-bottom'
 import type { UseChatHelpers } from '@ai-sdk/react'
 import type { UIMessage } from 'ai'
 import equal from 'fast-deep-equal'
-import { type ComponentProps, memo, useMemo } from 'react'
+import { memo } from 'react'
 import { PreviewMessage, ThinkingMessage } from './message'
 
 interface MessagesProps {
@@ -17,23 +17,6 @@ interface MessagesProps {
   isReadonly: boolean
 }
 
-function PreviewMessageWrap(props: ComponentProps<typeof PreviewMessage>) {
-  const messageActions = useMemo(() => {
-    return props.message.parts?.reduce(
-      (prev, part) => {
-        if (part.type === 'tool-invocation' && part.toolInvocation.toolName === 'sqliteAnalyze') {
-          prev.showCode = true
-          prev.showDownload = true
-          prev.showDashboard = true
-        }
-        return prev
-      },
-      {} as { showCode?: boolean; showDownload?: boolean; showDashboard?: boolean },
-    )
-  }, [props.message])
-  return <PreviewMessage {...props} {...messageActions} />
-}
-
 function PureMessages({ stop, chatId, status, votes, messages, setMessages, reload, isReadonly }: MessagesProps) {
   const [messagesContainerRef, messagesEndRef] = useScrollToBottom<HTMLDivElement>({ status })
 
@@ -42,7 +25,7 @@ function PureMessages({ stop, chatId, status, votes, messages, setMessages, relo
       {messages.length === 0 && <Greeting />}
 
       {messages.map((message, index) => (
-        <PreviewMessageWrap
+        <PreviewMessage
           stop={stop}
           key={message.id}
           chatId={chatId}
