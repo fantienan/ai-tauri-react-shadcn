@@ -87,13 +87,11 @@ function PureCodeEditor({ content, onSaveContent, status }: EditorProps) {
   return <div className="relative not-prose w-full pb-[calc(80dvh)] text-sm" ref={containerRef} />
 }
 
-function areEqual(prevProps: EditorProps, nextProps: EditorProps) {
+export const CodeEditor = memo(PureCodeEditor, (prevProps: EditorProps, nextProps: EditorProps) => {
   if (prevProps.currentVersionIndex !== nextProps.currentVersionIndex) return false
   if (prevProps.isCurrentVersion !== nextProps.isCurrentVersion) return false
   if (prevProps.status === 'streaming' && nextProps.status === 'streaming') return false
   if (prevProps.content !== nextProps.content) return false
 
   return true
-}
-
-export const CodeEditor = memo(PureCodeEditor, areEqual)
+})

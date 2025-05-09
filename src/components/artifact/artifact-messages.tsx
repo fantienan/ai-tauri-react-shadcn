@@ -55,7 +55,7 @@ function PureArtifactMessages({
   )
 }
 
-function areEqual(prevProps: ArtifactMessagesProps, nextProps: ArtifactMessagesProps) {
+export const ArtifactMessages = memo(PureArtifactMessages, (prevProps, nextProps) => {
   if (prevProps.artifactStatus === 'streaming' && nextProps.artifactStatus === 'streaming') return true
   if (prevProps.stop !== nextProps.stop) return false
   if (prevProps.status !== nextProps.status) return false
@@ -64,6 +64,4 @@ function areEqual(prevProps: ArtifactMessagesProps, nextProps: ArtifactMessagesP
   if (!equal(prevProps.votes, nextProps.votes)) return false
 
   return true
-}
-
-export const ArtifactMessages = memo(PureArtifactMessages, areEqual)
+})

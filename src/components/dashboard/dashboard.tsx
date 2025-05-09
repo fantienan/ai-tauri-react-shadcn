@@ -1,17 +1,19 @@
 import type { AnalyzeResultSchema, DashboardRecord } from '@/types'
 import { fetcher } from '@/utils'
 import { Loader2 } from 'lucide-react'
-import { memo, useMemo } from 'react'
+import React, { memo, useMemo } from 'react'
 import useSWR from 'swr'
 import { ChartRenderer } from '../chart'
 import { IndicatorCards } from '../chart/indicator-card'
+import { DashboardActions } from './dashboard-actions'
 
 export interface DashboardProps {
   chatId: string
   messageId: string
+  prefixNode?: React.ReactNode
 }
 
-export function PureDashboard({ chatId, messageId }: DashboardProps) {
+export function PureDashboard({ chatId, messageId, prefixNode = null }: DashboardProps) {
   const { data, isLoading } = useSWR(
     () => (chatId && messageId ? `/llm/dashboard/query` : null),
     async (input: string, init?: RequestInit) => {
@@ -27,6 +29,7 @@ export function PureDashboard({ chatId, messageId }: DashboardProps) {
   )
   const chartInfo = useMemo(() => {
     if (!data?.data?.charts) return
+
     return data.data.charts.reduce(
       (prev, curr) => {
         if (curr.chartType === 'indicator-card') {
@@ -40,11 +43,20 @@ export function PureDashboard({ chatId, messageId }: DashboardProps) {
         }
         return prev
       },
-      { indicatorCards: [], charts: [], blockChart: [], table: [] } as {
+      {
+        indicatorCards: [],
+        charts: [],
+        blockChart: [],
+        table: [],
+        title: data.data.title.value,
+        description: data.data.title.description,
+      } as {
         indicatorCards: AnalyzeResultSchema[]
         blockChart: AnalyzeResultSchema[]
         charts: AnalyzeResultSchema[]
         table: AnalyzeResultSchema[]
+        title: string
+        description: string
       },
     )
   }, [data])
@@ -52,6 +64,13 @@ export function PureDashboard({ chatId, messageId }: DashboardProps) {
 
   return (
     <div className="flex flex-col gap-4 w-full">
+      <div className="p-2 flex flex-row justify-between items-center gap-4">
+        {prefixNode}
+        <div className="font-medium">{chartInfo.title}</div>
+        <div className="flex-1 text-right">
+          <DashboardActions type="label-icon" showDownload showShare chatId={chatId} messageId={messageId} />
+        </div>
+      </div>
       <IndicatorCards configs={chartInfo.indicatorCards} className="gap-3 py-4" />
       {chartInfo.blockChart.map((chart, index) => (
         <ChartRenderer className="h-18" key={index} {...chart} />
@@ -68,7 +87,7 @@ export function PureDashboard({ chatId, messageId }: DashboardProps) {
   )
 }
 
-export const Dashboard = memo(PureDashboard, (prevProps: DashboardProps, nextProps: DashboardProps) => {
+export const Dashboard = memo(PureDashboard, (prevProps, nextProps) => {
   if (prevProps.chatId !== nextProps.chatId) return false
   if (prevProps.messageId !== nextProps.messageId) return false
   return true

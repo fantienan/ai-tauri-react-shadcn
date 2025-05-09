@@ -18,11 +18,9 @@ export function PureCodeBlock(props: CodeBlockProps) {
   )
 }
 
-function areEqual(prevProps: CodeBlockProps, nextProps: CodeBlockProps) {
+export const CodeBlock = memo(PureCodeBlock, (prevProps, nextProps) => {
   if (prevProps.className !== nextProps.className) return false
   if (prevProps.children !== nextProps.children) return false
 
   return true
-}
-
-export const CodeBlock = memo(PureCodeBlock, areEqual)
+})

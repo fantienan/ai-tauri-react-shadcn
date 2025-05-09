@@ -9,9 +9,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { memo } from 'react'
 import { useWindowSize } from 'usehooks-ts'
 import { Dashboard } from '../dashboard'
-import { DashboardActions } from '../dashboard/dashboard-actions'
 import { MultimodalInput } from '../multimodal-input'
-import { Card } from '../ui/card'
 import { ArtifactCloseButton } from './artifact-close-button'
 import { ArtifactMessages } from './artifact-messages'
 
@@ -229,16 +227,9 @@ function PureArtifact({
               },
             }}
           >
-            <div className="p-2 flex flex-row justify-between items-center gap-4">
-              <ArtifactCloseButton />
-              <div className="font-medium">{artifact.title}</div>
-              <div className="flex-1 text-right">
-                {artifact.kind === 'dashboard' && <DashboardActions showDownload showShare {...artifact.paramater} />}
-              </div>
-            </div>
-            <Card className="flex-1 m-2 rounded-lg p-2">
-              {artifact.kind === 'dashboard' && <Dashboard {...artifact.paramater} />}
-            </Card>
+            {artifact.kind === 'dashboard' && (
+              <Dashboard {...artifact.paramater} prefixNode={<ArtifactCloseButton />} />
+            )}
           </motion.div>
         </motion.div>
       )}
