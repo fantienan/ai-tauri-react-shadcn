@@ -3,8 +3,10 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
+import { useNavigate } from 'react-router'
 
 export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
+  const navigate = useNavigate()
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card className="overflow-hidden p-0">
@@ -28,7 +30,13 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
                 </div>
                 <Input id="password" type="password" required />
               </div>
-              <Button type="submit" className="w-full">
+              <Button
+                type="submit"
+                className="w-full"
+                onClick={() => {
+                  navigate('/chat', { replace: true })
+                }}
+              >
                 Login
               </Button>
               <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">

@@ -1,5 +1,6 @@
 // import '@wooorm/starry-night/style/both.css'
 import 'github-markdown-css/github-markdown.css'
+import { Copy2Clipboard } from '@/components/copy-2-clipboard'
 import { cn } from '@/lib/utils'
 import { common } from '@wooorm/starry-night'
 import tsx from '@wooorm/starry-night/source.tsx'
@@ -9,7 +10,6 @@ import { MarkdownHooks } from 'react-markdown'
 import rehypeSanitize from 'rehype-sanitize'
 import rehypeStarryNight from 'rehype-starry-night' // 使用 rehype-starry-night 插件
 import remarkGfm from 'remark-gfm'
-import { Copy2Clipboard } from '../copy-2-clipboard'
 import { CopyIcon } from '../icons'
 
 const remarkPlugins = [remarkGfm]

@@ -16,6 +16,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
 
   server: {
+    host: '0.0.0.0',
     watch: {
       ignored: genWatchIgnore({ includes: ['src', 'public', 'index.html', '.env', '.env.local'] }),
     },

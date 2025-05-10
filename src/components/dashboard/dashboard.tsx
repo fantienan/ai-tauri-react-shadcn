@@ -63,12 +63,19 @@ export function PureDashboard({ chatId, messageId, prefixNode = null }: Dashboar
   if (isLoading || !chartInfo) return <Loader2 size="16" className="animate-spin" />
 
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex flex-col gap-4 w-full p-2">
       <div className="p-2 flex flex-row justify-between items-center gap-4">
         {prefixNode}
         <div className="font-medium">{chartInfo.title}</div>
         <div className="flex-1 text-right">
-          <DashboardActions type="label-icon" showDownload showShare chatId={chatId} messageId={messageId} />
+          <DashboardActions
+            type="label-icon"
+            showDownload
+            showShare
+            chatId={chatId}
+            messageId={messageId}
+            title={chartInfo.title}
+          />
         </div>
       </div>
       <IndicatorCards configs={chartInfo.indicatorCards} className="gap-3 py-4" />
