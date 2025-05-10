@@ -125,6 +125,9 @@
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   },
+  "commitlint": {
+    "extends": ["@commitlint/config-conventional"]
+  },
   "lint-staged": {
     "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
       "biome check --files-ignore-unknown=true",
