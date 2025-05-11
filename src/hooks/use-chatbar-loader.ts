@@ -3,7 +3,7 @@ import { useAppStore, useThemeStore } from '@/stores'
 import { DBMessage } from '@/types'
 import { BizResult } from '@/types'
 import { fetcher, tauri } from '@/utils'
-import { convertToUIMessages } from 'common/utils'
+import { convertToUIMessages } from '@ai-dashboard/common/utils'
 import useSWR from 'swr'
 import { v4 as uuidv4 } from 'uuid'
 

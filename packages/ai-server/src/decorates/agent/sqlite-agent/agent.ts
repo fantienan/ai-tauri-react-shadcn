@@ -1,5 +1,5 @@
+import { CreateDashboardProgressSchema, DashboardSchema } from '@ai-dashboard/common/utils'
 import { CoreAssistantMessage, CoreToolMessage, StepResult, StreamTextOnStepFinishCallback } from 'ai'
-import { CreateDashboardProgressSchema, DashboardSchema } from 'common/utils'
 import { ChatContextInstance } from '../context.ts'
 import { llmProvider } from '../utils/ai.ts'
 import { SQLiteAgentTool, createSqliteTools } from './tools.ts'

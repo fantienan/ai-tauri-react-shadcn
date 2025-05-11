@@ -1,4 +1,4 @@
-import { BizResult } from 'common/types'
+import { BizResult } from '@ai-dashboard/common/types'
 export class Result {
   /**
    * @description 10000 成功

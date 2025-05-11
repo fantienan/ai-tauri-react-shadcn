@@ -1,4 +1,4 @@
-import { MakeOptional, MakeReqiured, MakeRequiredAndOptional } from 'common/types'
+import { MakeOptional, MakeReqiured, MakeRequiredAndOptional } from '@ai-dashboard/common/types'
 import { SQL, and, asc, desc, eq, gt, lt } from 'drizzle-orm'
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'

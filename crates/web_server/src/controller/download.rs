@@ -1,5 +1,4 @@
-use crate::service::chat;
-use crate::service::message;
+use crate::service::dashboard;
 use crate::utils::{common::AppState, error::*};
 
 use axum::{
@@ -12,7 +11,6 @@ use axum::{
 use serde::Deserialize;
 use std::path;
 use tracing::info;
-use web_server_entity::message::{InvocationResult, MessagePart, Model};
 
 pub async fn download_code(
   state: State<AppState>,
@@ -32,24 +30,21 @@ pub async fn download_code(
     payload.chat_id, payload.message_id, template_src_dir, file_type
   );
 
-  let chat = chat::find_by_id(&state.db, &payload.chat_id)
-    .await
-    .map_err(|e| AppError::ChatQueryError(e.to_string()))?
-    .ok_or_else(|| AppError::ChatNotFound(payload.chat_id.clone()))?;
+  info!("正在查询dashboard配置...");
+  let dashboard_config =
+    dashboard::find_dashboard_config(&state.db, &payload.chat_id, &payload.message_id)
+      .await
+      .map_err(|e| AppError::DashboardQueryError(e.to_string()))?
+      .ok_or_else(|| AppError::DashboardNotFound)?;
 
-  let message = message::find_by_id(&state.db, &payload.message_id)
-    .await
-    .map_err(|e| AppError::MessageQueryError(e.to_string()))?
-    .ok_or_else(|| AppError::MessageNotFound(payload.message_id.clone()))?;
-
-  let data = extract_analyze_result(&message);
+  info!("查询dashboard配置成功");
 
   let path = path::PathBuf::from(&template_src_dir);
   let file_bytes = common::download::code(&path)
     .await
     .map_err(|e| AppError::DownloadFailed(e.to_string()))?;
 
-  let filename = format!("{}.{}", chat.title, file_type);
+  let filename = format!("a.{}", file_type);
   // 使用 UTF-8 编码和 RFC 8187 格式处理文件名
   // 同时提供普通 filename 和 RFC 6266 编码的 filename* 以增强兼容性
   let content_disposition = common::response::gen_content_disposition(&filename);
@@ -70,17 +65,4 @@ pub struct DownloadCode {
   message_id: String,
   template_src_dir: Option<String>,
   file_type: Option<String>,
-}
-
-fn extract_analyze_result(message: &Model) -> Option<InvocationResult> {
-  if let Ok(parts) = message.parse_parts() {
-    for part in parts {
-      if let MessagePart::ToolInvocation { data } = part {
-        if data.tool_name == "sqliteAnalyze" && data.state == "result" {
-          return Some(data.result);
-        }
-      }
-    }
-  }
-  None
 }

@@ -1,4 +1,4 @@
-import { MakeRequiredAndOptional } from 'common/types'
+import { MakeRequiredAndOptional } from '@ai-dashboard/common/types'
 import { eq } from 'drizzle-orm'
 import type { FastifyInstance } from 'fastify'
 import { user } from '../database/schema.ts'

@@ -76,7 +76,7 @@ git-commit:
 	@pnpm format
 	@pnpm check
 	@git add .
-	@git commit -am "$(ARGS)"
+	@git commit -m "$(ARGS)"
 	@git push -u origin main
 
 git-init:

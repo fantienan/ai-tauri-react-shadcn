@@ -139,14 +139,20 @@ export const dashboard = sqliteTable(
 
 export type Dashboard = InferSelectModel<typeof dashboard>
 
-export const metadataInfo = sqliteTable('metadata_info', {
-  columnName: text('column_name').notNull(),
-  columnAliases: text('column_aliases').notNull(),
-  columnType: text('column_type').notNull(),
-  isNullable: integer('is_nullable', { mode: 'boolean' }).notNull(),
-  columnDefault: text('column_default'),
-  tableName: text('table_name').notNull(),
-  tableAliases: text('table_aliases').notNull(),
-})
+export const metadataInfo = sqliteTable(
+  'metadata_info',
+  {
+    columnName: text('column_name').notNull(),
+    columnAliases: text('column_aliases').notNull(),
+    columnType: text('column_type').notNull(),
+    isNullable: integer('is_nullable', { mode: 'boolean' }).notNull(),
+    columnDefault: text('column_default'),
+    tableName: text('table_name').notNull(),
+    tableAliases: text('table_aliases').notNull(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.columnName, table.tableName], name: 'metadata_info_column_name_table_name_pk' }),
+  ],
+)
 
 export type MetadataInfo = InferSelectModel<typeof metadataInfo>

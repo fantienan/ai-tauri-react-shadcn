@@ -9,3 +9,4 @@ repository.workspace = true
 sea-orm = { workspace = true}
 serde = {workspace = true}
 serde_json = {workspace = true}
+common = { path = "../common" }

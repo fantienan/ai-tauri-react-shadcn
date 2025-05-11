@@ -1,5 +1,5 @@
+import type { DashboardSchema } from '@ai-dashboard/common/utils'
 import type { DataStreamWriter, StepResult, ToolSet } from 'ai'
-import type { DashboardSchema } from 'common/utils'
 import { v4 as uuidv4 } from 'uuid'
 import { AnalyzeUserNeedsSchema, generateDescriptionInformation, getDatabase } from './utils/index.ts'
 

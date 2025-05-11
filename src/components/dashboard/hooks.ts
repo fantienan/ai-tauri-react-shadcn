@@ -1,5 +1,5 @@
+import { AnalyzeResultSchema } from '@ai-dashboard/common/utils'
 import type { UIMessage } from 'ai'
-import { AnalyzeResultSchema } from 'common/utils'
 import { useMemo } from 'react'
 
 const createDashboardToolName = 'generateDashboardsBasedOnDataAnalysisResults'

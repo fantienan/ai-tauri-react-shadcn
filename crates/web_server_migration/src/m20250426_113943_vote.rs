@@ -1,5 +1,7 @@
 use sea_orm_migration::{prelude::*, schema::*};
 
+use crate::m20220101_000001_create_table::Chat;
+
 #[derive(DeriveMigrationName)]
 pub struct Migration;
 
@@ -15,6 +17,14 @@ impl MigrationTrait for Migration {
           .col(text(Vote::MessageId))
           .col(integer(Vote::IsUpvoted))
           .primary_key(Index::create().col(Vote::ChatId).col(Vote::MessageId))
+          .foreign_key(
+            ForeignKey::create()
+              .name("fk_vote_chat_id")
+              .from(Vote::Table, Vote::ChatId)
+              .to(Chat::Table, Chat::Id)
+              .on_delete(ForeignKeyAction::Cascade)
+              .on_update(ForeignKeyAction::Cascade),
+          )
           .to_owned(),
       )
       .await

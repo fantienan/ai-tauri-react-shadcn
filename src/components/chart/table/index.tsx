@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { MetadataInfo } from '@/types'
 import { fetcher } from '@/utils'
+import { AnalyzeResultSchema } from '@ai-dashboard/common/utils'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -22,7 +23,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { AnalyzeResultSchema } from 'common/utils'
 import { ArrowUpDown, ChevronDown } from 'lucide-react'
 import { memo, useState } from 'react'
 import useSWR from 'swr'

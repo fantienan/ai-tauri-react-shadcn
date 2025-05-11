@@ -1,9 +1,9 @@
-import { tool } from 'ai'
 import {
   AnalyzeResultSchema,
   analyzeResultSchema,
   generateDashboardsBasedOnDataAnalysisResultsSchema,
-} from 'common/utils'
+} from '@ai-dashboard/common/utils'
+import { tool } from 'ai'
 import { z } from 'zod'
 import { logger } from '../../../utils/index.ts'
 import { createBizError } from '../../errors.ts'

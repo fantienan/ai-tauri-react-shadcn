@@ -6,6 +6,8 @@ pub enum AppError {
   NotFound,
   #[error("Template rendering error: {0}")]
   Render(#[from] askama::Error),
+  #[error("数据库错误: {0}")]
+  DbError(#[from] sea_orm::DbErr),
   #[error("查询聊天记录错误: {0}")]
   ChatQueryError(String),
   #[error("查询消息错误: {0}")]
@@ -18,4 +20,10 @@ pub enum AppError {
   MessageNotFound(String),
   #[error("下载代码失败: {0}")]
   DownloadFailed(String),
+  #[error("查询仪表盘错误: {0}")]
+  DashboardQueryError(String),
+  #[error("未找到仪表盘")]
+  DashboardNotFound,
+  #[error("仪表盘解析错误: {0}")]
+  DashboardParseError(String),
 }

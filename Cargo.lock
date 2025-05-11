@@ -1093,6 +1093,8 @@ dependencies = [
  "futures",
  "log",
  "percent-encoding",
+ "serde",
+ "serde_json",
  "tokio",
  "tokio-util",
  "walkdir",
@@ -6919,6 +6921,7 @@ dependencies = [
 name = "web_server_entity"
 version = "0.1.0"
 dependencies = [
+ "common",
  "sea-orm",
  "serde",
  "serde_json",

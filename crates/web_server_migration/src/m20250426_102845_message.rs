@@ -12,7 +12,7 @@ impl MigrationTrait for Migration {
         Table::create()
           .table(Message::Table)
           .if_not_exists()
-          .col(pk_uuid(Message::Id))
+          .col(pk_uuid(Message::Id).primary_key())
           .col(text(Message::ChatId))
           .col(text(Message::Role))
           .col(text(Message::Parts))
@@ -39,7 +39,7 @@ impl MigrationTrait for Migration {
 }
 
 #[derive(DeriveIden)]
-enum Message {
+pub enum Message {
   Table,
   Id,
   ChatId,

@@ -1,0 +1,978 @@
+{
+    "title": {
+        "value": "Dashboard标题",
+        "description": "Dashboard描述"
+    },
+    "charts": [
+        {
+            "chartType": "indicator-card",
+            "tableName": "analyze_daily_summary",
+            "whoCalled": "generateDashboardsBasedOnDataAnalysisResults",
+            "id": "b9e03216-07af-48e4-9d07-b88a9d089e6e",
+            "progress": {
+                "total": 8,
+                "current": 1,
+                "description": "统计总访问量"
+            },
+            "data": [
+                {
+                    "total_visits": 211
+                }
+            ],
+            "title": {
+                "value": "总访问量",
+                "description": "统计总访问量"
+            },
+            "footer": {
+                "value": "总访问量统计",
+                "description": "统计数据库中的总访问量数据"
+            }
+        },
+        {
+            "chartType": "indicator-card",
+            "tableName": "analyze_daily_summary",
+            "whoCalled": "generateDashboardsBasedOnDataAnalysisResults",
+            "id": "b9e03216-07af-48e4-9d07-b88a9d089e6e",
+            "progress": {
+                "total": 8,
+                "current": 2,
+                "description": "统计总PV量"
+            },
+            "data": [
+                {
+                    "total_pv": 2242
+                }
+            ],
+            "title": {
+                "value": "总PV量",
+                "description": "统计总PV量"
+            },
+            "footer": {
+                "value": "总PV量统计",
+                "description": "统计数据库中的总PV量数据"
+            }
+        },
+        {
+            "chartType": "indicator-card",
+            "tableName": "analyze_order_product_details",
+            "whoCalled": "generateDashboardsBasedOnDataAnalysisResults",
+            "id": "b9e03216-07af-48e4-9d07-b88a9d089e6e",
+            "progress": {
+                "total": 8,
+                "current": 3,
+                "description": "统计总订单数"
+            },
+            "data": [
+                {
+                    "total_orders": 211
+                }
+            ],
+            "title": {
+                "value": "总订单数",
+                "description": "统计总订单数"
+            },
+            "footer": {
+                "value": "总订单数统计",
+                "description": "统计数据库中的总订单数数据"
+            }
+        },
+        {
+            "chartType": "indicator-card",
+            "tableName": "analyze_order_product_details",
+            "whoCalled": "generateDashboardsBasedOnDataAnalysisResults",
+            "id": "b9e03216-07af-48e4-9d07-b88a9d089e6e",
+            "progress": {
+                "total": 8,
+                "current": 4,
+                "description": "统计总销售额"
+            },
+            "data": [
+                {
+                    "total_sales": 14984.970000000001
+                }
+            ],
+            "title": {
+                "value": "总销售额",
+                "description": "统计总销售额"
+            },
+            "footer": {
+                "value": "总销售额统计",
+                "description": "统计数据库中的总销售额数据"
+            }
+        },
+        {
+            "chartType": "line",
+            "tableName": "analyze_daily_summary",
+            "whoCalled": "generateDashboardsBasedOnDataAnalysisResults",
+            "id": "b9e03216-07af-48e4-9d07-b88a9d089e6e",
+            "progress": {
+                "total": 8,
+                "current": 5,
+                "description": "每日PV趋势分析"
+            },
+            "data": [
+                {
+                    "visit_date": "2021-01-02",
+                    "daily_pv": 10
+                },
+                {
+                    "visit_date": "2021-01-07",
+                    "daily_pv": 16
+                },
+                {
+                    "visit_date": "2021-01-10",
+                    "daily_pv": 41
+                },
+                {
+                    "visit_date": "2021-01-12",
+                    "daily_pv": 82
+                },
+                {
+                    "visit_date": "2021-01-13",
+                    "daily_pv": 27
+                },
+                {
+                    "visit_date": "2021-01-14",
+                    "daily_pv": 25
+                },
+                {
+                    "visit_date": "2021-01-15",
+                    "daily_pv": 3
+                },
+                {
+                    "visit_date": "2021-01-17",
+                    "daily_pv": 103
+                },
+                {
+                    "visit_date": "2021-01-19",
+                    "daily_pv": 8
+                },
+                {
+                    "visit_date": "2021-01-20",
+                    "daily_pv": 4
+                },
+                {
+                    "visit_date": "2021-01-22",
+                    "daily_pv": 14
+                },
+                {
+                    "visit_date": "2021-01-23",
+                    "daily_pv": 4
+                },
+                {
+                    "visit_date": "2021-01-25",
+                    "daily_pv": 15
+                },
+                {
+                    "visit_date": "2021-01-27",
+                    "daily_pv": 109
+                },
+                {
+                    "visit_date": "2021-01-29",
+                    "daily_pv": 9
+                },
+                {
+                    "visit_date": "2021-01-30",
+                    "daily_pv": 12
+                },
+                {
+                    "visit_date": "2021-02-01",
+                    "daily_pv": 3
+                },
+                {
+                    "visit_date": "2021-02-03",
+                    "daily_pv": 2
+                },
+                {
+                    "visit_date": "2021-02-04",
+                    "daily_pv": 3
+                },
+                {
+                    "visit_date": "2021-02-05",
+                    "daily_pv": 12
+                },
+                {
+                    "visit_date": "2021-02-06",
+                    "daily_pv": 17
+                },
+                {
+                    "visit_date": "2021-02-08",
+                    "daily_pv": 18
+                },
+                {
+                    "visit_date": "2021-02-09",
+                    "daily_pv": 3
+                },
+                {
+                    "visit_date": "2021-02-11",
+                    "daily_pv": 3
+                },
+                {
+                    "visit_date": "2021-02-14",
+                    "daily_pv": 30
+                },
+                {
+                    "visit_date": "2021-02-15",
+                    "daily_pv": 69
+                },
+                {
+                    "visit_date": "2021-02-17",
+                    "daily_pv": 29
+                },
+                {
+                    "visit_date": "2021-02-19",
+                    "daily_pv": 5
+                },
+                {
+                    "visit_date": "2021-02-21",
+                    "daily_pv": 3
+                },
+                {
+                    "visit_date": "2021-02-22",
+                    "daily_pv": 14
+                },
+                {
+                    "visit_date": "2021-02-24",
+                    "daily_pv": 3
+                },
+                {
+                    "visit_date": "2021-02-25",
+                    "daily_pv": 27
+                },
+                {
+                    "visit_date": "2021-02-26",
+                    "daily_pv": 28
+                },
+                {
+                    "visit_date": "2021-03-03",
+                    "daily_pv": 17
+                },
+                {
+                    "visit_date": "2021-03-04",
+                    "daily_pv": 121
+                },
+                {
+                    "visit_date": "2021-03-05",
+                    "daily_pv": 12
+                },
+                {
+                    "visit_date": "2021-03-06",
+                    "daily_pv": 5
+                },
+                {
+                    "visit_date": "2021-03-07",
+                    "daily_pv": 21
+                },
+                {
+                    "visit_date": "2021-03-08",
+                    "daily_pv": 3
+                },
+                {
+                    "visit_date": "2021-03-10",
+                    "daily_pv": 6
+                },
+                {
+                    "visit_date": "2021-03-12",
+                    "daily_pv": 11
+                },
+                {
+                    "visit_date": "2021-03-13",
+                    "daily_pv": 6
+                },
+                {
+                    "visit_date": "2021-03-14",
+                    "daily_pv": 3
+                },
+                {
+                    "visit_date": "2021-03-15",
+                    "daily_pv": 15
+                },
+                {
+                    "visit_date": "2021-03-16",
+                    "daily_pv": 11
+                },
+                {
+                    "visit_date": "2021-03-17",
+                    "daily_pv": 7
+                },
+                {
+                    "visit_date": "2021-03-22",
+                    "daily_pv": 42
+                },
+                {
+                    "visit_date": "2021-03-23",
+                    "daily_pv": 23
+                },
+                {
+                    "visit_date": "2021-03-26",
+                    "daily_pv": 11
+                },
+                {
+                    "visit_date": "2021-03-27",
+                    "daily_pv": 7
+                },
+                {
+                    "visit_date": "2021-03-28",
+                    "daily_pv": 7
+                },
+                {
+                    "visit_date": "2021-03-29",
+                    "daily_pv": 1
+                },
+                {
+                    "visit_date": "2021-03-30",
+                    "daily_pv": 8
+                },
+                {
+                    "visit_date": "2021-04-02",
+                    "daily_pv": 3
+                },
+                {
+                    "visit_date": "2021-04-08",
+                    "daily_pv": 19
+                },
+                {
+                    "visit_date": "2021-04-09",
+                    "daily_pv": 11
+                },
+                {
+                    "visit_date": "2021-04-10",
+                    "daily_pv": 6
+                },
+                {
+                    "visit_date": "2021-04-12",
+                    "daily_pv": 31
+                },
+                {
+                    "visit_date": "2021-04-13",
+                    "daily_pv": 33
+                },
+                {
+                    "visit_date": "2021-04-15",
+                    "daily_pv": 3
+                },
+                {
+                    "visit_date": "2021-04-19",
+                    "daily_pv": 28
+                },
+                {
+                    "visit_date": "2021-04-20",
+                    "daily_pv": 2
+                },
+                {
+                    "visit_date": "2021-04-21",
+                    "daily_pv": 8
+                },
+                {
+                    "visit_date": "2021-04-22",
+                    "daily_pv": 21
+                },
+                {
+                    "visit_date": "2021-04-23",
+                    "daily_pv": 7
+                },
+                {
+                    "visit_date": "2021-04-26",
+                    "daily_pv": 14
+                },
+                {
+                    "visit_date": "2021-04-27",
+                    "daily_pv": 3
+                },
+                {
+                    "visit_date": "2021-04-28",
+                    "daily_pv": 9
+                },
+                {
+                    "visit_date": "2021-04-29",
+                    "daily_pv": 6
+                },
+                {
+                    "visit_date": "2021-04-30",
+                    "daily_pv": 18
+                },
+                {
+                    "visit_date": "2021-05-01",
+                    "daily_pv": 105
+                },
+                {
+                    "visit_date": "2021-05-02",
+                    "daily_pv": 169
+                },
+                {
+                    "visit_date": "2021-05-03",
+                    "daily_pv": 71
+                },
+                {
+                    "visit_date": "2021-05-06",
+                    "daily_pv": 17
+                },
+                {
+                    "visit_date": "2021-05-07",
+                    "daily_pv": 3
+                },
+                {
+                    "visit_date": "2021-05-08",
+                    "daily_pv": 47
+                },
+                {
+                    "visit_date": "2021-05-09",
+                    "daily_pv": 8
+                },
+                {
+                    "visit_date": "2021-05-11",
+                    "daily_pv": 3
+                },
+                {
+                    "visit_date": "2021-05-14",
+                    "daily_pv": 45
+                },
+                {
+                    "visit_date": "2021-05-15",
+                    "daily_pv": 25
+                },
+                {
+                    "visit_date": "2021-05-16",
+                    "daily_pv": 19
+                },
+                {
+                    "visit_date": "2021-05-18",
+                    "daily_pv": 13
+                },
+                {
+                    "visit_date": "2021-05-19",
+                    "daily_pv": 25
+                },
+                {
+                    "visit_date": "2021-05-20",
+                    "daily_pv": 8
+                },
+                {
+                    "visit_date": "2021-05-21",
+                    "daily_pv": 3
+                },
+                {
+                    "visit_date": "2021-05-22",
+                    "daily_pv": 26
+                },
+                {
+                    "visit_date": "2021-05-23",
+                    "daily_pv": 41
+                },
+                {
+                    "visit_date": "2021-05-25",
+                    "daily_pv": 15
+                },
+                {
+                    "visit_date": "2021-05-26",
+                    "daily_pv": 33
+                },
+                {
+                    "visit_date": "2021-05-27",
+                    "daily_pv": 7
+                },
+                {
+                    "visit_date": "2021-05-28",
+                    "daily_pv": 13
+                },
+                {
+                    "visit_date": "2021-05-29",
+                    "daily_pv": 21
+                },
+                {
+                    "visit_date": "2021-06-01",
+                    "daily_pv": 40
+                },
+                {
+                    "visit_date": "2021-06-02",
+                    "daily_pv": 53
+                },
+                {
+                    "visit_date": "2021-06-05",
+                    "daily_pv": 13
+                },
+                {
+                    "visit_date": "2021-06-12",
+                    "daily_pv": 13
+                },
+                {
+                    "visit_date": "2021-06-14",
+                    "daily_pv": 12
+                },
+                {
+                    "visit_date": "2021-06-15",
+                    "daily_pv": 9
+                },
+                {
+                    "visit_date": "2021-06-17",
+                    "daily_pv": 15
+                },
+                {
+                    "visit_date": "2021-06-18",
+                    "daily_pv": 3
+                },
+                {
+                    "visit_date": "2021-06-19",
+                    "daily_pv": 35
+                },
+                {
+                    "visit_date": "2021-06-24",
+                    "daily_pv": 5
+                },
+                {
+                    "visit_date": "2021-06-25",
+                    "daily_pv": 4
+                },
+                {
+                    "visit_date": "2021-06-27",
+                    "daily_pv": 13
+                }
+            ],
+            "title": {
+                "value": "每日PV趋势",
+                "description": "每日PV趋势分析"
+            },
+            "footer": {
+                "value": "每日PV趋势分析",
+                "description": "分析每日PV趋势数据"
+            }
+        },
+        {
+            "chartType": "bar",
+            "tableName": "analyze_order_product_details",
+            "whoCalled": "generateDashboardsBasedOnDataAnalysisResults",
+            "id": "b9e03216-07af-48e4-9d07-b88a9d089e6e",
+            "progress": {
+                "total": 8,
+                "current": 6,
+                "description": "订单省份分布分析"
+            },
+            "data": [
+                {
+                    "province": "河南省",
+                    "order_count": 211
+                }
+            ],
+            "title": {
+                "value": "订单省份分布",
+                "description": "订单省份分布分析"
+            },
+            "footer": {
+                "value": "订单省份分布分析",
+                "description": "分析订单省份分布数据"
+            }
+        },
+        {
+            "chartType": "list",
+            "tableName": "analyze_order_product_details",
+            "whoCalled": "generateDashboardsBasedOnDataAnalysisResults",
+            "id": "b9e03216-07af-48e4-9d07-b88a9d089e6e",
+            "progress": {
+                "total": 8,
+                "current": 7,
+                "description": "订单详情列表展示"
+            },
+            "data": [
+                {
+                    "customer_code": 963208,
+                    "custormer_type": "LA",
+                    "province": "河南省",
+                    "city": "安阳市",
+                    "store_type": "商场店",
+                    "store_code": 102,
+                    "baby_age_group": "3-6岁",
+                    "gender": "男",
+                    "crowd_type": "已转化",
+                    "online_order": "616356807570000345963208",
+                    "payment_date": "2021-10-31",
+                    "write_off_date": "2021-10-31",
+                    "associated_order_number": "1205634826060413963208",
+                    "first_category": "奶粉",
+                    "secondary_category": "4段奶粉",
+                    "related_first_category": "玩具车床图书",
+                    "related_secondary_category": "玩具车床图书",
+                    "brand_name": "飞鹤",
+                    "related_brand_name": "其他",
+                    "online_commodity_code": "96320810262491",
+                    "related_online_commodity_code": "96320810277727",
+                    "marketing_campaign_type": "特卖促销",
+                    "scene_name": "社群",
+                    "payment_write_off_days_difference": 0,
+                    "online_sales": 79.2,
+                    "related_sales": 0
+                },
+                {
+                    "customer_code": 963208,
+                    "custormer_type": "LA",
+                    "province": "河南省",
+                    "city": "安阳市",
+                    "store_type": "商场店",
+                    "store_code": 102,
+                    "baby_age_group": "3-6岁",
+                    "gender": "男",
+                    "crowd_type": "已转化",
+                    "online_order": "616356807570000345963208",
+                    "payment_date": "2021-10-31",
+                    "write_off_date": "2021-10-31",
+                    "associated_order_number": "1205634826060413963208",
+                    "first_category": "奶粉",
+                    "secondary_category": "4段奶粉",
+                    "related_first_category": "服务",
+                    "related_secondary_category": "育儿活动",
+                    "brand_name": "飞鹤",
+                    "related_brand_name": "其他",
+                    "online_commodity_code": "96320810262491",
+                    "related_online_commodity_code": "96320810277187",
+                    "marketing_campaign_type": "特卖促销",
+                    "scene_name": "社群",
+                    "payment_write_off_days_difference": 0,
+                    "online_sales": 79.2,
+                    "related_sales": 0.57
+                },
+                {
+                    "customer_code": 963208,
+                    "custormer_type": "LA",
+                    "province": "河南省",
+                    "city": "安阳市",
+                    "store_type": "商场店",
+                    "store_code": 102,
+                    "baby_age_group": "3-6岁",
+                    "gender": "男",
+                    "crowd_type": "已转化",
+                    "online_order": "616356807570000345963208",
+                    "payment_date": "2021-10-31",
+                    "write_off_date": "2021-10-31",
+                    "associated_order_number": "1205634826060413963208",
+                    "first_category": "奶粉",
+                    "secondary_category": "4段奶粉",
+                    "related_first_category": "其他",
+                    "related_secondary_category": "孕妇营养品",
+                    "brand_name": "飞鹤",
+                    "related_brand_name": "其他",
+                    "online_commodity_code": "96320810262491",
+                    "related_online_commodity_code": "96320810503725",
+                    "marketing_campaign_type": "特卖促销",
+                    "scene_name": "自然",
+                    "payment_write_off_days_difference": 0,
+                    "online_sales": 79.2,
+                    "related_sales": 19
+                },
+                {
+                    "customer_code": 963208,
+                    "custormer_type": "LA",
+                    "province": "河南省",
+                    "city": "安阳市",
+                    "store_type": "商场店",
+                    "store_code": 102,
+                    "baby_age_group": "3-6岁",
+                    "gender": "男",
+                    "crowd_type": "已转化",
+                    "online_order": "616356807570000345963208",
+                    "payment_date": "2021-10-31",
+                    "write_off_date": "2021-10-31",
+                    "associated_order_number": "1205634826060413963208",
+                    "first_category": "奶粉",
+                    "secondary_category": "4段奶粉",
+                    "related_first_category": "玩具车床图书",
+                    "related_secondary_category": "玩具车床图书",
+                    "brand_name": "飞鹤",
+                    "related_brand_name": "其他",
+                    "online_commodity_code": "96320810262491",
+                    "related_online_commodity_code": "96320810272445",
+                    "marketing_campaign_type": "特卖促销",
+                    "scene_name": "短视频",
+                    "payment_write_off_days_difference": 0,
+                    "online_sales": 79.2,
+                    "related_sales": 74.48
+                },
+                {
+                    "customer_code": 963208,
+                    "custormer_type": "LA",
+                    "province": "河南省",
+                    "city": "安阳市",
+                    "store_type": "商场店",
+                    "store_code": 102,
+                    "baby_age_group": "3-6岁",
+                    "gender": "男",
+                    "crowd_type": "已转化",
+                    "online_order": "616356808090000691963208",
+                    "payment_date": "2021-10-31",
+                    "write_off_date": "2021-10-31",
+                    "associated_order_number": "1205634826060413963208",
+                    "first_category": "用品",
+                    "secondary_category": "婴童洗护",
+                    "related_first_category": "玩具车床图书",
+                    "related_secondary_category": "玩具车床图书",
+                    "brand_name": "德敏舒",
+                    "related_brand_name": "其他",
+                    "online_commodity_code": "96320810274789",
+                    "related_online_commodity_code": "96320810277727",
+                    "marketing_campaign_type": "特卖促销",
+                    "scene_name": "社群",
+                    "payment_write_off_days_difference": 0,
+                    "online_sales": 10.89,
+                    "related_sales": 0
+                },
+                {
+                    "customer_code": 963208,
+                    "custormer_type": "LA",
+                    "province": "河南省",
+                    "city": "安阳市",
+                    "store_type": "商场店",
+                    "store_code": 102,
+                    "baby_age_group": "3-6岁",
+                    "gender": "男",
+                    "crowd_type": "已转化",
+                    "online_order": "616356808090000691963208",
+                    "payment_date": "2021-10-31",
+                    "write_off_date": "2021-10-31",
+                    "associated_order_number": "1205634826060413963208",
+                    "first_category": "用品",
+                    "secondary_category": "婴童洗护",
+                    "related_first_category": "服务",
+                    "related_secondary_category": "育儿活动",
+                    "brand_name": "德敏舒",
+                    "related_brand_name": "其他",
+                    "online_commodity_code": "96320810274789",
+                    "related_online_commodity_code": "96320810277187",
+                    "marketing_campaign_type": "特卖促销",
+                    "scene_name": "短视频",
+                    "payment_write_off_days_difference": 0,
+                    "online_sales": 10.89,
+                    "related_sales": 0.57
+                },
+                {
+                    "customer_code": 963208,
+                    "custormer_type": "LA",
+                    "province": "河南省",
+                    "city": "安阳市",
+                    "store_type": "商场店",
+                    "store_code": 102,
+                    "baby_age_group": "3-6岁",
+                    "gender": "男",
+                    "crowd_type": "已转化",
+                    "online_order": "616356808090000691963208",
+                    "payment_date": "2021-10-31",
+                    "write_off_date": "2021-10-31",
+                    "associated_order_number": "1205634826060413963208",
+                    "first_category": "用品",
+                    "secondary_category": "婴童洗护",
+                    "related_first_category": "其他",
+                    "related_secondary_category": "孕妇营养品",
+                    "brand_name": "德敏舒",
+                    "related_brand_name": "其他",
+                    "online_commodity_code": "96320810274789",
+                    "related_online_commodity_code": "96320810503725",
+                    "marketing_campaign_type": "特卖促销",
+                    "scene_name": "社群",
+                    "payment_write_off_days_difference": 0,
+                    "online_sales": 10.89,
+                    "related_sales": 19
+                },
+                {
+                    "customer_code": 963208,
+                    "custormer_type": "LA",
+                    "province": "河南省",
+                    "city": "安阳市",
+                    "store_type": "商场店",
+                    "store_code": 102,
+                    "baby_age_group": "3-6岁",
+                    "gender": "男",
+                    "crowd_type": "已转化",
+                    "online_order": "616356808090000691963208",
+                    "payment_date": "2021-10-31",
+                    "write_off_date": "2021-10-31",
+                    "associated_order_number": "1205634826060413963208",
+                    "first_category": "用品",
+                    "secondary_category": "婴童洗护",
+                    "related_first_category": "玩具车床图书",
+                    "related_secondary_category": "玩具车床图书",
+                    "brand_name": "德敏舒",
+                    "related_brand_name": "其他",
+                    "online_commodity_code": "96320810274789",
+                    "related_online_commodity_code": "96320810272445",
+                    "marketing_campaign_type": "特卖促销",
+                    "scene_name": "自然",
+                    "payment_write_off_days_difference": 0,
+                    "online_sales": 10.89,
+                    "related_sales": 74.48
+                },
+                {
+                    "customer_code": 963208,
+                    "custormer_type": "LA",
+                    "province": "河南省",
+                    "city": "安阳市",
+                    "store_type": "商场店",
+                    "store_code": 102,
+                    "baby_age_group": "6-14岁",
+                    "gender": "女",
+                    "crowd_type": "已转化",
+                    "online_order": "616180252860000126963208",
+                    "payment_date": "2021-04-10",
+                    "write_off_date": "2021-04-10",
+                    "associated_order_number": "1205688818498442963208",
+                    "first_category": "用品",
+                    "secondary_category": "婴童洗护",
+                    "related_first_category": "服务",
+                    "related_secondary_category": "育儿活动",
+                    "brand_name": "其他",
+                    "related_brand_name": "其他",
+                    "online_commodity_code": "96320810277676",
+                    "related_online_commodity_code": "96320810277187",
+                    "marketing_campaign_type": "特卖促销",
+                    "scene_name": "自然",
+                    "payment_write_off_days_difference": 0,
+                    "online_sales": 27.456,
+                    "related_sales": 1.14
+                },
+                {
+                    "customer_code": 963208,
+                    "custormer_type": "LA",
+                    "province": "河南省",
+                    "city": "安阳市",
+                    "store_type": "商场店",
+                    "store_code": 102,
+                    "baby_age_group": "6-14岁",
+                    "gender": "女",
+                    "crowd_type": "已转化",
+                    "online_order": "616180252860000126963208",
+                    "payment_date": "2021-04-10",
+                    "write_off_date": "2021-04-10",
+                    "associated_order_number": "1205688818498442963208",
+                    "first_category": "用品",
+                    "secondary_category": "婴童洗护",
+                    "related_first_category": "用品",
+                    "related_secondary_category": "婴童洗护",
+                    "brand_name": "其他",
+                    "related_brand_name": "Pigeon/贝亲",
+                    "online_commodity_code": "96320810277676",
+                    "related_online_commodity_code": "96320810273279",
+                    "marketing_campaign_type": "特卖促销",
+                    "scene_name": "自然",
+                    "payment_write_off_days_difference": 0,
+                    "online_sales": 27.456,
+                    "related_sales": 129.2
+                }
+            ],
+            "title": {
+                "value": "订单详情列表",
+                "description": "订单详情列表展示"
+            },
+            "footer": {
+                "value": "订单详情列表展示",
+                "description": "展示订单详情列表数据"
+            }
+        },
+        {
+            "chartType": "table",
+            "tableName": "analyze_daily_summary",
+            "whoCalled": "generateDashboardsBasedOnDataAnalysisResults",
+            "id": "b9e03216-07af-48e4-9d07-b88a9d089e6e",
+            "progress": {
+                "total": 8,
+                "current": 8,
+                "description": "访问记录表展示"
+            },
+            "data": [
+                {
+                    "id": "fe3245c8-bffc-45a8-b6d4-c880639366d8",
+                    "customer_code": 963208,
+                    "member_code": 1502118228,
+                    "visit_date": "2021-04-10",
+                    "visit_time_period": 11,
+                    "weixin_id": 1047,
+                    "pv": 6
+                },
+                {
+                    "id": "324534c3-6354-44d8-a106-953edc5df625",
+                    "customer_code": 963208,
+                    "member_code": 1502118318,
+                    "visit_date": "2021-05-02",
+                    "visit_time_period": 11,
+                    "weixin_id": 1089,
+                    "pv": 12
+                },
+                {
+                    "id": "1f9665ed-f005-4f50-8f48-e68f2b6b5787",
+                    "customer_code": 963208,
+                    "member_code": 1502118318,
+                    "visit_date": "2021-04-15",
+                    "visit_time_period": 12,
+                    "weixin_id": 1008,
+                    "pv": 3
+                },
+                {
+                    "id": "b177f808-6ed3-4cbd-8da7-309c85874281",
+                    "customer_code": 963208,
+                    "member_code": 1502118318,
+                    "visit_date": "2021-05-02",
+                    "visit_time_period": 9,
+                    "weixin_id": 1089,
+                    "pv": 12
+                },
+                {
+                    "id": "82715902-2e03-480f-80e2-ed3f601f888d",
+                    "customer_code": 963208,
+                    "member_code": 1502118318,
+                    "visit_date": "2021-03-15",
+                    "visit_time_period": 21,
+                    "weixin_id": 1089,
+                    "pv": 5
+                },
+                {
+                    "id": "1a8dea05-c1ea-4314-9519-1f39214a7913",
+                    "customer_code": 963208,
+                    "member_code": 1502118318,
+                    "visit_date": "2021-01-12",
+                    "visit_time_period": 14,
+                    "weixin_id": 1001,
+                    "pv": 4
+                },
+                {
+                    "id": "946a80c9-c669-4d68-aef7-3e171a47e8f8",
+                    "customer_code": 963208,
+                    "member_code": 1502118318,
+                    "visit_date": "2021-04-13",
+                    "visit_time_period": 10,
+                    "weixin_id": 1089,
+                    "pv": 6
+                },
+                {
+                    "id": "a6e529c1-5a9f-490e-96fb-7d1ecb1f0f6e",
+                    "customer_code": 963208,
+                    "member_code": 1502118318,
+                    "visit_date": "2021-01-02",
+                    "visit_time_period": 16,
+                    "weixin_id": 1001,
+                    "pv": 10
+                },
+                {
+                    "id": "3360dde1-0f0c-40df-822d-5c064f99e014",
+                    "customer_code": 963208,
+                    "member_code": 1502118318,
+                    "visit_date": "2021-01-12",
+                    "visit_time_period": 13,
+                    "weixin_id": 1001,
+                    "pv": 2
+                },
+                {
+                    "id": "38c54d7e-db39-4002-9f17-54e4b2cfe477",
+                    "customer_code": 963208,
+                    "member_code": 1502118318,
+                    "visit_date": "2021-02-15",
+                    "visit_time_period": 15,
+                    "weixin_id": 1008,
+                    "pv": 3
+                }
+            ],
+            "title": {
+                "value": "访问记录表",
+                "description": "访问记录表展示"
+            },
+            "footer": {
+                "value": "访问记录表展示",
+                "description": "展示访问记录表数据"
+            }
+        }
+    ]
+}

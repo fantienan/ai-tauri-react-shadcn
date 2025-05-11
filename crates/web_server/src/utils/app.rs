@@ -24,6 +24,10 @@ impl IntoResponse for AppError {
       AppError::MessageNotFound(_) => (StatusCode::NOT_FOUND, self.to_string()),
       AppError::MessageParseError(_) => (StatusCode::BAD_REQUEST, self.to_string()),
       AppError::NotFound => (StatusCode::NOT_FOUND, self.to_string()),
+      AppError::DashboardNotFound => (StatusCode::NOT_FOUND, self.to_string()),
+      AppError::DashboardParseError(_) => (StatusCode::BAD_REQUEST, self.to_string()),
+      AppError::DashboardQueryError(_) => (StatusCode::INTERNAL_SERVER_ERROR, self.to_string()),
+      AppError::DbError(_) => (StatusCode::INTERNAL_SERVER_ERROR, self.to_string()),
     };
     (status, message).into_response()
   }

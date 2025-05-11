@@ -12,7 +12,7 @@ impl MigrationTrait for Migration {
         Table::create()
           .table(Chat::Table)
           .if_not_exists()
-          .col(pk_uuid(Chat::Id))
+          .col(pk_uuid(Chat::Id).primary_key())
           .col(text(Chat::CreatedAt).default(SimpleExpr::Custom("CURRENT_TIMESTAMP".to_string())))
           .col(text(Chat::Title))
           .col(text(Chat::UserId))

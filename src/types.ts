@@ -1,7 +1,7 @@
 import * as DatabaseSchema from '@@/ai-server/database/schema'
-import type { AnalyzeResultSchema, DashboardSchema } from 'common/utils'
+import type { AnalyzeResultSchema, DashboardSchema } from '@ai-dashboard/common/utils'
 
-export * from 'common/types'
+export * from '@ai-dashboard/common/types'
 
 export type { DashboardSchema, AnalyzeResultSchema }
 
