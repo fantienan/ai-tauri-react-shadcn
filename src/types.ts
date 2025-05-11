@@ -4,6 +4,7 @@ import type { AnalyzeResultSchema, DashboardSchema } from '@ai-dashboard/common/
 export * from '@ai-dashboard/common/types'
 
 export type { DashboardSchema, AnalyzeResultSchema }
+
 export type ChatVisibilityType = DatabaseSchema.Chat['visibility']
 
 export type User = DatabaseSchema.User
