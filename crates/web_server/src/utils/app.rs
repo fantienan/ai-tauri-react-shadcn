@@ -28,6 +28,15 @@ impl IntoResponse for AppError {
       AppError::DashboardParseError(_) => (StatusCode::BAD_REQUEST, self.to_string()),
       AppError::DashboardQueryError(_) => (StatusCode::INTERNAL_SERVER_ERROR, self.to_string()),
       AppError::DbError(_) => (StatusCode::INTERNAL_SERVER_ERROR, self.to_string()),
+      AppError::DashboardSerializationError(_) => {
+        (StatusCode::INTERNAL_SERVER_ERROR, self.to_string())
+      }
+      AppError::MetadataSerializationError(_) => {
+        (StatusCode::INTERNAL_SERVER_ERROR, self.to_string())
+      }
+      AppError::MetadataQueryError(_) => {
+        (StatusCode::INTERNAL_SERVER_ERROR, self.to_string())
+      }
     };
     (status, message).into_response()
   }

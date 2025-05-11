@@ -1,26 +1,46 @@
 use archflow::compress::FileOptions;
 use archflow::compress::tokio::archive::ZipArchive;
 use archflow::compression::CompressionMethod;
+use std::io::Cursor;
 use std::path::PathBuf;
 use tokio::io::{DuplexStream, duplex};
 use tokio_util::io::ReaderStream;
 use walkdir::WalkDir;
 
-pub async fn code(src_dir: &PathBuf) -> Result<ReaderStream<DuplexStream>, String> {
+#[derive(Clone)]
+pub struct DownloadCodeOption {
+  pub file_content: String,
+  /// 相对src_dir的路径
+  pub relative_file_path: String,
+}
+
+impl DownloadCodeOption {
+  pub fn new(file_content: String, relative_file_path: String) -> Self {
+    Self {
+      file_content,
+      relative_file_path,
+    }
+  }
+}
+
+pub async fn code(
+  src_dir: &PathBuf,
+  options: Option<Vec<DownloadCodeOption>>,
+) -> Result<ReaderStream<DuplexStream>, String> {
   if !src_dir.exists() {
     return Err(format!("模板目录不存在: {:?}", src_dir));
   }
 
   // 1. 创建内存双工管道
-  let (writer, reader) = duplex(16 * 1024); // 16 KB 缓冲&#8203;:contentReference[oaicite:12]{index=12}
+  let (writer, reader) = duplex(16 * 1024); // 16 KB 缓冲
 
-  // Clone the path for ownership in the spawned task
   let owned_src_dir = src_dir.clone();
+  let owned_options = options.clone();
 
   // 2. 后台任务：动态遍历目录并压缩写入 writer
   tokio::spawn(async move {
     let mut archive = ZipArchive::new_streamable(writer);
-    let options = FileOptions::default().compression_method(CompressionMethod::Deflate());
+    let file_options = FileOptions::default().compression_method(CompressionMethod::Deflate());
 
     for entry in WalkDir::new(&owned_src_dir)
       .into_iter()
@@ -34,8 +54,21 @@ pub async fn code(src_dir: &PathBuf) -> Result<ReaderStream<DuplexStream>, Strin
         .to_str()
         .unwrap();
       let mut f = tokio::fs::File::open(entry.path()).await.unwrap();
-      archive.append(rel, &options, &mut f).await.unwrap();
+      archive.append(rel, &file_options, &mut f).await.unwrap();
     }
+
+    if let Some(opts) = owned_options {
+      for opt in opts {
+        // 使用 Cursor 将字符串内容包装成一个 AsyncRead 实现
+        let content_bytes = opt.file_content.into_bytes();
+        let mut cursor = Cursor::new(content_bytes);
+        archive
+          .append(&opt.relative_file_path, &file_options, &mut cursor)
+          .await
+          .unwrap();
+      }
+    }
+
     archive.finalize().await.unwrap();
   });
 

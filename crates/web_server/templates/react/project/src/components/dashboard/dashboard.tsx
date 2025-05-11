@@ -12,13 +12,9 @@ const defaultDashboardSchema: DashboardSchema = {
 }
 
 export function PureDashboard() {
-  const { data, isLoading } = useSWR<DashboardSchema | null | undefined>(
-    'dashboard.json',
-    (input, init) => fetcher<DashboardSchema>(input, init),
-    {
-      fallbackData: defaultDashboardSchema,
-    },
-  )
+  const { data, isLoading } = useSWR<DashboardSchema | null | undefined>('/dashboard.json', fetcher, {
+    fallbackData: defaultDashboardSchema,
+  })
 
   const chartInfo = useMemo(() => {
     if (!data) return
@@ -57,8 +53,9 @@ export function PureDashboard() {
 
   return (
     <div className="flex flex-col gap-4 w-full p-2">
-      <div className="p-2 flex flex-row justify-between items-center gap-4">
+      <div className="p-2 flex flex-col justify-between items-center gap-1">
         <div className="font-medium">{chartInfo.title}</div>
+        <div className="text-muted-foreground text-sm">{chartInfo.description}</div>
       </div>
       <IndicatorCards configs={chartInfo.indicatorCards} className="gap-3 py-4" />
       {chartInfo.blockChart.map((chart, index) => (

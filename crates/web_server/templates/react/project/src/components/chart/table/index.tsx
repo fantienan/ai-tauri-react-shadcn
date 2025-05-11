@@ -31,13 +31,13 @@ import { Pager } from './pagination'
 
 export type DataTableProps = Omit<AnalyzeResultSchema, 'chartType'>
 
-export function PureDataTable({ data, title, footer }: DataTableProps) {
+export function PureDataTable({ data, title, footer, tableName }: DataTableProps) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
 
-  const { data: metadatas = [] } = useSWR<MetadataInfo[]>('metadatas.json', fetcher, { fallbackData: [] })
+  const { data: metadatas = [] } = useSWR<MetadataInfo[]>(`/metadata/${tableName}.json`, fetcher, { fallbackData: [] })
 
   const columns: ColumnDef<Record<string, any>>[] = metadatas.map((meta) => ({
     accessorKey: meta.columnName!,
@@ -143,7 +143,6 @@ export function PureDataTable({ data, title, footer }: DataTableProps) {
 }
 
 export const DataTable = memo(PureDataTable, (prevProps, nextProps) => {
-  if (prevProps.className !== nextProps.className) return false
   if (prevProps.data !== nextProps.data) return false
   if (prevProps.title !== nextProps.title) return false
   if (prevProps.footer !== nextProps.footer) return false

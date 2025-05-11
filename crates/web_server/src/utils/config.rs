@@ -11,7 +11,6 @@ pub struct Config {
   pub max_lifetime_secs: u64,
   pub sqlx_logging: bool,
   pub template_src_dir: String,
-  pub download_code_file_type: DownloadCodeFileType,
 }
 
 #[derive(Debug, Clone)]
@@ -36,20 +35,13 @@ impl Config {
       template_src_dir: env::var("TEMPLATE_SRC_DIR").unwrap_or_else(|_| {
         path::PathBuf::from(file!())
           .parent()
+          .and_then(|p| p.parent())
+          .and_then(|p| p.parent())
           .expect("获取当前文件路径失败")
-          .join("templates/analyze")
-          .to_string_lossy()
+          .join("templates/react/project")
+          .display()
           .to_string()
       }),
-      download_code_file_type: env::var("DOWNLOAD_CODE_FILE_TYPE")
-        .map(|val| {
-          if val.eq_ignore_ascii_case("tar") {
-            DownloadCodeFileType::Tar
-          } else {
-            DownloadCodeFileType::Zip
-          }
-        })
-        .unwrap_or(DownloadCodeFileType::Zip),
       db_url: format!(
         "sqlite:///{}",
         env::var("SQLITE_DATABASE_URL").expect(".env 文件中未设置 SQLITE_DATABASE_URL")

@@ -68,7 +68,8 @@ impl ActiveModelBehavior for ActiveModel {}
 
 impl Model {
   pub fn parse_data(&self) -> Result<DashboardConfig, String> {
-    let dashboard_config: DashboardConfig = serde_json::from_str(&self.data).map_err(|e| e.to_string())?;
+    let dashboard_config: DashboardConfig =
+      serde_json::from_str(&self.data).map_err(|e| e.to_string())?;
     Ok(dashboard_config)
   }
 }

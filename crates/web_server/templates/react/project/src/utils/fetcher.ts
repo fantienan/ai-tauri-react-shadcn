@@ -7,7 +7,6 @@ export const fetcher = async <T>(input: RequestInfo | URL, init?: RequestInit): 
   const headers = new Headers(init?.headers)
   if (!headers.has('Content-Type')) headers.set('Content-Type', 'application/json')
   const res = await fetch(input, { ...init, headers })
-  debugger
   if (!res.ok) {
     const error = new Error('An error occurred while fetching the data.') as ApplicationError
     error.info = await res.json()

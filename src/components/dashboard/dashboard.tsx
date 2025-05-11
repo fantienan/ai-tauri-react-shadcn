@@ -66,7 +66,10 @@ export function PureDashboard({ chatId, messageId, prefixNode = null }: Dashboar
     <div className="flex flex-col gap-4 w-full p-2">
       <div className="p-2 flex flex-row justify-between items-center gap-4">
         {prefixNode}
-        <div className="font-medium">{chartInfo.title}</div>
+        <div className="flex flex-col gap-1">
+          <div className="font-medium">{chartInfo.title}</div>
+          <div className="text-muted-foreground text-sm">{chartInfo.description}</div>
+        </div>
         <div className="flex-1 text-right">
           <DashboardActions
             type="label-icon"

@@ -1,4 +1,8 @@
-import { CreateDashboardProgressSchema, DashboardSchema } from '@ai-dashboard/common/utils'
+import {
+  CreateDashboardProgressSchema,
+  DashboardSchema,
+  GenerateDashboardsBasedOnDataAnalysisResultsSchema,
+} from '@ai-dashboard/common/utils'
 import { CoreAssistantMessage, CoreToolMessage, StepResult, StreamTextOnStepFinishCallback } from 'ai'
 import { ChatContextInstance } from '../context.ts'
 import { llmProvider } from '../utils/ai.ts'
@@ -26,15 +30,17 @@ export class SQLiteAgent {
   async createDashboard({
     toolResults,
     messages,
+    dashboardGenerationCompleted,
   }: {
     toolResults: SQLiteAgentToolResults
     messages: ((CoreAssistantMessage | CoreToolMessage) & { id: string })[]
+    dashboardGenerationCompleted: GenerateDashboardsBasedOnDataAnalysisResultsSchema
   }) {
     try {
       const dashboardSchema: DashboardSchema = {
         title: {
-          value: 'Dashboard标题',
-          description: 'Dashboard描述',
+          value: dashboardGenerationCompleted.title,
+          description: dashboardGenerationCompleted.description,
         },
         charts: [],
       }
@@ -66,7 +72,7 @@ export class SQLiteAgent {
       finishReason === 'tool-calls' &&
       toolResults.length
     ) {
-      const dashboardGenerationCompleted = toolResults.some(
+      const dashboardGenerationCompleted = toolResults.find(
         (v) => v.toolName === 'generateDashboardsBasedOnDataAnalysisResults' && v.result.state === 'end',
       )
       const progress = toolResults.at(-1)?.result.progress as CreateDashboardProgressSchema
@@ -75,6 +81,7 @@ export class SQLiteAgent {
         this.chatContext.dashboardSchema = await this.createDashboard({
           toolResults,
           messages: response.messages,
+          dashboardGenerationCompleted: dashboardGenerationCompleted.result,
         })
       }
     }
