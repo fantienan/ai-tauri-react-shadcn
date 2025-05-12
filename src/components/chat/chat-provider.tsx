@@ -13,6 +13,7 @@ export type ChatbarContextProps = Pick<ThemeStoreProps, 'theme' | 'setTheme'> & 
   onOpenHistoryChat?: (params: { chatId: string }) => void
   onCreateChat?: (params: { chatId: string }) => void
   onDownloadCode?: (params: { chatId: string; messageId: string }) => Promise<any>
+  onSetting?: () => void
   useChatOptions: UseChatOptions
 }
 

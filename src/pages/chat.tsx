@@ -8,6 +8,7 @@ export default function Page() {
   const dispatch = useAppStore().dispatch
   const navigate = useNavigate()
   const { error, ...chatbarLoaderData } = useChatbarLoader({ chatId: id })
+  debugger
 
   //   if (error) return <Navigate replace to="/chat" />
 

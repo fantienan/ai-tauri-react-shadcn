@@ -6,6 +6,7 @@ import { fetcher, tauri } from '@/utils'
 import { convertToUIMessages } from '@ai-dashboard/common/utils'
 import useSWR from 'swr'
 import { v4 as uuidv4 } from 'uuid'
+import { useIsMobile } from './use-mobile'
 
 export type ChatLoaderData = {
   initialMessages: DBMessage[]
@@ -27,6 +28,7 @@ export const useChatbarLoader = ({ chatId }: { chatId?: string }) => {
   const user = useAppStore().session.user
   const theme = useThemeStore().theme
   const setTheme = useThemeStore().setTheme
+  const isMobile = useIsMobile()
 
   const { data, isLoading } = useSWR(
     chatId ? `/llm/message/queryByChatId?chatId=${chatId}` : null,
@@ -39,6 +41,7 @@ export const useChatbarLoader = ({ chatId }: { chatId?: string }) => {
     theme,
     setTheme,
     isReadonly: false,
+    resizeable: !isMobile,
     error: !!(chatId && !isLoading && !Array.isArray(data)),
     useChatOptions: {
       api: `${import.meta.env.BIZ_NODE_SERVER_URL}/llm/chat`,

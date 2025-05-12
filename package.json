@@ -19,6 +19,7 @@
     "commitlint": "commitlint --edit"
   },
   "dependencies": {
+    "@ai-dashboard/common": "file:packages/common",
     "@ai-sdk/deepseek": "^0.2.13",
     "@ai-sdk/react": "^1.2.11",
     "@ai-sdk/ui-utils": "^1.2.10",
@@ -69,7 +70,6 @@
     "codemirror": "^6.0.1",
     "codemirror-lang-elixir": "^4.0.0",
     "codemirror-lang-hcl": "^0.0.0-beta.2",
-    "@ai-dashboard/common": "file:packages/common",
     "date-fns": "^4.1.0",
     "debug": "^4.4.0",
     "dlx": "^0.2.1",
@@ -89,6 +89,7 @@
     "react-dom": "^19.0.0",
     "react-markdown": "^10.1.0",
     "react-resizable": "^3.0.5",
+    "react-resizable-panels": "^3.0.1",
     "react-router": "^7.5.0",
     "react-syntax-highlighter": "^15.6.1",
     "recharts": "^2.15.3",
