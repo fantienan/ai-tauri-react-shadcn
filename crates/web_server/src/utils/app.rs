@@ -34,9 +34,7 @@ impl IntoResponse for AppError {
       AppError::MetadataSerializationError(_) => {
         (StatusCode::INTERNAL_SERVER_ERROR, self.to_string())
       }
-      AppError::MetadataQueryError(_) => {
-        (StatusCode::INTERNAL_SERVER_ERROR, self.to_string())
-      }
+      AppError::MetadataQueryError(_) => (StatusCode::INTERNAL_SERVER_ERROR, self.to_string()),
     };
     (status, message).into_response()
   }

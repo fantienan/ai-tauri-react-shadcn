@@ -2,7 +2,9 @@
 
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
+        use std::collections::HashMap;
 
+        use serde_json::{Value, json};
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
 #[sea_orm(table_name = "metadata_info")]
 pub struct Model {
@@ -19,6 +21,65 @@ pub struct Model {
   pub table_name: String,
   #[sea_orm(column_type = "Text")]
   pub table_aliases: String,
+}
+
+impl Model {
+  /// 将字符串从下划线命名(snake_case)转换为驼峰命名(camelCase)
+  pub fn snake_to_camel_case(input: &str) -> String {
+    let mut result = String::new();
+    let mut capitalize_next = false;
+    for (i, c) in input.chars().enumerate() {
+      if c == '_' {
+        capitalize_next = true;
+      } else if capitalize_next {
+        result.push(c.to_ascii_uppercase());
+        capitalize_next = false;
+      } else if i == 0 {
+        // 第一个字符保持小写
+        result.push(c.to_ascii_lowercase());
+      } else {
+        result.push(c);
+      }
+    }
+
+    result
+  }
+
+    /// 将当前记录的所有相关字段转为驼峰命名格式并返回
+    pub fn to_camel_case_map(&self) -> HashMap<String, Value> {
+        
+        let mut result = HashMap::new();
+        
+        // 转换各个字段
+        result.insert("columnName".to_string(), Self::snake_to_camel_case(&self.column_name));
+        result.insert("columnAliases".to_string(), Self::snake_to_camel_case(&self.column_aliases));
+        result.insert("columnType".to_string(), Self::snake_to_camel_case(&self.column_type));
+        result.insert("tableName".to_string(), Self::snake_to_camel_case(&self.table_name));
+        result.insert("tableAliases".to_string(), Self::snake_to_camel_case(&self.table_aliases));
+        
+        // 处理可选字段
+        if let Some(default) = &self.column_default {
+            result.insert("columnDefault".to_string(), json!(Self::snake_to_camel_case(default)));
+        } else {
+        result.insert("columnDefault".to_string(), Value::Null);
+        }
+        
+        if let Some(is_nullable) = self.is_nullable {
+            result.insert("isNullable".to_string(), is_nullable.to_string());
+        } else {
+            result.insert("isNullable".to_string(), Value::Null);
+        }
+        
+        result
+    }
+
+
+    /// 将多条记录的所有字段转为驼峰格式
+    pub fn batch_to_camel_case(records: &[Model]) -> Vec<HashMap<String, Value>> {
+        records.iter()
+               .map(|record| record.to_camel_case_map())
+               .collect()
+    }
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

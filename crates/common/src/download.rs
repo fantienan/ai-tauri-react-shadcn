@@ -23,10 +23,14 @@ impl DownloadCodeOption {
   }
 }
 
-pub async fn code(
+pub async fn code<F>(
   src_dir: &PathBuf,
   options: Option<Vec<DownloadCodeOption>>,
-) -> Result<ReaderStream<DuplexStream>, String> {
+  index_html_modifier: Option<F>,
+) -> Result<ReaderStream<DuplexStream>, String>
+where
+  F: Fn(String) -> String + Send + 'static,
+{
   if !src_dir.exists() {
     return Err(format!("模板目录不存在: {:?}", src_dir));
   }
@@ -53,8 +57,19 @@ pub async fn code(
         .unwrap()
         .to_str()
         .unwrap();
-      let mut f = tokio::fs::File::open(entry.path()).await.unwrap();
-      archive.append(rel, &file_options, &mut f).await.unwrap();
+      println!("rel: {}", rel);
+      if rel == "index.html" && index_html_modifier.is_some() {
+        let content = tokio::fs::read_to_string(entry.path()).await.unwrap();
+        let modified_content = index_html_modifier.as_ref().unwrap()(content);
+        let mut cursor = Cursor::new(modified_content.into_bytes());
+        archive
+          .append(rel, &file_options, &mut cursor)
+          .await
+          .unwrap();
+      } else {
+        let mut f = tokio::fs::File::open(entry.path()).await.unwrap();
+        archive.append(rel, &file_options, &mut f).await.unwrap();
+      }
     }
 
     if let Some(opts) = owned_options {

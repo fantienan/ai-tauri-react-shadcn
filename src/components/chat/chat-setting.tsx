@@ -7,6 +7,7 @@ const PureChatSetting = () => {
         <h1>设置</h1>
         <div className="text-sm">所有设置项</div>
       </div>
+      <div></div>
     </div>
   )
 }

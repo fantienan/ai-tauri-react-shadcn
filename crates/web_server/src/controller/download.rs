@@ -12,8 +12,8 @@ use common::download::DownloadCodeOption;
 use common::types::dashboard::DashboardConfig;
 use sea_orm::DbConn;
 use serde::Deserialize;
+use std::collections::HashMap;
 use std::path;
-  use std::collections::HashMap;
 use tracing::info;
 
 pub async fn download_code(
@@ -44,11 +44,14 @@ pub async fn download_code(
   download_code_options.extend(metadata_options);
 
   let path = path::PathBuf::from(&template_src_dir);
-  let file_bytes = common::download::code(&path, Some(download_code_options))
-    .await
-    .map_err(|e| AppError::DownloadFailed(e.to_string()))?;
-
   let filename = format!("{}.zip", dashboard_config.title.value);
+  let file_bytes = common::download::code(
+    &path,
+    Some(download_code_options),
+    Some(move |content: String| content.replace("{{ title }}", &dashboard_config.title.value)),
+  )
+  .await
+  .map_err(|e| AppError::DownloadFailed(e.to_string()))?;
 
   // 使用 UTF-8 编码和 RFC 8187 格式处理文件名
   // 同时提供普通 filename 和 RFC 6266 编码的 filename* 以增强兼容性
@@ -117,6 +120,7 @@ async fn get_metadata_options(db: &DbConn) -> Result<Vec<DownloadCodeOption>, Ap
   }
 
   let mut options = Vec::with_capacity(grouped_metadata.len());
+
   for (table_name, metadata) in grouped_metadata {
     let metadata_json = serde_json::to_string(&metadata)
       .map_err(|e| AppError::MetadataSerializationError(e.to_string()))?;

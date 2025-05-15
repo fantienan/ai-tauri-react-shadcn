@@ -28,7 +28,7 @@ pub enum AppError {
   DashboardParseError(String),
   #[error("仪表盘JSON序列化错误: {0}")]
   DashboardSerializationError(String),
-    #[error("元数据JSON序列化错误: {0}")]
+  #[error("元数据JSON序列化错误: {0}")]
   MetadataSerializationError(String),
   #[error("查询元数据错误: {0}")]
   MetadataQueryError(String),

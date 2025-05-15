@@ -25,13 +25,7 @@ export const Chatbar = ({
   return (
     <ChatbarProvider chatId={id} {...chatbarProviderProps}>
       <SidebarProvider
-        style={
-          resizeable
-            ? ({
-                '--sidebar-width': '100%',
-              } as React.CSSProperties)
-            : undefined
-        }
+        style={resizeable ? ({ '--sidebar-width': '100%' } as React.CSSProperties) : undefined}
         showFooter={showFooter}
         defaultOpen={defaultOpen}
         className={cn(className)}
@@ -44,12 +38,12 @@ export const Chatbar = ({
             </SidebarInset>
           </>
         ) : (
-          <ResizablePanelGroup direction="horizontal">
-            <ResizablePanel defaultSize={15} minSize={15} order={1}>
+          <ResizablePanelGroup direction="horizontal" id={id}>
+            <ResizablePanel className="min-w-[256px]" defaultSize={15} order={1}>
               <AppSidebar className={classNames({ relative: resizeable })} />
             </ResizablePanel>
             <ResizableHandle withHandle />
-            <ResizablePanel order={2}>
+            <ResizablePanel order={2} className="min-w-[50%]">
               <SidebarInset>
                 <Chat initialMessages={initialMessages} isReadonly={isReadonly} id={id} key={id} />
               </SidebarInset>
